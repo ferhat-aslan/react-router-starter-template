@@ -1,16 +1,38 @@
 @import "tailwindcss" source(".");
 
+/* Preline UI */
+@source "../node_modules/preline/dist/*.js";
+@import "../node_modules/preline/variants.css";
+
+/* Plugins */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-	--font-sans:
-		"Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* Adds pointer cursor to buttons */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* Defaults hover styles on all devices */
+@custom-variant hover (&:hover);
 
 html,
 body {
-	@apply bg-white dark:bg-gray-950;
+  @apply bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 font-sans;
 
-	@media (prefers-color-scheme: dark) {
-		color-scheme: dark;
-	}
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+.header-link {
+  @apply p-2 flex items-center text-sm  text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700;
 }
