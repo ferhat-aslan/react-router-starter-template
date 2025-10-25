@@ -5,585 +5,156 @@ const Layout = ({children}: any) => {
   return (
     <div className="">
       {/* ========== HEADER ========== */}
-      <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full bg-white border-b border-gray-200 dark:bg-neutral-800 dark:border-neutral-700">
-        <nav className="relative max-w-340 w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 py-2 px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center gap-x-1">
-            <a
-              className="flex-none font-semibold text-xl text-black focus:outline-hidden focus:opacity-80 dark:text-white"
-              href="#"
-              aria-label="Brand"
-            >
-              Tinker
+
+      <header className="border-b border-gray-200">
+        <nav
+          className="
+          flex flex-wrap
+          items-center
+          justify-between
+          w-full
+          py-4
+          md:py-0
+          px-4
+          text-lg text-gray-700
+          bg-white container mx-auto 
+        "
+        >
+          <div>
+            <a href="#">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="150"
+                height="32.125"
+                viewBox="0 0 150 32.125"
+              >
+                <g
+                  id="Group_330"
+                  data-name="Group 330"
+                  transform="translate(-251.1 457.654)"
+                >
+                  <g
+                    id="Group_329"
+                    data-name="Group 329"
+                    transform="translate(251.1 -457.654)"
+                  >
+                    <path
+                      id="Path_121"
+                      data-name="Path 121"
+                      d="M257.887-454.034a12.084,12.084,0,0,1,3.505-3.62,11.811,11.811,0,0,1,3.46,3.549,17.887,17.887,0,0,1,3.362,11.216c.73.589,1.482,1.154,2.2,1.754a3.969,3.969,0,0,1,1.266,3.659c-.347,1.672-.679,3.347-1.045,5.015a1.393,1.393,0,0,1-2.12.7c-1.178-.946-2.326-1.925-3.5-2.872a5.373,5.373,0,0,1-3.316,1.44,5.365,5.365,0,0,1-3.882-1.4c-.844.621-1.628,1.367-2.453,2.033a6.315,6.315,0,0,1-1.2.924,1.393,1.393,0,0,1-1.839-.9c-.377-1.631-.771-3.257-1.136-4.89a3.96,3.96,0,0,1,1.335-3.81c.641-.517,1.29-1.025,1.943-1.527.182-.092.091-.3.1-.46a17.915,17.915,0,0,1,3.326-10.806m1.156,5.049a2.748,2.748,0,0,0,.24,3.641,3.024,3.024,0,0,0,4.134.085,2.75,2.75,0,0,0,.729-3.021,2.924,2.924,0,0,0-2.454-1.825,2.984,2.984,0,0,0-2.65,1.119"
+                      transform="translate(-251.1 457.654)"
+                      fill="#764abc"
+                    />
+                    <path
+                      id="Path_122"
+                      data-name="Path 122"
+                      d="M260.3-419.746a.693.693,0,0,1,1.027-.557,6.628,6.628,0,0,0,5.77,0,.7.7,0,0,1,1.029.516q.008,1.532,0,3.064a.691.691,0,0,1-1.079.5c-.306-.26-.582-.552-.876-.825-.467.874-.905,1.76-1.375,2.631a.7.7,0,0,1-1.161.007c-.472-.873-.908-1.764-1.384-2.637-.29.275-.566.566-.873.825a.692.692,0,0,1-1.078-.506c-.008-1.007,0-2.015,0-3.022"
+                      transform="translate(-253.92 446.225)"
+                      fill="#764abc"
+                    />
+                    <path
+                      id="Path_123"
+                      data-name="Path 123"
+                      d="M265.28-441.9a1.4,1.4,0,0,0,1.432-1.376,1.4,1.4,0,0,0-1.432-1.377,1.4,1.4,0,0,0-1.431,1.377,1.4,1.4,0,0,0,1.431,1.376"
+                      transform="translate(-255.01 453.668)"
+                      fill="#764abc"
+                    />
+                    <path
+                      id="Path_124"
+                      data-name="Path 124"
+                      d="M288.561-448.233H290.8v15.127h9.357v2.036h-11.6Zm13.563,11.211a5.99,5.99,0,0,1,.546-2.557,6.4,6.4,0,0,1,1.479-2.037,6.769,6.769,0,0,1,4.751-1.818,6.592,6.592,0,0,1,4.666,1.733,5.891,5.891,0,0,1,1.891,4.521,5.9,5.9,0,0,1-2.024,4.544,6.767,6.767,0,0,1-4.751,1.807A6.582,6.582,0,0,1,304-432.549a5.832,5.832,0,0,1-1.879-4.472m2.3-.133a4.517,4.517,0,0,0,.339,1.757A4.36,4.36,0,0,0,305.7-434a4.381,4.381,0,0,0,3.2,1.235,4.1,4.1,0,0,0,3.03-1.235,4.107,4.107,0,0,0,1.224-3.043,4.325,4.325,0,0,0-1.273-3.188,4.335,4.335,0,0,0-3.2-1.26,4.074,4.074,0,0,0-3.03,1.249,4.213,4.213,0,0,0-1.224,3.091m16.677,1.078a2.077,2.077,0,0,0-.582,1.3.918.918,0,0,0,.413.849,3.845,3.845,0,0,0,1.1.413q.692.157,1.564.266t1.794.218q.909.121,1.782.315a6.957,6.957,0,0,1,1.575.509,2.345,2.345,0,0,1,1.516,2.158,4.306,4.306,0,0,1-1.9,3.563,6.821,6.821,0,0,1-4.157,1.321,7.745,7.745,0,0,1-3.806-.873,3.147,3.147,0,0,1-1.831-2.861,3.762,3.762,0,0,1,.9-2.315,5.143,5.143,0,0,1,.558-.606,2.3,2.3,0,0,1-1.758-2.17,4.315,4.315,0,0,1,1.6-3.321,3.385,3.385,0,0,1-.557-1.878,3.7,3.7,0,0,1,.424-1.806,4.118,4.118,0,0,1,1.152-1.321,5.62,5.62,0,0,1,3.5-1.115,5.436,5.436,0,0,1,3.466,1.115,4.661,4.661,0,0,1,2.5-1.043,6.619,6.619,0,0,1,.945-.072l-.1,1.879a6.307,6.307,0,0,0-2.218.569,3.709,3.709,0,0,1,.412,1.721,3.4,3.4,0,0,1-.436,1.7,4.025,4.025,0,0,1-1.14,1.31,5.554,5.554,0,0,1-3.405,1.091,5.887,5.887,0,0,1-3.309-.91m.582-4.253a2.143,2.143,0,0,0-.231,1.017,2.221,2.221,0,0,0,.231,1.031,2.275,2.275,0,0,0,.654.739,3.493,3.493,0,0,0,2.085.582,2.688,2.688,0,0,0,2.594-1.285,2.074,2.074,0,0,0,.231-1.006,2.135,2.135,0,0,0-.243-1.03,2.124,2.124,0,0,0-.642-.751,3.446,3.446,0,0,0-2.085-.594,2.682,2.682,0,0,0-2.594,1.3m.024,8.944a3.151,3.151,0,0,0-.837,2.194,1.783,1.783,0,0,0,1.2,1.611,4.619,4.619,0,0,0,1.975.473,7.943,7.943,0,0,0,1.6-.134,3.885,3.885,0,0,0,1.139-.4,1.942,1.942,0,0,0,1.176-1.769q0-1.079-2.085-1.443-.9-.157-2.194-.279t-1.975-.254m27.052-11.563a5.27,5.27,0,0,1-3.515,5.273l3.261,6.606H345.9l-2.945-5.976a16.725,16.725,0,0,1-2.509.182h-4.461v5.793h-2.241v-17.163h7.042a12.082,12.082,0,0,1,5.684,1.042,4.451,4.451,0,0,1,2.291,4.242m-8.012,4.048a8.338,8.338,0,0,0,4.024-.752,3.344,3.344,0,0,0,1.612-3.151q0-2.885-3.733-3.273a19.936,19.936,0,0,0-2.218-.121h-4.449v7.3Zm10.7,1.879a5.99,5.99,0,0,1,.546-2.557,6.4,6.4,0,0,1,1.479-2.037,6.77,6.77,0,0,1,4.751-1.818A6.591,6.591,0,0,1,362.9-441.7a5.894,5.894,0,0,1,1.891,4.521,5.9,5.9,0,0,1-2.024,4.544,6.767,6.767,0,0,1-4.751,1.807,6.582,6.582,0,0,1-4.678-1.721,5.831,5.831,0,0,1-1.879-4.472m2.3-.133a4.517,4.517,0,0,0,.34,1.757,4.37,4.37,0,0,0,.933,1.394,4.383,4.383,0,0,0,3.2,1.235,4.1,4.1,0,0,0,3.03-1.235,4.107,4.107,0,0,0,1.224-3.043,4.325,4.325,0,0,0-1.273-3.188,4.336,4.336,0,0,0-3.2-1.26,4.073,4.073,0,0,0-3.03,1.249,4.214,4.214,0,0,0-1.224,3.091m23.344,3.491.424,1.709a7.408,7.408,0,0,1-4.46,1.127,5.729,5.729,0,0,1-4.412-1.721,6.409,6.409,0,0,1-1.563-4.557,6.234,6.234,0,0,1,1.757-4.509,5.974,5.974,0,0,1,4.448-1.818,6.431,6.431,0,0,1,3.9,1.1l-.8,1.805a5.411,5.411,0,0,0-3.321-1.017,3.3,3.3,0,0,0-2.7,1.284,4.622,4.622,0,0,0-.982,3.006,4.82,4.82,0,0,0,1.03,3.175,3.638,3.638,0,0,0,2.969,1.309,8.3,8.3,0,0,0,3.708-.9m3.066-16.326h2.3v12.133l5.442-5.333h2.69l-5.7,5.575,3.394,3.66a3.824,3.824,0,0,0,2.569,1.249l-.352,1.636a3.724,3.724,0,0,1-2.981-.678,6.8,6.8,0,0,1-.691-.667l-4.375-4.728v6.073h-2.3Zm22.108,7.866a4.441,4.441,0,0,1,1.006,1.624,5.626,5.626,0,0,1,.376,2.049,15.688,15.688,0,0,1-.243,2.533h-8.436a4.022,4.022,0,0,0,1.188,2.315,3.741,3.741,0,0,0,2.606.836,10.169,10.169,0,0,0,4.133-.824l.388,1.733a8.96,8.96,0,0,1-3.564.958,15.618,15.618,0,0,1-1.672.073,6.288,6.288,0,0,1-2.158-.412,4.692,4.692,0,0,1-1.866-1.212,6.631,6.631,0,0,1-1.466-4.654,6.234,6.234,0,0,1,1.757-4.509,5.974,5.974,0,0,1,4.448-1.818,4.733,4.733,0,0,1,3.5,1.309m-.812,4.425.049-.655a2.885,2.885,0,0,0-1.66-2.945,3.332,3.332,0,0,0-1.334-.242,3.368,3.368,0,0,0-1.43.3,3.514,3.514,0,0,0-1.114.825,4.376,4.376,0,0,0-1.091,2.715Zm5.358-3.624h-1.3v-1.5l2.982-2.242h.618v1.879h3.466v1.866h-3.466v4.9a5.311,5.311,0,0,0,.521,2.812,2.747,2.747,0,0,0,2.036.91l-.351,1.636q-3.636.46-4.3-2.873a10.568,10.568,0,0,1-.206-2.144Z"
+                      transform="translate(-262.589 455.303)"
+                      fill="#764abc"
+                    />
+                  </g>
+                </g>
+              </svg>
             </a>
-
-            {/* Collapse Button */}
-            <button
-              type="button"
-              className="hs-collapse-toggle md:hidden relative size-9 flex justify-center items-center font-medium text-sm rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-              id="hs-header-base-collapse"
-              aria-expanded="false"
-              aria-controls="hs-header-base"
-              aria-label="Toggle navigation"
-              data-hs-collapse="#hs-header-base"
-            >
-              <svg
-                className="hs-collapse-open:hidden size-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="3" x2="21" y1="6" y2="6" />
-                <line x1="3" x2="21" y1="12" y2="12" />
-                <line x1="3" x2="21" y1="18" y2="18" />
-              </svg>
-              <svg
-                className="hs-collapse-open:block shrink-0 hidden size-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M18 6 6 18" />
-                <path d="m6 6 12 12" />
-              </svg>
-              <span className="sr-only">Toggle navigation</span>
-            </button>
-            {/* End Collapse Button */}
           </div>
 
-          {/* Collapse */}
-          <div
-            id="hs-header-base"
-            className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block "
-            aria-labelledby="hs-header-base-collapse"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            id="menu-button"
+            className="h-6 w-6 cursor-pointer md:hidden block"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            <div className="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-              <div className="py-2 md:py-0  flex flex-col md:flex-row md:items-center gap-0.5 md:gap-1">
-                <div className="grow">
-                  <div className="flex flex-col md:flex-row md:justify-end md:items-center gap-0.5 md:gap-1">
-                    <NavLink
-                      className={({isActive, isPending}) =>
-                        isPending
-                          ? "pending"
-                          : isActive
-                            ? " underline header-link bg-gray-200"
-                            : "header-link"
-                      }
-                      to="/"
-                      aria-current="page"
-                    >
-                      <svg
-                        className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-                        <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                      </svg>
-                      Home
-                    </NavLink>
-                    <a
-                      className="p-2 flex items-center text-sm bg-transparent text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                      href="#"
-                      aria-current="page"
-                    >
-                      <svg
-                        className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-                        <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                      </svg>
-                      Convert Document
-                    </a>
-                    <NavLink
-                      className={({isActive, isPending}) =>
-                        isPending
-                          ? "pending"
-                          : isActive
-                            ? " underline header-link bg-gray-200"
-                            : "header-link"
-                      }
-                      to="/about"
-                      aria-current="page"
-                    >
-                      <svg
-                        className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-                        <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                      </svg>
-                      Convert Image
-                    </NavLink>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
 
-                    {/* Mega Menu */}
-                    <div className="hs-dropdown [--strategy:static] md:[--strategy:absolute] [--adaptive:none] [--is-collapse:true] md:[--is-collapse:false] ">
-                      <button
-                        id="hs-header-base-mega-menu-fullwidth"
-                        type="button"
-                        className="hs-dropdown-toggle w-full p-2 flex items-center text-sm text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                        aria-haspopup="menu"
-                        aria-expanded="false"
-                        aria-label="Mega Menu"
-                      >
-                        <svg
-                          className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        Amazon Tools
-                        <svg
-                          className="hs-dropdown-open:-rotate-180 md:hs-dropdown-open:rotate-0 duration-300 shrink-0 size-4 ms-auto md:ms-1"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="m6 9 6 6 6-6" />
-                        </svg>
-                      </button>
-
-                      <div
-                        className="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] md:duration-150 hs-dropdown-open:opacity-100 opacity-0 relative w-full min-w-60 hidden z-10 top-full start-0 before:absolute before:-top-5 before:start-0 before:w-full before:h-5"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="hs-header-base-mega-menu-fullwidth"
-                      >
-                        <div className="md:mx-6 lg:mx-8 md:bg-white md:rounded-lg md:shadow-md dark:md:bg-neutral-800">
-                          {/* Grid */}
-                          <div className="py-1 md:p-2 md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div className="flex flex-col">
-                              {/* Link */}
-                              <a
-                                className="p-3 flex gap-x-4 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 rounded-lg dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                href="#"
-                              >
-                                <svg
-                                  className="shrink-0 size-4 mt-1 text-gray-800 dark:text-neutral-200"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                                </svg>
-                                <div className="grow">
-                                  <p className="font-medium text-sm text-gray-800 dark:text-neutral-200">
-                                    Support Docs
-                                  </p>
-                                  <p className="text-sm text-gray-500 dark:text-neutral-500">
-                                    Explore advice and explanations for all of
-                                    Preline's features.
-                                  </p>
-                                </div>
-                              </a>
-                              {/* End Link */}
-
-                              {/* Link */}
-                              <a
-                                className="p-3 flex gap-x-4 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 rounded-lg dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                href="#"
-                              >
-                                <svg
-                                  className="shrink-0 size-4 mt-1 text-gray-800 dark:text-neutral-200"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <rect
-                                    width="7"
-                                    height="7"
-                                    x="14"
-                                    y="3"
-                                    rx="1"
-                                  />
-                                  <path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3" />
-                                </svg>
-                                <div className="grow">
-                                  <p className="font-medium text-sm text-gray-800 dark:text-neutral-200">
-                                    Integrations
-                                  </p>
-                                  <p className="text-sm text-gray-500 dark:text-neutral-500">
-                                    Discover the huge range of tools that
-                                    Preline integrates with.
-                                  </p>
-                                </div>
-                              </a>
-                              {/* End Link */}
-
-                              {/* Link */}
-                              <a
-                                className="p-3 flex gap-x-4 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 rounded-lg dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                href="#"
-                              >
-                                <svg
-                                  className="shrink-0 size-4 mt-1 text-gray-800 dark:text-neutral-200"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <path d="m7 11 2-2-2-2" />
-                                  <path d="M11 13h4" />
-                                  <rect
-                                    width="18"
-                                    height="18"
-                                    x="3"
-                                    y="3"
-                                    rx="2"
-                                    ry="2"
-                                  />
-                                </svg>
-                                <div className="grow">
-                                  <p className="font-medium text-sm text-gray-800 dark:text-neutral-200">
-                                    API Reference
-                                  </p>
-                                  <p className="text-sm text-gray-500 dark:text-neutral-500">
-                                    Build custom integrations with our
-                                    first-class API.
-                                  </p>
-                                </div>
-                              </a>
-                              {/* End Link */}
-                            </div>
-                            {/* End Col */}
-
-                            <div className="flex flex-col">
-                              {/* Link */}
-                              <a
-                                className="p-3 flex gap-x-4 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 rounded-lg dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                href="#"
-                              >
-                                <svg
-                                  className="shrink-0 size-4 mt-1 text-gray-800 dark:text-neutral-200"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <circle cx="12" cy="12" r="10" />
-                                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                                  <path d="M12 17h.01" />
-                                </svg>
-                                <div className="grow">
-                                  <p className="font-medium text-sm text-gray-800 dark:text-neutral-200">
-                                    Help Center
-                                  </p>
-                                  <p className="text-sm text-gray-500 dark:text-neutral-500">
-                                    Learn how to install, set up, and use
-                                    Preline.
-                                  </p>
-                                </div>
-                              </a>
-                              {/* End Link */}
-
-                              {/* Link */}
-                              <a
-                                className="p-3 flex gap-x-4 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 rounded-lg dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                href="#"
-                              >
-                                <svg
-                                  className="shrink-0 size-4 mt-1 text-gray-800 dark:text-neutral-200"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <circle cx="12" cy="12" r="4" />
-                                  <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" />
-                                </svg>
-                                <div className="grow">
-                                  <p className="font-medium text-sm text-gray-800 dark:text-neutral-200">
-                                    Developer Hub
-                                  </p>
-                                  <p className="text-sm text-gray-500 dark:text-neutral-500">
-                                    Learn how to integrate or build on top of
-                                    Preline.
-                                  </p>
-                                </div>
-                              </a>
-                              {/* End Link */}
-
-                              {/* Link */}
-                              <a
-                                className="p-3 flex gap-x-4 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 rounded-lg dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                href="#"
-                              >
-                                <svg
-                                  className="shrink-0 size-4 mt-1 text-gray-800 dark:text-neutral-200"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                  <circle cx="9" cy="7" r="4" />
-                                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                </svg>
-                                <div className="grow">
-                                  <p className="font-medium text-sm text-gray-800 dark:text-neutral-200">
-                                    Community Forum
-                                  </p>
-                                  <p className="text-sm text-gray-500 dark:text-neutral-500">
-                                    Learn, share, and connect with other Preline
-                                    users.
-                                  </p>
-                                </div>
-                              </a>
-                              {/* End Link */}
-                            </div>
-                            {/* End Col */}
-
-                            <div className="mt-2 md:mt-0 flex flex-col">
-                              <span className="ms-2.5 mb-2 font-semibold text-xs uppercase text-gray-800 dark:text-neutral-200">
-                                Customer stories
-                              </span>
-
-                              {/* Link */}
-                              <a
-                                className="p-3 flex gap-x-5 items-center rounded-xl hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                href="#"
-                              >
-                                <img
-                                  className="size-32 rounded-lg"
-                                  src="https://images.unsplash.com/photo-1648737967328-690548aec14f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&h=320&q=80"
-                                  alt="Avatar"
-                                />
-                                <div className="grow">
-                                  <p className="text-sm text-gray-800 dark:text-neutral-400">
-                                    Preline Projects has proved to be most
-                                    efficient cloud based project tracking and
-                                    bug tracking tool.
-                                  </p>
-                                  <p className="mt-3 inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 group-hover:underline group-focus:underline font-medium dark:text-blue-400">
-                                    Learn more
-                                    <svg
-                                      className="shrink-0 size-4"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="24"
-                                      height="24"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    >
-                                      <path d="m9 18 6-6-6-6" />
-                                    </svg>
-                                  </p>
-                                </div>
-                              </a>
-                              {/* End Link */}
-                            </div>
-                            {/* End Col */}
-                          </div>
-                          {/* End Grid */}
-                        </div>
-                      </div>
-                    </div>
-                    {/* End Mega Menu */}
-
-                    <NavLink
-                      className={({isActive, isPending}) =>
-                        isPending
-                          ? "pending"
-                          : isActive
-                            ? " underline header-link bg-gray-200"
-                            : "header-link"
-                      }
-                      to="/etc"
-                    >
-                      <svg
-                        className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
-                      Account
-                    </NavLink>
-
-                    <NavLink
-                      className={({isActive, isPending}) =>
-                        isPending
-                          ? "pending"
-                          : isActive
-                            ? " underline header-link bg-gray-200"
-                            : "header-link"
-                      }
-                      to="/detc"
-                    >
-                      <svg
-                        className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M12 12h.01" />
-                        <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-                        <path d="M22 13a18.15 18.15 0 0 1-20 0" />
-                        <rect width="20" height="14" x="2" y="6" rx="2" />
-                      </svg>
-                      Work
-                    </NavLink>
-
-                    <NavLink
-                      className={({isActive, isPending}) =>
-                        isPending
-                          ? "pending"
-                          : isActive
-                            ? " underline header-link bg-gray-200"
-                            : "header-link"
-                      }
-                      to="/blog"
-                    >
-                      <svg
-                        className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
-                        <path d="M18 14h-8" />
-                        <path d="M15 18h-5" />
-                        <path d="M10 6h8v4h-8V6Z" />
-                      </svg>
-                      Blog
-                    </NavLink>
-                  </div>
-                </div>
-
-                <div className="my-2 md:my-0 md:mx-2">
-                  <div className="w-full h-px md:w-px md:h-4 bg-gray-100 md:bg-gray-300 dark:bg-neutral-700"></div>
-                </div>
-
-                {/* Button Group */}
-                <div className=" flex flex-wrap items-center gap-x-1.5">
-                  <a
-                    className="py-[7px] px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                    href="#"
-                  >
-                    Sign in
-                  </a>
-                  <a
-                    className="py-2 px-2.5 inline-flex items-center font-medium text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:bg-blue-600"
-                    href="#"
-                  >
-                    Get started
-                  </a>
-                </div>
-                {/* End Button Group */}
-              </div>
-            </div>
+          <div
+            className="hidden w-full md:flex md:items-center md:w-auto"
+            id="menu"
+          >
+            <ul
+              className="
+              pt-4
+              text-base text-gray-700
+              md:flex
+              md:justify-between 
+              md:pt-0"
+            >
+              <li>
+                <NavLink
+                  className={({isActive, isPending}) =>
+                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                  }
+                  to="/pdf-tools"
+                >
+                  Pdf Tools
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className={({isActive, isPending}) =>
+                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                  }
+                  to="/docx-tools"
+                >
+                  Docx Tool
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className={({isActive, isPending}) =>
+                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                  }
+                  to="/amazon"
+                >
+                  Amazon
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className={({isActive, isPending}) =>
+                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                  }
+                  to="/blog"
+                >
+                  Blog
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className={({isActive, isPending}) =>
+                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                  }
+                  to="/docs"
+                >
+                  Docs
+                </NavLink>
+              </li>
+            </ul>
           </div>
-          {/* End Collapse */}
-          <ThemeSwitcher />
         </nav>
       </header>
+
       {/* ========== END HEADER ========== */}
 
       <main className="main container mx-auto border-l border-r border-gray-200 dark:border-neutral-700">
@@ -828,11 +399,10 @@ const Layout = ({children}: any) => {
           <div className="sm:flex sm:justify-between sm:items-center">
             <div className="flex flex-wrap items-center gap-3">
               {/* Language Dropdown */}
-              <div className="hs-dropdown [--placement:top-left] relative inline-flex">
+              <div className=" [--placement:top-left] relative inline-flex">
                 <button
-                  id="hs-footer-language-dropdown"
                   type="button"
-                  className="hs-dropdown-toggle py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                  className=" py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
                   aria-haspopup="menu"
                   aria-expanded="false"
                   aria-label="Dropdown"
@@ -870,7 +440,7 @@ const Layout = ({children}: any) => {
                   </svg>
                   English (US)
                   <svg
-                    className="hs-dropdown-open:rotate-180 shrink-0 size-4 text-gray-500 dark:text-neutral-500"
+                    className=" shrink-0 size-4 text-gray-500 dark:text-neutral-500"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -886,10 +456,9 @@ const Layout = ({children}: any) => {
                 </button>
 
                 <div
-                  className="hs-dropdown-menu w-40 transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden z-10 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
+                  className=" w-40 transition-[opacity,margin] duration  opacity-0 hidden z-10 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
                   role="menu"
                   aria-orientation="vertical"
-                  aria-labelledby="hs-footer-language-dropdown"
                 >
                   <a
                     className="flex items-center gap-x-2 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"

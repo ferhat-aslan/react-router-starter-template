@@ -1,23 +1,17 @@
 import type {Route} from "./+types/home";
-import {Welcome} from "../welcome/welcome";
 import Layout from "~/components/layout";
 import SVG from "/pdf.svg";
-
 export function meta({}: Route.MetaArgs) {
   return [
-    {title: "New React Router App"},
-    {name: "description", content: "Welcome to React Router!"},
+    {title: "Docx Tools - APIs & Samples"},
+    {name: "description", content: "Welcome to Docx Tools!"},
   ];
 }
 
-export function loader({context}: Route.LoaderArgs) {
-  return {message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE};
-}
-
-export default function Home({loaderData}: Route.ComponentProps) {
+export default function DocxTools() {
   return (
     <Layout>
-      <Welcome message={loaderData.message} />
+      {/* Card Blog */}
       <section className="grid w-full grid-cols-12 container mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-4">
         <h1 className="col-span-12 text-center text-6xl font-bold">
           Every tool you need to work with PDFs in one place
@@ -106,6 +100,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
           </div>
         </aside>
       </section>
+      {/* End Card Blog */}
     </Layout>
   );
 }

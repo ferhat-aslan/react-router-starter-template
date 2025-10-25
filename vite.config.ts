@@ -10,5 +10,15 @@ export default defineConfig({
 		tailwindcss(),
 		reactRouter(),
 		tsconfigPaths(),
+
 	],
+	build: {
+		cssMinify: true,
+		cssCodeSplit: true,
+
+	},
+	css: {
+
+
+	},
 });
