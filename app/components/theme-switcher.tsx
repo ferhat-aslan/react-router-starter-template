@@ -3,11 +3,11 @@ export const ThemeSwitcher = () => {
     <>
       <button
         type="button"
-        className="hs-dark-mode-active:hidden block hs-dark-mode font-medium text-gray-800 rounded-full hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+        className="dark:hidden block hs-dark-mode font-medium text-gray-800 rounded-full hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
         data-hs-theme-click-value="dark"
         onClick={() => {
           document.documentElement.classList.add("dark");
-          localStorage.setItem("hs_theme", "dark");
+          localStorage.setItem("theme", "dark");
         }}
       >
         <span className="group inline-flex shrink-0 justify-center items-center size-9">
@@ -29,11 +29,11 @@ export const ThemeSwitcher = () => {
       </button>
       <button
         type="button"
-        className="hs-dark-mode-active:block hidden hs-dark-mode font-medium text-gray-800 rounded-full hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+        className="dark:block hidden hs-dark-mode font-medium text-gray-800 rounded-full hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
         data-hs-theme-click-value="light"
         onClick={() => {
           document.documentElement.classList.remove("dark");
-          localStorage.setItem("hs_theme", "light");
+          localStorage.setItem("theme", "light");
         }}
       >
         <span className="group inline-flex shrink-0 justify-center items-center size-9">

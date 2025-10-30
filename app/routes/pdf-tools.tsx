@@ -27,7 +27,10 @@ export default function PDFTools() {
         </h6>
 
         <aside className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="option-grid-box">
+          <a
+            className="option-grid-box bg-background"
+            href="/pdf-tools/merge-pdf"
+          >
             <span className="flex relative">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img
@@ -46,8 +49,8 @@ export default function PDFTools() {
               Combine multiple PDF files into a single document quickly and
               easily.
             </p>
-          </div>
-          <div className="option-grid-box">
+          </a>
+          <a className="option-grid-box" href="/pdf-tools/split-pdf">
             <span className="flex flex-row justify-start item-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={SVG} alt="PDF Icon" className="mb-4 size-10" />
@@ -58,7 +61,7 @@ export default function PDFTools() {
               Combine multiple PDF files into a single document quickly and
               easily.
             </p>
-          </div>
+          </a>
           <div className="option-grid-box">
             <span className="flex flex-row justify-start items-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
@@ -95,7 +98,7 @@ export default function PDFTools() {
           <NavLink
             to="/amazon"
             viewTransition
-            className="group hidden hover:bg-neutral-100 cursor-pointer flex-col h-full bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
+            className="group flex hover:bg-neutral-100 cursor-pointer flex-col h-full bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
           >
             <div className="h-52 flex flex-col justify-center items-center bg-amber-500 rounded-t-xl">
               <img src={SVG} alt="Slack Logo" className=" w-32" />

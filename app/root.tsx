@@ -46,8 +46,21 @@ const menu = document.querySelector('#menu');
 
 
 button.addEventListener('click', () => {
-  menu.classList.toggle('hidden');
-});`,
+  menu.classList.toggle('hidden');});
+
+  const storedTheme = localStorage.getItem('theme');
+  const prefersDark =
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (storedTheme) {
+    document.documentElement.classList.add(storedTheme);
+  } else if (prefersDark) {
+    document.documentElement.classList.add('dark');
+  }
+console.log("girdi");
+
+`,
         }}
       ></script>
     </html>

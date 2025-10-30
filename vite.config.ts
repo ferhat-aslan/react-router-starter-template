@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+
 	plugins: [
 		cloudflare({ viteEnvironment: { name: "ssr" } }),
 		tailwindcss(),
@@ -15,6 +16,7 @@ export default defineConfig({
 	build: {
 		cssMinify: true,
 		cssCodeSplit: true,
+		ssr: true,
 
 	},
 	css: {

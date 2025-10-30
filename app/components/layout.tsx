@@ -3,10 +3,10 @@ import {ThemeSwitcher} from "./theme-switcher";
 
 const Layout = ({children}: any) => {
   return (
-    <div className="">
+    <>
       {/* ========== HEADER ========== */}
 
-      <header className="border-b border-gray-200">
+      <header className="">
         <nav
           className="
           flex flex-wrap
@@ -17,7 +17,7 @@ const Layout = ({children}: any) => {
           md:py-0
           px-4
           text-lg text-gray-700
-          bg-white container mx-auto 
+           container mx-auto  border border-gray-200 dark:border-neutral-700 h-13
         "
         >
           <div>
@@ -89,7 +89,7 @@ const Layout = ({children}: any) => {
           </svg>
 
           <div
-            className="hidden w-full md:flex md:items-center md:w-auto"
+            className="hidden w-full md:flex md:items-center md:w-auto gap-x-3"
             id="menu"
           >
             <ul
@@ -98,12 +98,12 @@ const Layout = ({children}: any) => {
               text-base text-gray-700
               md:flex
               md:justify-between 
-              md:pt-0"
+              md:pt-0 gap-x-3"
             >
               <li>
                 <NavLink
                   className={({isActive, isPending}) =>
-                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                    `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/pdf-tools"
                 >
@@ -113,7 +113,7 @@ const Layout = ({children}: any) => {
               <li>
                 <NavLink
                   className={({isActive, isPending}) =>
-                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                    `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/docx-tools"
                 >
@@ -123,7 +123,7 @@ const Layout = ({children}: any) => {
               <li>
                 <NavLink
                   className={({isActive, isPending}) =>
-                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                    `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/amazon"
                 >
@@ -133,7 +133,7 @@ const Layout = ({children}: any) => {
               <li>
                 <NavLink
                   className={({isActive, isPending}) =>
-                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                    `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/blog"
                 >
@@ -143,7 +143,7 @@ const Layout = ({children}: any) => {
               <li>
                 <NavLink
                   className={({isActive, isPending}) =>
-                    `header-link ${isActive ? "text-purple-400 underline" : ""}`
+                    `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/docs"
                 >
@@ -152,6 +152,7 @@ const Layout = ({children}: any) => {
               </li>
             </ul>
           </div>
+          <ThemeSwitcher />
         </nav>
       </header>
 
@@ -688,7 +689,7 @@ const Layout = ({children}: any) => {
         </div>
       </footer>
       {/* ========== END FOOTER ========== */}
-    </div>
+    </>
   );
 };
 export default Layout;

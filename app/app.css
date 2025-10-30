@@ -34,15 +34,11 @@ body {
 }
 
 .header-link {
-  @apply p-2 flex items-center text-sm  text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-hidden active:text-sm focus:text-sm focus:bg-gray-100 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700;
+  @apply p-2 py-1 flex items-center text-base  text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-hidden active:text-base focus:text-sm focus:bg-gray-100  dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700;
 }
 
-.active {
-  @apply font-semibold text-gray-900 dark:text-gray-100 text-sm;
-}
-
-.pending {
-  @apply font-semibold  text-sm scale-100;
+.active-link {
+  @apply font-bold  dark:text-[chartreuse] text-violet-500;
 }
 
 .tag {
@@ -50,5 +46,44 @@ body {
 }
 
 .option-grid-box {
-  @apply w-full p-6 border border-gray-200 rounded-2xl duration-200 hover:shadow-lg transition aspect-square cursor-pointer;
+  @apply w-full p-6 border  border-gray-200 bg-white dark:bg-neutral-800 dark:border-neutral-700 rounded-2xl duration-200 hover:shadow-lg transition aspect-square cursor-pointer;
+}
+
+body {
+  background-image: linear-gradient(rgb(241 241 241) 2px, transparent 2px),
+    linear-gradient(90deg, rgb(241 241 241) 2px, transparent 2px),
+    linear-gradient(rgb(241 241 241) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(241 241 241) 1px, rgb(255 255 255 / 63%) 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
+.dark body {
+  background-image: linear-gradient(rgb(38 38 38) 2px, transparent 2px),
+    linear-gradient(90deg, rgb(38 38 38) 2px, transparent 2px),
+    linear-gradient(rgb(38 38 38) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(38 38 38) 1px, rgb(0 0 0 / 63%) 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
+.dark body footer {
+  background: #262626;
+}
+
+.bg-background {
+  @apply bg-white dark:bg-neutral-800;
+}
+
+.box.over {
+  outline: 3px dotted #666;
+}
+
+.box {
+  cursor: pointer;
+}
+.box:hover {
+  outline-color: violet;
+  outline-width: 2px;
+  outline-style: dashed;
 }
