@@ -5,18 +5,65 @@ import {useState} from "react";
 import Free from "~/components/free";
 
 export function meta({}: Route.MetaArgs) {
+  const title = "Word to PDF — Convert DOC/DOCX/RTF to PDF";
+  const description =
+    "Convert Word documents (.doc, .docx, .rtf) to PDF quickly and privately. No signup required.";
+  const canonical = "https://your-domain.example/pdf-tools/word-to-pdf"; // replace with your domain
+
   return [
-    {title: "Word to PDF"},
+    {title},
+    {name: "description", content: description},
+    {name: "robots", content: "index,follow"},
+    {rel: "canonical", href: canonical},
+    {property: "og:type", content: "website"},
+    {property: "og:title", content: title},
+    {property: "og:description", content: description},
+    {property: "og:url", content: canonical},
     {
-      name: "description",
-      content: "Convert Word documents (.doc/.docx/.rtf) to PDF",
+      property: "og:image",
+      content: "https://your-domain.example/og-image-word.png",
     },
+    {name: "twitter:card", content: "summary_large_image"},
   ];
 }
 
 export default function WordToPdf() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Word to PDF",
+    description: "Convert Word files to PDF with one click.",
+    url:
+      typeof window !== "undefined"
+        ? window.location.href
+        : "https://your-domain.example/pdf-tools/word-to-pdf",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://your-domain.example/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "PDF Tools",
+          item: "https://your-domain.example/pdf-tools",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Word to PDF",
+          item: "https://your-domain.example/pdf-tools/word-to-pdf",
+        },
+      ],
+    },
+  };
 
   return (
     <Layout>
@@ -113,6 +160,11 @@ export default function WordToPdf() {
 
         <Free />
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
+      />
     </Layout>
   );
 }

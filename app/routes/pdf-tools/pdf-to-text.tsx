@@ -5,15 +5,65 @@ import {useState} from "react";
 import Free from "~/components/free";
 
 export function meta({}: Route.MetaArgs) {
+  const title = "PDF to Text — Extract Text from PDF Pages";
+  const description =
+    "Extract all text from a PDF into a single .txt file. Useful for copying, search, and analysis.";
+  const canonical = "https://your-domain.example/pdf-tools/pdf-to-text"; // replace with your domain
+
   return [
-    {title: "PDF to Text"},
-    {name: "description", content: "Extract text from PDF pages"},
+    {title},
+    {name: "description", content: description},
+    {name: "robots", content: "index,follow"},
+    {rel: "canonical", href: canonical},
+    {property: "og:type", content: "website"},
+    {property: "og:title", content: title},
+    {property: "og:description", content: description},
+    {property: "og:url", content: canonical},
+    {
+      property: "og:image",
+      content: "https://your-domain.example/og-image-text.png",
+    },
+    {name: "twitter:card", content: "summary_large_image"},
   ];
 }
 
 export default function PdfToText() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "PDF to Text",
+    description: "Extract text from PDF pages and download as a .txt file.",
+    url:
+      typeof window !== "undefined"
+        ? window.location.href
+        : "https://your-domain.example/pdf-tools/pdf-to-text",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://your-domain.example/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "PDF Tools",
+          item: "https://your-domain.example/pdf-tools",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "PDF to Text",
+          item: "https://your-domain.example/pdf-tools/pdf-to-text",
+        },
+      ],
+    },
+  };
 
   return (
     <Layout>
@@ -72,6 +122,10 @@ export default function PdfToText() {
         </div>
         <Free />
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
+      />
     </Layout>
   );
 }

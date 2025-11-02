@@ -7,16 +7,70 @@ import {useEffect, useRef, useState} from "react";
 import Free from "~/components/free";
 
 export function meta({}: Route.MetaArgs) {
+  const title = "Split PDF Pages — Fast, Private PDF Tool";
+  const description =
+    "Split a PDF into a new PDF containing only the pages you want (keep or remove ranges). Fast, secure, no uploads retained.";
+  const canonical = "https://your-domain.example/pdf-tools/split-pdf"; // replace with your domain
+
   return [
-    {title: "Split PDF Pages"},
-    {name: "description", content: "Split PDF into single-page PDFs"},
+    {title},
+    {name: "description", content: description},
+    {name: "robots", content: "index,follow"},
+    {rel: "canonical", href: canonical},
+    {property: "og:type", content: "website"},
+    {property: "og:title", content: title},
+    {property: "og:description", content: description},
+    {property: "og:url", content: canonical},
+    {
+      property: "og:image",
+      content: "https://your-domain.example/og-image-split.png",
+    },
+    {name: "twitter:card", content: "summary_large_image"},
+    {name: "twitter:title", content: title},
+    {name: "twitter:description", content: description},
   ];
 }
+
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [ranges, setRanges] = useState<string>(""); // e.g. "1-3,5"
   const [mode, setMode] = useState<"keep" | "remove">("keep");
   const [loading, setLoading] = useState(false);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Split PDF Pages",
+    description:
+      "Split PDFs and produce a single PDF containing just the pages you choose. Supports page ranges and keep/remove modes.",
+    url:
+      typeof window !== "undefined"
+        ? window.location.href
+        : "https://your-domain.example/pdf-tools/split-pdf",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://your-domain.example/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "PDF Tools",
+          item: "https://your-domain.example/pdf-tools",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Split PDF",
+          item: "https://your-domain.example/pdf-tools/split-pdf",
+        },
+      ],
+    },
+  };
 
   return (
     <Layout>
@@ -157,6 +211,12 @@ export default function Home() {
 
         <Free />
       </section>
+
+      {/* insert JSON-LD for crawlers */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
+      />
     </Layout>
   );
 }
