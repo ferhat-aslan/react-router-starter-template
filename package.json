@@ -15,6 +15,7 @@
 		"publish": true
 	},
 	"dependencies": {
+		"@forge42/seo-tools": "^1.4.5",
 		"isbot": "5.1.26",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",

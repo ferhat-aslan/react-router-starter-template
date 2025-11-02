@@ -1,8 +1,10 @@
 import PDF from "../../public/pdf.svg";
 import FolderSVG from "/public/folder.svg";
 export default function SelectFilesInput({
+  accept = ".pdf,application/pdf",
   onChange,
 }: {
+  accept?: string;
   onChange: (files: FileList | null) => void;
 }) {
   return (
@@ -18,7 +20,7 @@ export default function SelectFilesInput({
       <input
         type="file"
         multiple
-        accept="application/pdf"
+        accept={accept}
         className="hidden"
         id="file-input"
         onChange={(e) => {
