@@ -28,7 +28,7 @@ export default function PDFTools() {
 
         <aside className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <a
-            className="option-grid-box bg-background"
+            className="option-grid-box bg-background group  flex flex-col justify-center "
             href="/pdf-tools/merge-pdf"
           >
             <span className="flex relative">
@@ -49,8 +49,14 @@ export default function PDFTools() {
               Combine multiple PDF files into a single document quickly and
               easily.
             </p>
+            <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+              Go to Tool →
+            </div>
           </a>
-          <a className="option-grid-box" href="/pdf-tools/split-pdf">
+          <a
+            className="option-grid-box bg-background group  flex flex-col justify-center "
+            href="/pdf-tools/split-pdf"
+          >
             <span className="flex flex-row justify-start item-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={SVG} alt="PDF Icon" className="mb-4 size-10" />
@@ -61,8 +67,14 @@ export default function PDFTools() {
               Combine multiple PDF files into a single document quickly and
               easily.
             </p>
+            <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+              Go to Tool →
+            </div>
           </a>
-          <div className="option-grid-box">
+          <a
+            className="option-grid-box bg-background group  flex flex-col justify-center "
+            href="/pdf-tools/word-to-pdf"
+          >
             <span className="flex flex-row justify-start items-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={WORD} alt="Word Icon" className="mb-4 size-14" />
@@ -72,8 +84,14 @@ export default function PDFTools() {
               Combine multiple PDF files into a single document quickly and
               easily.
             </p>
-          </div>
-          <div className="option-grid-box">
+            <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+              Go to Tool →
+            </div>
+          </a>
+          <a
+            className="option-grid-box bg-background group  flex flex-col justify-center "
+            href="/pdf-tools/pdf-to-text"
+          >
             <span className="flex flex-row justify-start items-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={TXT} alt="Txt Icon" className="mb-4 size-14" />
@@ -83,8 +101,14 @@ export default function PDFTools() {
               Combine multiple PDF files into a single document quickly and
               easily.
             </p>
-          </div>
-          <div className="option-grid-box">
+            <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+              Go to Tool →
+            </div>
+          </a>
+          <a
+            className="option-grid-box bg-background group  flex flex-col justify-center "
+            href="/pdf-tools/pdf-to-images"
+          >
             <span className="flex flex-row justify-start items-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={JPG} alt="Jpg Icon" className="mb-4 size-14" />
@@ -94,10 +118,12 @@ export default function PDFTools() {
               Combine multiple PDF files into a single document quickly and
               easily.
             </p>
-          </div>
-          <NavLink
-            to="/amazon"
-            viewTransition
+            <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+              Go to Tool →
+            </div>
+          </a>
+          <a
+            href="/amazon"
             className="group flex hover:bg-neutral-100 cursor-pointer flex-col h-full bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
           >
             <div className="h-52 flex flex-col justify-center items-center bg-amber-500 rounded-t-xl">
@@ -118,7 +144,7 @@ export default function PDFTools() {
             <div className="mt-auto flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
             </div>
-          </NavLink>
+          </a>
         </aside>
       </section>
       {/* End Card Blog */}

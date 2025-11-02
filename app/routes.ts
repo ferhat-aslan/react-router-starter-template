@@ -8,5 +8,6 @@ route("docx-tools", "routes/docx-tools.tsx"),
 ...prefix("pdf-tools", [
     index("routes/pdf-tools.tsx"),
     route("merge-pdf", "routes/pdf-tools/merge-pdf.tsx"),
+    route("split-pdf", "routes/pdf-tools/split-pdf.tsx"),
 ]),
 ] satisfies RouteConfig;

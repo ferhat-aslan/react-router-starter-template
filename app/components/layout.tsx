@@ -6,7 +6,7 @@ const Layout = ({children}: any) => {
     <>
       {/* ========== HEADER ========== */}
 
-      <header className="">
+      <header className="sticky top-0 z-50">
         <nav
           className="
           flex flex-wrap

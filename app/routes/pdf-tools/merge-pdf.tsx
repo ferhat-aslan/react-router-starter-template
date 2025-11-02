@@ -4,6 +4,7 @@ import PDF from "/pdf.svg";
 import SelectFilesInput from "~/components/select-files-input";
 import Dragging from "~/components/dragging";
 import {useEffect, useRef, useState} from "react";
+import Free from "~/components/free";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,6 +16,7 @@ export default function Home() {
   const [files, setFiles] = useState<FileList | null>(null);
   const [orderedFiles, setOrderedFiles] = useState<File[]>([]);
   const draggingRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   return (
     <Layout>
@@ -25,15 +27,43 @@ export default function Home() {
           single document online. No installation or registration/login and
           required and secured.
         </p>
+        <span className="text-red-500 font-bold text-2xl underline">
+          Just in 3 Steps:
+        </span>
+        <span className="flex justify-start w-full items-center font-medium text-xl">
+          1. Select PDF files
+        </span>
         <SelectFilesInput
           onChange={(newFiles: any) => {
             (draggingRef.current as any)?.setBoxes(Array.from(newFiles));
             setFiles(newFiles);
           }}
         />
+        <span className="flex justify-start w-full items-center font-medium text-xl">
+          2. Sort files as you want{" "}
+          <span
+            className="text-blue-500 cursor-pointer ml-5 border rounded-lg px-5 text-base hover:bg-blue-100"
+            onClick={() => setFiles(null)}
+          >
+            Clear
+          </span>
+        </span>
+
+        <Dragging
+          list={files ? Array.from(files) : []}
+          onChange={setOrderedFiles}
+          ref={draggingRef}
+        />
+
+        <span className="flex justify-start w-full items-center font-medium text-xl">
+          3. Merge PDFs
+        </span>
         <button
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="mt-4 px-4 py-2 disabled:opacity-40 disabled:pointer-events-none bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          disabled={!files?.length || files.length < 2}
           onClick={() => {
+            if (!files) return;
+            setLoading(true);
             const form = new FormData();
             orderedFiles.forEach((file) => {
               form.append("files", file);
@@ -54,18 +84,17 @@ export default function Home() {
                 a.setAttribute("download", "merged.pdf");
                 a.click();
                 a.remove();
+                setLoading(false);
+              })
+              .catch((error) => {
+                console.error("Error merging PDFs:", error);
+                setLoading(false);
               });
           }}
         >
           Merge PDFs
         </button>
-        {files?.length && (
-          <Dragging
-            list={files ? Array.from(files) : []}
-            onChange={setOrderedFiles}
-            ref={draggingRef}
-          />
-        )}
+        <Free />
       </section>
     </Layout>
   );

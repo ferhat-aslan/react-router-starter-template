@@ -1,4 +1,5 @@
 import {useImperativeHandle, useState} from "react";
+import PDFSVG from "/public/pdf.svg";
 
 export default function Dragging({
   list,
@@ -62,14 +63,30 @@ export default function Dragging({
     return false;
   };
 
+  if (boxes.length === 0) {
+    return (
+      <span className="border border-dashed w-full h-40 rounded-4xl grid grid-cols-3 place-items-center text-gray-400">
+        <span className="text-8xl border border-dashed w-full h-full rounded-4xl grid place-items-center">
+          1
+        </span>
+        <span className="text-8xl border border-dashed w-full h-full rounded-4xl grid place-items-center">
+          2
+        </span>
+        <span className="text-8xl border border-dashed w-full h-full rounded-4xl grid place-items-center">
+          3
+        </span>
+      </span>
+    );
+  }
+
   return (
     <>
-      <div className="grid grid-cols-3 gap-4 p-4 border-2 border-dashed border-gray-300 rounded-lg w-full max-w-lg mx-auto">
+      <div className="grid grid-cols-3  border-2  border-dashed border-gray-300 rounded-lg w-full max-w-xl mx-auto">
         {boxes.map((box, index) => (
           <div
             key={box + index}
             draggable="true"
-            className="border truncate line-clamp-3 border-gray-300 rounded-lg p-4 flex justify-center items-center box"
+            className="border rounded-4xl block place-content-center  truncate relative h-40 line-clamp-3 border-gray-300  p-4  justify-center items-center box"
             onDragStart={(e) => onDragStart(e, index)}
             onDragEnd={onDragEnd}
             onDragOver={handleDragOver}
@@ -77,7 +94,11 @@ export default function Dragging({
             onDragLeave={handleDragLeave}
             onDrop={(e) => handleDrop(e, index)}
           >
+            <img src={PDFSVG} alt="PDF Icon" className="mb-4 size-14" />
             {box.name}
+            <span className="absolute top-0 -start-0 aspect-square w-5 h-5 rounded-full bg-amber-400 text-black flex justify-center items-center">
+              {index + 1}
+            </span>
           </div>
         ))}
       </div>

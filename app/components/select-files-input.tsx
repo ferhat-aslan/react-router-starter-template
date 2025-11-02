@@ -1,4 +1,5 @@
 import PDF from "../../public/pdf.svg";
+import FolderSVG from "/public/folder.svg";
 export default function SelectFilesInput({
   onChange,
 }: {
@@ -25,7 +26,7 @@ export default function SelectFilesInput({
           onChange(files);
         }}
       />
-      <img src={PDF} alt="PDF Icon" className="mb-4 size-14" />
+      <img src={FolderSVG} alt="PDF Icon" className="mb-4 size-14" />
       <h2 className="text-2xl font-bold">Click and Select Files</h2>
       <span>Drag and drop PDF files here</span>
     </div>
