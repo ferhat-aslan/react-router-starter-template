@@ -4,13 +4,47 @@ import SVG from "/pdf.svg";
 import WORD from "/word.svg";
 import TXT from "/txt.svg";
 import JPG from "/jpg.svg";
-import {NavLink} from "react-router";
-export function meta({}: Route.MetaArgs) {
+import {NavLink, type MetaFunction} from "react-router";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {article} from "@forge42/seo-tools/structured-data/article";
+import {course} from "@forge42/seo-tools/structured-data/course";
+console.time("test");
+export const meta: MetaFunction = () => {
+  // This utility will under the hood generate the twitter & og title and description tags for you.
+  const meta = generateMeta(
+    {
+      title: "test",
+      description: "test",
+      url: "test",
+    },
+    [
+      {
+        "script:ld+json": article({
+          "@type": "Article",
+          headline: "Article headline",
+          image: "https://example.com/image.jpg",
+          datePublished: "2021-01-01T00:00:00Z",
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "Course",
+          name: "Course name",
+          description: "Course description",
+        }),
+      },
+    ]
+  );
+  return meta;
+};
+console.timeEnd("test");
+
+/* export function meta({}: Route.MetaArgs) {
   return [
     {title: "PDF Tools - APIs & Samples"},
     {name: "description", content: "Welcome to PDF Tools!"},
   ];
-}
+} */
 
 export default function PDFTools() {
   return (

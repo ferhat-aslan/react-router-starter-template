@@ -1,13 +1,15 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
 import SVG from "/pdf.svg";
+console.time("docx-tools-load-time");
+
 export function meta({}: Route.MetaArgs) {
   return [
     {title: "Docx Tools - APIs & Samples"},
     {name: "description", content: "Welcome to Docx Tools!"},
   ];
 }
-
+console.timeEnd("docx-tools-load-time");
 export default function DocxTools() {
   return (
     <Layout>
