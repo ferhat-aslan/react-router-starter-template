@@ -1,14 +1,43 @@
 import type {Route} from "./+types/home";
 import {Welcome} from "../welcome/welcome";
 import Layout from "~/components/layout";
+
 import SVG from "/pdf.svg";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    {title: "New React Router App"},
-    {name: "description", content: "Welcome to React Router!"},
-  ];
-}
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {type MetaFunction} from "react-router";
+
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
+    {
+      title: "PDF Tools - APIs & Samples",
+      description: "Welcome to PDF Tools!",
+      url: "https://kleinbyte.com/pdf-tools",
+      image: "https://picsum.photos/200/300",
+    },
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "Article",
+          headline: "Article headline",
+          image: "https://example.com/image.jpg",
+          datePublished: "2021-01-01T00:00:00Z",
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "Course",
+          name: "Course name",
+          description: "Course description",
+        }),
+      },
+    ]
+  );
+  return meta;
+};
 
 export function loader({context}: Route.LoaderArgs) {
   return {message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE};
@@ -20,7 +49,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
       <Welcome message={loaderData.message} />
       <section className="grid w-full grid-cols-12 container mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-4">
         <h1 className="col-span-12 text-center text-6xl font-bold">
-          Every tool you need to work with PDFs in one place
+          Every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools,
+          E-commerce Tools, Developer Tools in one place
         </h1>
         <h6 className="col-span-10 col-start-2 text-center text-lg text-gray-600 dark:text-neutral-400">
           Every tool you need to use PDFs, at your fingertips. All are 100% FREE

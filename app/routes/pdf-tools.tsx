@@ -8,43 +8,39 @@ import {NavLink, type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {article} from "@forge42/seo-tools/structured-data/article";
 import {course} from "@forge42/seo-tools/structured-data/course";
-console.time("test");
+
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+
 export const meta: MetaFunction = () => {
-  // This utility will under the hood generate the twitter & og title and description tags for you.
   const meta = generateMeta(
     {
-      title: "test",
-      description: "test",
-      url: "test",
+      title: "Free Online PDF Tools | Kleinbyte",
+      description:
+        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
+      url: "https://kleinbyte.com/pdf-tools",
+      image: "https://picsum.photos/200/300",
     },
     [
       {
-        "script:ld+json": article({
-          "@type": "Article",
-          headline: "Article headline",
-          image: "https://example.com/image.jpg",
-          datePublished: "2021-01-01T00:00:00Z",
+        "script:ld+json": webApp({
+          "@type": "WebApplication",
+          headline: "The Ultimate Guide to Free Online PDF Tools",
+          image: "https://kleinbyte.com/og-image-pdf-tools.png",
+          datePublished: "2025-11-04T00:00:00Z",
         }),
       },
       {
         "script:ld+json": course({
           "@type": "Course",
-          name: "Course name",
-          description: "Course description",
+          name: "Mastering PDF Manipulation with Kleinbyte Tools",
+          description:
+            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
         }),
       },
     ]
   );
   return meta;
 };
-console.timeEnd("test");
-
-/* export function meta({}: Route.MetaArgs) {
-  return [
-    {title: "PDF Tools - APIs & Samples"},
-    {name: "description", content: "Welcome to PDF Tools!"},
-  ];
-} */
 
 export default function PDFTools() {
   return (

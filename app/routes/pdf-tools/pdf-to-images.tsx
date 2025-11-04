@@ -3,29 +3,41 @@ import type {Route} from "../+types/home";
 import SelectFilesInput from "~/components/select-files-input";
 import {useState} from "react";
 import Free from "~/components/free";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export function meta({}: Route.MetaArgs) {
-  const title = "PDF to Images — Export PDF Pages as PNG";
-  const description =
-    "Convert each page of a PDF into PNG images. Download all pages as a zip archive. Fast and private.";
-  const canonical = "https://your-domain.example/pdf-tools/pdf-to-images"; // replace with your domain
-
-  return [
-    {title},
-    {name: "description", content: description},
-    {name: "robots", content: "index,follow"},
-    {rel: "canonical", href: canonical},
-    {property: "og:type", content: "website"},
-    {property: "og:title", content: title},
-    {property: "og:description", content: description},
-    {property: "og:url", content: canonical},
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
     {
-      property: "og:image",
-      content: "https://your-domain.example/og-image-images.png",
+      title: "Free Online PDF Tools | Kleinbyte",
+      description:
+        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
+      url: "https://kleinbyte.com/pdf-tools",
+      image: "https://picsum.photos/200/300",
     },
-    {name: "twitter:card", content: "summary_large_image"},
-  ];
-}
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "WebApplication",
+          headline: "The Ultimate Guide to Free Online PDF Tools",
+          image: "https://kleinbyte.com/og-image-pdf-tools.png",
+          datePublished: "2025-11-04T00:00:00Z",
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "Course",
+          name: "Mastering PDF Manipulation with Kleinbyte Tools",
+          description:
+            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
+        }),
+      },
+    ]
+  );
+  return meta;
+};
 
 export default function PdfToImages() {
   const [file, setFile] = useState<File | null>(null);

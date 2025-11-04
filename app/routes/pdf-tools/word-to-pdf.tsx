@@ -4,28 +4,41 @@ import SelectFilesInput from "~/components/select-files-input";
 import {useState} from "react";
 import Free from "~/components/free";
 
-export function meta({}: Route.MetaArgs) {
-  const title = "Word to PDF — Convert DOC/DOCX/RTF to PDF";
-  const description =
-    "Convert Word documents (.doc, .docx, .rtf) to PDF quickly and privately. No signup required.";
-  const canonical = "https://your-domain.example/pdf-tools/word-to-pdf"; // replace with your domain
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-  return [
-    {title},
-    {name: "description", content: description},
-    {name: "robots", content: "index,follow"},
-    {rel: "canonical", href: canonical},
-    {property: "og:type", content: "website"},
-    {property: "og:title", content: title},
-    {property: "og:description", content: description},
-    {property: "og:url", content: canonical},
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
     {
-      property: "og:image",
-      content: "https://your-domain.example/og-image-word.png",
+      title: "Free Online PDF Tools | Kleinbyte",
+      description:
+        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
+      url: "https://kleinbyte.com/pdf-tools",
+      image: "https://picsum.photos/200/300",
     },
-    {name: "twitter:card", content: "summary_large_image"},
-  ];
-}
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "WebApplication",
+          headline: "The Ultimate Guide to Free Online PDF Tools",
+          image: "https://kleinbyte.com/og-image-pdf-tools.png",
+          datePublished: "2025-11-04T00:00:00Z",
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "Course",
+          name: "Mastering PDF Manipulation with Kleinbyte Tools",
+          description:
+            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
+        }),
+      },
+    ]
+  );
+  return meta;
+};
 
 export default function WordToPdf() {
   const [file, setFile] = useState<File | null>(null);

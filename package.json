@@ -28,6 +28,7 @@
 		"@types/node": "24.0.4",
 		"@types/react": "^19.0.0",
 		"@types/react-dom": "^19.0.0",
+		"@typescript/native-preview": "^7.0.0-dev.20251104.1",
 		"tailwindcss": "4.1.1",
 		"typescript": "5.8.3",
 		"vite": "^6.0.0",

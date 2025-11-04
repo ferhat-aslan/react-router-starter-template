@@ -6,9 +6,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import {useLocation} from "react-router";
 
 import type {Route} from "./+types/root";
 import "./app.css";
+import {generateCanonicalLinks} from "@forge42/seo-tools/canonical";
 
 export const links: Route.LinksFunction = () => [
   /*   {rel: "preconnect", href: "https://fonts.googleapis.com"},
@@ -24,6 +26,8 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({children}: {children: React.ReactNode}) {
+  const {pathname} = useLocation();
+  console.log(pathname);
   return (
     <html lang="en">
       <head>
@@ -32,6 +36,17 @@ export function Layout({children}: {children: React.ReactNode}) {
 
         <Meta />
         <Links />
+        <link rel="canonical" href={"https://kleinbyte.com" + pathname} />
+        <link
+          rel="alternate"
+          href={"https://kleinbyte.com" + pathname + "?lng=de"}
+          hrefLang="de"
+        />
+        <link
+          rel="alternate"
+          href={"https://kleinbyte.com" + pathname + "?lng=se"}
+          hrefLang="es"
+        />
       </head>
       <body>
         {children}
