@@ -14,27 +14,32 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 export const meta: MetaFunction = () => {
   const meta = generateMeta(
     {
-      title: "Free Online PDF Tools | Kleinbyte",
-      description:
-        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
+      title: "Free Online PDF Tools - Merge, Split, Convert, Edit | Kleinbyte",
+      description: "Every tool you need to work with PDFs in one place. 100% free PDF tools including merge, split, compress, convert, rotate, unlock and watermark PDFs with just a few clicks.",
       url: "https://kleinbyte.com/pdf-tools",
-      image: "https://picsum.photos/200/300",
+      image: "https://kleinbyte.com/og-image-pdf-tools.png",
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          headline: "The Ultimate Guide to Free Online PDF Tools",
-          image: "https://kleinbyte.com/og-image-pdf-tools.png",
-          datePublished: "2025-11-04T00:00:00Z",
+          name: "Kleinbyte PDF Tools",
+          url: "https://kleinbyte.com/pdf-tools",
+          description: "Comprehensive PDF tools including merge, split, convert, and edit functions",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD"
+          }
         }),
       },
       {
         "script:ld+json": course({
-          "@type": "Course",
-          name: "Mastering PDF Manipulation with Kleinbyte Tools",
-          description:
-            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
+          "@type": "HowTo",
+          name: "How to Use PDF Tools",
+          description: "Simple steps to work with PDF files using our tools",
         }),
       },
     ]

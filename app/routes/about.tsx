@@ -9,27 +9,27 @@ import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 export const meta: MetaFunction = () => {
   const meta = generateMeta(
     {
-      title: "Free Online PDF Tools | Kleinbyte",
-      description:
-        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
-      url: "https://kleinbyte.com/pdf-tools",
-      image: "https://picsum.photos/200/300",
+      title: "About Kleinbyte - All-in-One Digital Tools Platform",
+      description: "Kleinbyte provides every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
+      url: "https://kleinbyte.com/about",
+      image: "https://kleinbyte.com/og-image-about.png",
     },
     [
       {
         "script:ld+json": webApp({
-          "@type": "WebApplication",
-          headline: "The Ultimate Guide to Free Online PDF Tools",
-          image: "https://kleinbyte.com/og-image-pdf-tools.png",
-          datePublished: "2025-11-04T00:00:00Z",
+          "@type": "Organization",
+          name: "Kleinbyte",
+          url: "https://kleinbyte.com",
+          logo: "https://kleinbyte.com/logo.png",
+          description: "Comprehensive suite of free online tools for PDFs, DOCX, Images, LaTeX, SEO and E-commerce",
+          foundingDate: "2025",
         }),
       },
       {
         "script:ld+json": course({
-          "@type": "Course",
-          name: "Mastering PDF Manipulation with Kleinbyte Tools",
-          description:
-            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
+          "@type": "AboutPage",
+          name: "About Kleinbyte",
+          description: "Learn about our mission to provide free digital tools for everyone",
         }),
       },
     ]

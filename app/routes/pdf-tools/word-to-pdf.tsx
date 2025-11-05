@@ -12,27 +12,32 @@ import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 export const meta: MetaFunction = () => {
   const meta = generateMeta(
     {
-      title: "Free Online PDF Tools | Kleinbyte",
-      description:
-        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
-      url: "https://kleinbyte.com/pdf-tools",
-      image: "https://picsum.photos/200/300",
+      title: "Free Online Word to PDF Converter - DOC, DOCX to PDF | Kleinbyte",
+      description: "Convert Word documents to PDF files online for free. Support for DOC, DOCX, and RTF files. No installation or registration required. Fast, secure and easy-to-use Word to PDF converter.",
+      url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
+      image: "https://kleinbyte.com/og-image-word-to-pdf.png",
     },
     [
       {
         "script:ld+json": webApp({
-          "@type": "WebApplication",
-          headline: "The Ultimate Guide to Free Online PDF Tools",
-          image: "https://kleinbyte.com/og-image-pdf-tools.png",
-          datePublished: "2025-11-04T00:00:00Z",
+          "@type": "SoftwareApplication",
+          name: "Kleinbyte Word to PDF Converter",
+          url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
+          description: "Convert Word documents to PDF files",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD"
+          }
         }),
       },
       {
         "script:ld+json": course({
-          "@type": "Course",
-          name: "Mastering PDF Manipulation with Kleinbyte Tools",
-          description:
-            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
+          "@type": "HowTo",
+          name: "How to Convert Word to PDF",
+          description: "Step-by-step guide on converting DOC/DOCX files to PDF",
         }),
       },
     ]

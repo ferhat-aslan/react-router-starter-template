@@ -9,27 +9,32 @@ import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 export const meta: MetaFunction = () => {
   const meta = generateMeta(
     {
-      title: "Free Online PDF Tools | Kleinbyte",
-      description:
-        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
-      url: "https://kleinbyte.com/pdf-tools",
-      image: "https://picsum.photos/200/300",
+      title: "Free Online DOCX Tools - Convert, Edit, Manipulate | Kleinbyte",
+      description: "Every tool you need to work with DOCX files in one place. 100% free DOCX tools including convert, edit, merge, split and manipulate DOCX documents with just a few clicks.",
+      url: "https://kleinbyte.com/docx-tools",
+      image: "https://kleinbyte.com/og-image-docx-tools.png",
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          headline: "The Ultimate Guide to Free Online PDF Tools",
-          image: "https://kleinbyte.com/og-image-pdf-tools.png",
-          datePublished: "2025-11-04T00:00:00Z",
+          name: "Kleinbyte DOCX Tools",
+          url: "https://kleinbyte.com/docx-tools",
+          description: "Comprehensive DOCX tools including convert, edit, merge and split functions",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD"
+          }
         }),
       },
       {
         "script:ld+json": course({
-          "@type": "Course",
-          name: "Mastering PDF Manipulation with Kleinbyte Tools",
-          description:
-            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
+          "@type": "HowTo",
+          name: "How to Use DOCX Tools",
+          description: "Simple steps to work with DOCX files using our tools",
         }),
       },
     ]
