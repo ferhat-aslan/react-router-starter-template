@@ -125,9 +125,9 @@ const Layout = ({children}: any) => {
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
-                  to="/amazon"
+                  to="/image-tools"
                 >
-                  Amazon
+                  Image Tools
                 </NavLink>
               </li>
               <li>
@@ -135,9 +135,9 @@ const Layout = ({children}: any) => {
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
-                  to="/blog"
+                  to="/favicon-maker"
                 >
-                  Blog
+                  Favicon Maker
                 </NavLink>
               </li>
               <li>
@@ -145,9 +145,9 @@ const Layout = ({children}: any) => {
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
-                  to="/docs"
+                  to="/icon-resizer"
                 >
-                  Docs
+                  Icon Resizer
                 </NavLink>
               </li>
             </ul>

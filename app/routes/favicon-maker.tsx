@@ -1,0 +1,163 @@
+import type {Route} from "./+types/home";
+import Layout from "~/components/layout";
+
+import JPG from "/jpg.svg";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
+    {
+      title: "Free Online Favicon Maker - Create Favicon from Images | Kleinbyte",
+      description: "Create favicons from your images in multiple sizes. Convert JPG, PNG, GIF, and other formats to ICO files for your website. 100% free favicon generator tool.",
+      url: "https://kleinbyte.com/favicon-maker",
+      image: "https://kleinbyte.com/og-image-favicon-maker.png",
+    },
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "WebApplication",
+          name: "Kleinbyte Favicon Maker",
+          url: "https://kleinbyte.com/favicon-maker",
+          description: "Create favicons from your images in multiple sizes",
+          applicationCategory: "GraphicsApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD"
+          }
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "HowTo",
+          name: "How to Create a Favicon",
+          description: "Simple steps to generate a favicon for your website",
+        }),
+      },
+    ]
+  );
+  return meta;
+};
+
+export default function FaviconMaker() {
+  return (
+    <Layout>
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              Favicon Maker
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Create beautiful favicons from your images in multiple sizes. Perfect for websites, apps, and browsers. All tools are 100% FREE and easy to use!
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Create Your Favicon</h2>
+                
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Upload Image
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
+                      <img src={JPG} alt="Upload" className="mx-auto h-12 w-12 text-gray-400" />
+                      <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        <span className="font-medium text-blue-600 hover:text-blue-500">Click to upload</span> or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        PNG, JPG, GIF up to 10MB
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Favicon Sizes
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {['16x16', '32x32', '48x48', '64x64', '128x128', '256x256'].map((size) => (
+                        <div key={size} className="flex items-center">
+                          <input
+                            id={`size-${size}`}
+                            name={`size-${size}`}
+                            type="checkbox"
+                            defaultChecked
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <label htmlFor={`size-${size}`} className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                            {size}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4">
+                    <button 
+                      className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Generate Favicon
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Preview</h2>
+                
+                <div className="bg-gray-50 dark:bg-slate-700 rounded-lg p-6 h-full flex flex-col items-center justify-center">
+                  <div className="flex space-x-4 mb-8">
+                    {[16, 32, 48].map((size) => (
+                      <div key={size} className="flex flex-col items-center">
+                        <div 
+                          className="bg-gray-200 border border-gray-300 rounded-md flex items-center justify-center"
+                          style={{ width: `${size}px`, height: `${size}px` }}
+                        >
+                          <span className="text-xs text-gray-500">{size}px</span>
+                        </div>
+                        <span className="text-xs mt-2 text-gray-500 dark:text-gray-400">Size</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-white dark:bg-slate-800 rounded-lg w-full">
+                    <h3 className="font-medium text-gray-900 dark:text-white mb-2">How to use</h3>
+                    <ol className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                      <li>1. Upload an image (suggested size: 256x256 or larger)</li>
+                      <li>2. Select the sizes you need</li>
+                      <li>3. Click "Generate Favicon"</li>
+                      <li>4. Download and place in your website root</li>
+                      <li>5. Add link tag to your HTML head</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Supported Input Formats</h2>
+            <div className="flex flex-wrap justify-center gap-4">
+              {['PNG', 'JPG', 'GIF', 'BMP', 'TIFF', 'WEBP'].map((format, index) => (
+                <div 
+                  key={index} 
+                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg shadow-md"
+                >
+                  {format}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}
