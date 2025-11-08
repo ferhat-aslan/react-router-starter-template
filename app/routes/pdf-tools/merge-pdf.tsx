@@ -14,7 +14,8 @@ export const meta: MetaFunction = () => {
   const meta = generateMeta(
     {
       title: "Free Online PDF Merger - Combine Multiple PDFs | Kleinbyte",
-      description: "Merge multiple PDF files into a single document online for free. No installation or registration required. Fast, secure and easy-to-use PDF merger tool.",
+      description:
+        "Merge multiple PDF files into a single document online for free. No installation or registration required. Fast, secure and easy-to-use PDF merger tool.",
       url: "https://kleinbyte.com/pdf-tools/merge-pdf",
       image: "https://kleinbyte.com/og-image-merge-pdf.png",
     },
@@ -30,15 +31,16 @@ export const meta: MetaFunction = () => {
           offers: {
             "@type": "Offer",
             price: "0",
-            priceCurrency: "USD"
-          }
+            priceCurrency: "USD",
+          },
         }),
       },
       {
         "script:ld+json": course({
           "@type": "HowTo",
           name: "How to Merge PDF Files",
-          description: "Step-by-step guide on combining multiple PDF files into one",
+          description:
+            "Step-by-step guide on combining multiple PDF files into one",
         }),
       },
     ]
@@ -70,6 +72,7 @@ export default function Home() {
           onChange={(newFiles: any) => {
             (draggingRef.current as any)?.setBoxes(Array.from(newFiles));
             setFiles(newFiles);
+            setOrderedFiles(Array.from(newFiles));
           }}
         />
         <span className="flex justify-start w-full items-center font-medium text-xl">
@@ -101,6 +104,7 @@ export default function Home() {
             orderedFiles.forEach((file) => {
               form.append("files", file);
             });
+            console.log("form", orderedFiles);
             //return application/pdf
             fetch("http://localhost:8000/merge-pdf", {
               method: "POST",
