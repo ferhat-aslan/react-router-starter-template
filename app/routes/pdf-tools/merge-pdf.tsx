@@ -105,8 +105,8 @@ export default function Home() {
               form.append("files", file);
             });
             console.log("form", orderedFiles);
-            //return application/pdf
-            fetch("http://localhost:8000/merge-pdf", {
+            //return application/pdf  http://localhost:8000/merge-pdf
+            fetch("https://docker.ferhataslan.dev/merge-pdf", {
               method: "POST",
               body: form,
             })
