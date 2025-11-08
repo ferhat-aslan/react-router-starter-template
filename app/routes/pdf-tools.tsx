@@ -11,11 +11,13 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({location}) => {
+  console.log("location", location.pathname.split("/")[1]);
   const meta = generateMeta(
     {
       title: "Free Online PDF Tools - Merge, Split, Convert, Edit | Kleinbyte",
-      description: "Every tool you need to work with PDFs in one place. 100% free PDF tools including merge, split, compress, convert, rotate, unlock and watermark PDFs with just a few clicks.",
+      description:
+        "Every tool you need to work with PDFs in one place. 100% free PDF tools including merge, split, compress, convert, rotate, unlock and watermark PDFs with just a few clicks.",
       url: "https://kleinbyte.com/pdf-tools",
       image: "https://kleinbyte.com/og-image-pdf-tools.png",
     },
@@ -25,14 +27,15 @@ export const meta: MetaFunction = () => {
           "@type": "WebApplication",
           name: "Kleinbyte PDF Tools",
           url: "https://kleinbyte.com/pdf-tools",
-          description: "Comprehensive PDF tools including merge, split, convert, and edit functions",
+          description:
+            "Comprehensive PDF tools including merge, split, convert, and edit functions",
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
             "@type": "Offer",
             price: "0",
-            priceCurrency: "USD"
-          }
+            priceCurrency: "USD",
+          },
         }),
       },
       {

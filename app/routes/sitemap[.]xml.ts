@@ -7,7 +7,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     const { origin } = new URL(request.url);
     const sitemap = await generateRemixSitemap({
         domain: origin,
-
+      
         routes,
     });
 
