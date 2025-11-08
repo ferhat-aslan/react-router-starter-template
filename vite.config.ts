@@ -17,10 +17,10 @@ export default defineConfig({
 		cssMinify: true,
 		cssCodeSplit: true,
 		ssr: true,
+		
+		
 
 	},
-	css: {
-
-
-	},
+	
+	
 });

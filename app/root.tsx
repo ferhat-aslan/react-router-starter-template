@@ -31,7 +31,8 @@ export const links: Route.LinksFunction = () => [
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
   const params = useParams();
-  const localeParam = params.locale === "de" ? "de" : "en";
+  const localeParam = pathname.includes("/de") ? "de" : "en";
+
   return (
     <html lang={localeParam}>
       <head>
