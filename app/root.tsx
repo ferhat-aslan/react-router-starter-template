@@ -39,7 +39,6 @@ export function Layout({children}: {children: React.ReactNode}) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-
         <Meta />
         <Links />
         <link rel="canonical" href={"https://kleinbyte.com" + pathname} />
@@ -53,6 +52,20 @@ export function Layout({children}: {children: React.ReactNode}) {
           href={"https://kleinbyte.com" + pathname + "?lng=se"}
           hrefLang="es"
         />
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
+        ></script>
+        ^
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HRC6G6L65K');`,
+          }}
+        ></script>
       </head>
       <body>
         <I18nProvider locale={localeParam}>
