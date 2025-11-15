@@ -14,6 +14,7 @@ import "./app.css";
 import {generateCanonicalLinks} from "@forge42/seo-tools/canonical";
 
 import {I18nProvider} from "./i18n/context";
+import {renderToStaticMarkup} from "react-dom/server";
 
 export const links: Route.LinksFunction = () => [
   /*   {rel: "preconnect", href: "https://fonts.googleapis.com"},
@@ -52,8 +53,49 @@ export function Layout({children}: {children: React.ReactNode}) {
           href={"https://kleinbyte.com" + pathname + "?lng=se"}
           hrefLang="es"
         />
+        {/* Google Tag Manager */}
+        <script
+          async={true}
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GT-NC6V7F4V');
+            `,
+          }}
+        />
+        {/* Google Analytics 4 */}
+        <script
+          async={true}
+          src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
+        />
+        <script
+          async={true}
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-HRC6G6L65K', {
+                page_path: window.location.pathname,
+                send_page_view: false  // We'll handle page views via route changes
+              });
+            `,
+          }}
+        />
       </head>
       <body>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GT-NC6V7F4V"
+            height="0"
+            width="0"
+            style={{display: "none", visibility: "hidden"}}
+          ></iframe>
+        </noscript>
         <I18nProvider locale={localeParam}>
           {children}
           <ScrollRestoration />
@@ -61,6 +103,7 @@ export function Layout({children}: {children: React.ReactNode}) {
         </I18nProvider>
       </body>
       <script
+        async={true}
         dangerouslySetInnerHTML={{
           __html: `
 		const button = document.querySelector('#menu-button');
@@ -90,7 +133,7 @@ window.addEventListener('scroll', function() {
 
 `,
         }}
-      ></script>
+      />
     </html>
   );
 }

@@ -9,6 +9,7 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {apiClient} from "~/lib/api-client";
 
 export const meta: MetaFunction = () => {
   const meta = generateMeta(
@@ -104,12 +105,10 @@ export default function Home() {
             orderedFiles.forEach((file) => {
               form.append("files", file);
             });
-            console.log("form", orderedFiles);
+
             //return application/pdf  http://localhost:8000/merge-pdf
-            fetch("https://docker.ferhataslan.dev/merge-pdf", {
-              method: "POST",
-              body: form,
-            })
+            apiClient
+              .request("/merge-pdf", {method: "POST", body: form})
               .then((response) => response.blob())
               .then((data) => {
                 const url = URL.createObjectURL(data);

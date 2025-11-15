@@ -22,7 +22,6 @@ export const meta: MetaFunction = ({location}) => {
     return messages[key] ?? key;
   }
 
-  console.log(t("home.title"));
   const meta = generateMeta(
     {
       title:

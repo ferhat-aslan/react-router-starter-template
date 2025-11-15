@@ -12,7 +12,6 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 
 export const meta: MetaFunction = ({location}) => {
-  console.log("location", location.pathname.split("/")[1]);
   const meta = generateMeta(
     {
       title: "Free Online PDF Tools - Merge, Split, Convert, Edit | Kleinbyte",
