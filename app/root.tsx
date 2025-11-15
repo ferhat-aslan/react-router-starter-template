@@ -56,7 +56,6 @@ export function Layout({children}: {children: React.ReactNode}) {
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
         ></script>
-        ^
         <script
           dangerouslySetInnerHTML={{
             __html: `  window.dataLayer = window.dataLayer || [];
