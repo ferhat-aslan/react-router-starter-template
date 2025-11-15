@@ -17,6 +17,8 @@ const baseRoutes: RouteConfig = [
   route("api-tools", "routes/api-tools.tsx"),
   route("favicon-maker", "routes/favicon-maker.tsx"),
   route("icon-resizer", "routes/icon-resizer.tsx"),
+  route("privacy-policy", "routes/privacy-policy.tsx"),
+  route("terms-and-conditions", "routes/terms-and-conditions.tsx"),
   ...prefix("pdf-tools", [
     index("routes/pdf-tools.tsx"),
     route("merge-pdf", "routes/pdf-tools/merge-pdf.tsx"),

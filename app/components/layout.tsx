@@ -553,18 +553,18 @@ const Layout = ({children}: any) => {
               {/* End Language Dropdown */}
 
               <div className="space-x-4 text-sm">
-                <a
+                <NavLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/terms-and-conditions"
                 >
                   Terms
-                </a>
-                <a
+                </NavLink>
+                <NavLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/privacy-policy"
                 >
                   Privacy
-                </a>
+                </NavLink>
                 <a
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   href="#"
@@ -581,10 +581,10 @@ const Layout = ({children}: any) => {
                   href="#"
                   aria-label="Brand"
                 >
-                  Brand
+                  Klein⁘Byte
                 </a>
                 <p className="mt-1 text-xs sm:text-sm text-gray-600 dark:text-neutral-400">
-                  © 2025 Preline Labs.
+                  © 2025 Kleinbyte.
                 </p>
               </div>
 

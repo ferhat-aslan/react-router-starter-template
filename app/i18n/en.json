@@ -1,6 +1,12 @@
 {
   "home.title": "Welcome to our website",
   "home.subtitle": "All-in-one document tools",
+  "home.meta.title": "All-in-One Digital Tools Platform - PDF, DOCX, Images, LaTeX, SEO & E-commerce Tools",
+  "home.meta.description": "Every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
+  "home.meta.lt.web.name": "Kleinbyte Digital Tools",
+  "home.meta.lt.web.description": "Comprehensive suite of free online tools for PDFs, DOCX, Images, LaTeX, SEO and E-commerce",
+  "home.meta.lt.course.name": "All Digital Tools Hub",
+  "home.meta.lt.course.description": "One platform with every tool you need for PDFs, DOCX, Images, LaTeX, SEO and E-commerce",
   "about.title": "About Us",
   "about.text": "We build simple and powerful web tools."
 }

@@ -24,10 +24,8 @@ export const meta: MetaFunction = ({location}) => {
 
   const meta = generateMeta(
     {
-      title:
-        "All-in-One Digital Tools Platform - PDF, DOCX, Images, LaTeX, SEO & E-commerce Tools",
-      description:
-        "Every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
+      title: t("home.meta.title"),
+      description: t("home.meta.description"),
       url: "https://kleinbyte.com/",
       image: "https://kleinbyte.com/og-image-all-tools.png",
     },
@@ -35,10 +33,9 @@ export const meta: MetaFunction = ({location}) => {
       {
         "script:ld+json": webApp({
           "@type": "WebSite",
-          name: "Kleinbyte Digital Tools",
+          name: t("home.meta.lt.web.name"),
           url: "https://kleinbyte.com/",
-          description:
-            "Comprehensive suite of free online tools for PDFs, DOCX, Images, LaTeX, SEO and E-commerce",
+          description: t("home.meta.lt.web.description"),
           potentialAction: {
             "@type": "SearchAction",
             target: "https://kleinbyte.com/search?q={search_term_string}",
@@ -49,9 +46,8 @@ export const meta: MetaFunction = ({location}) => {
       {
         "script:ld+json": course({
           "@type": "WebPage",
-          name: "All Digital Tools Hub",
-          description:
-            "One platform with every tool you need for PDFs, DOCX, Images, LaTeX, SEO and E-commerce",
+          name: t("home.meta.lt.course.description"),
+          description: t("home.meta.lt.course.description"),
         }),
       },
     ]
