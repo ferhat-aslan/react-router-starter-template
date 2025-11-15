@@ -64,108 +64,112 @@ export default function Home({loaderData}: Route.ComponentProps) {
 
   const tools = [
     {
-      category: "PDF Tools",
+      category: t("tools.pdf.category"),
       icon: PDF,
       tools: [
         {
-          name: "Merge PDF",
-          description: "Combine multiple PDF files into a single document",
+          name: t("tools.pdf.merge.name"),
+          description: t("tools.pdf.merge.description"),
           link: "/pdf-tools/merge-pdf",
         },
         {
-          name: "Split PDF",
-          description: "Extract specific pages from your PDF files",
+          name: t("tools.pdf.split.name"),
+          description: t("tools.pdf.split.description"),
           link: "/pdf-tools/split-pdf",
         },
         {
-          name: "Word to PDF",
-          description: "Convert Word documents to PDF format",
+          name: t("tools.pdf.word_to_pdf.name"),
+          description: t("tools.pdf.word_to_pdf.description"),
           link: "/pdf-tools/word-to-pdf",
         },
         {
-          name: "PDF to Text",
-          description: "Extract text from PDF files",
+          name: t("tools.pdf.pdf_to_text.name"),
+          description: t("tools.pdf.pdf_to_text.description"),
           link: "/pdf-tools/pdf-to-text",
         },
         {
-          name: "PDF to Images",
-          description: "Convert PDF pages to image files",
+          name: t("tools.pdf.pdf_to_images.name"),
+          description: t("tools.pdf.pdf_to_images.description"),
           link: "/pdf-tools/pdf-to-images",
         },
       ],
     },
     {
-      category: "Document Tools",
+      category: t("tools.documents.category"),
       icon: WORD,
       tools: [
         {
-          name: "DOCX Tools",
-          description: "Create, edit, and convert DOCX files",
+          name: t("tools.documents.docx.name"),
+          description: t("tools.documents.docx.description"),
           link: "/docx-tools",
         },
         {
-          name: "LaTeX Tools",
-          description: "Typesetting and document preparation",
+          name: t("tools.documents.latex.name"),
+          description: t("tools.documents.latex.description"),
           link: "/latex-tools",
         },
         {
-          name: "Text Tools",
-          description: "Text manipulation and processing",
+          name: t("tools.documents.text.name"),
+          description: t("tools.documents.text.description"),
           link: "#",
         },
         {
-          name: "Spreadsheet Tools",
-          description: "Excel and CSV processing",
+          name: t("tools.documents.spreadsheet.name"),
+          description: t("tools.documents.spreadsheet.description"),
           link: "#",
         },
       ],
     },
     {
-      category: "Image Tools",
+      category: t("tools.images.category"),
       icon: JPG,
       tools: [
         {
-          name: "Image Converter",
-          description: "Convert between image formats",
+          name: t("tools.images.converter.name"),
+          description: t("tools.images.converter.description"),
           link: "#",
         },
         {
-          name: "Image Compressor",
-          description: "Reduce image file sizes",
+          name: t("tools.images.compressor.name"),
+          description: t("tools.images.compressor.description"),
           link: "#",
         },
         {
-          name: "Image Editor",
-          description: "Edit and annotate images",
+          name: t("tools.images.editor.name"),
+          description: t("tools.images.editor.description"),
           link: "#",
         },
         {
-          name: "Image Resizer",
-          description: "Resize images to exact dimensions",
+          name: t("tools.images.resizer.name"),
+          description: t("tools.images.resizer.description"),
           link: "#",
         },
       ],
     },
     {
-      category: "Developer Tools",
+      category: t("tools.developer.category"),
       icon: FOLDER,
       tools: [
         {
-          name: "SEO Tools",
-          description: "Optimize your website for search engines",
+          name: t("tools.developer.seo.name"),
+          description: t("tools.developer.seo.description"),
           link: "#",
         },
         {
-          name: "Code Formatter",
-          description: "Format and beautify your code",
+          name: t("tools.developer.code_formatter.name"),
+          description: t("tools.developer.code_formatter.description"),
           link: "#",
         },
         {
-          name: "JSON Tools",
-          description: "Validate, format, and manipulate JSON",
+          name: t("tools.developer.json.name"),
+          description: t("tools.developer.json.description"),
           link: "#",
         },
-        {name: "API Tools", description: "Test and debug your APIs", link: "#"},
+        {
+          name: t("tools.developer.api.name"),
+          description: t("tools.developer.api.description"),
+          link: "#",
+        },
       ],
     },
   ];
@@ -173,34 +177,32 @@ export default function Home({loaderData}: Route.ComponentProps) {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1>{t("home.title")}</h1>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-            Every tool you need to work with
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              {" "}
-              PDFs, DOCX, Images, LaTeX{" "}
-            </span>
-            and more - in one place
+      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-20 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          {/* Animated background elements */}
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+          <div className="absolute top-40 right-20 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+          <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+        </div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 animate-fade-in-up">
+            {t("home.hero.title")}
           </h1>
-          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-10">
-            All-in-one platform with 100% free tools for PDFs, documents,
-            images, SEO and e-commerce. No registration required, no watermarks,
-            no limitations.
+          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-10 animate-fade-in-up animation-delay-200">
+            {t("home.hero.subtitle")}
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up animation-delay-400">
             <a
               href="#tools"
-              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 text-lg"
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 text-lg transform hover:scale-105"
             >
-              Explore All Tools
+              {t("home.hero.explore_btn")}
             </a>
             <a
               href="/pdf-tools"
-              className="px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold rounded-lg shadow-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-300 text-lg border border-gray-200 dark:border-slate-700"
+              className="px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold rounded-lg shadow-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-300 text-lg border border-gray-200 dark:border-slate-700 transform hover:scale-105"
             >
-              Start with PDF Tools
+              {t("home.hero.pdf_btn")}
             </a>
           </div>
         </div>
@@ -210,12 +212,11 @@ export default function Home({loaderData}: Route.ComponentProps) {
       <section className="py-16 bg-white dark:bg-slate-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Powerful Tools for Every Need
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 animate-fade-in">
+              {t("home.features.title")}
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Our comprehensive suite covers everything from document processing
-              to developer utilities
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-fade-in animation-delay-200">
+              {t("home.features.description")}
             </p>
           </div>
 
@@ -238,10 +239,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Document Tools
+                {t("home.features.document.title")}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Convert, merge, split, and edit PDFs and DOCX files with ease
+                {t("home.features.document.description")}
               </p>
             </div>
 
@@ -263,10 +264,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Image Tools
+                {t("home.features.image.title")}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Convert, compress, and edit images in multiple formats
+                {t("home.features.image.description")}
               </p>
             </div>
 
@@ -294,10 +295,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Developer Tools
+                {t("home.features.developer.title")}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                SEO optimization, API testing, and developer utilities
+                {t("home.features.developer.description")}
               </p>
             </div>
 
@@ -319,10 +320,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                E-commerce Tools
+                {t("home.features.ecommerce.title")}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Amazon integration, product management, and business tools
+                {t("home.features.ecommerce.description")}
               </p>
             </div>
           </div>
@@ -333,12 +334,11 @@ export default function Home({loaderData}: Route.ComponentProps) {
       <section id="tools" className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              All-in-One Tools Suite
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 animate-fade-in">
+              {t("home.tools.title")}
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Browse our complete collection of digital tools organized by
-              category
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-fade-in animation-delay-200">
+              {t("home.tools.description")}
             </p>
           </div>
 
@@ -346,7 +346,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
             {tools.map((category, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-slate-700"
+                className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-slate-700 transform transition-all duration-300 hover:shadow-2xl animate-slide-in-up"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-center mb-6">
                   <img
@@ -363,7 +364,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
                     <a
                       key={toolIdx}
                       href={tool.link}
-                      className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-colors duration-300"
+                      className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:translate-x-1 hover:shadow-md"
                     >
                       <div className="flex justify-between items-center">
                         <div>
@@ -397,20 +398,24 @@ export default function Home({loaderData}: Route.ComponentProps) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to boost your productivity?
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          {/* Animated background elements */}
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+          <div className="absolute bottom-40 right-20 w-72 h-72 bg-indigo-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        </div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 animate-fade-in">
+            {t("home.cta.title")}
           </h2>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-10">
-            Join thousands of users who rely on our free tools every day to work
-            more efficiently
+          <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-10 animate-fade-in animation-delay-200">
+            {t("home.cta.subtitle")}
           </p>
           <a
             href="/pdf-tools"
-            className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-colors duration-300 text-lg"
+            className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all duration-300 text-lg transform hover:scale-105 animate-fade-in animation-delay-400"
           >
-            Start Using Tools Now
+            {t("home.cta.button")}
           </a>
         </div>
       </section>
