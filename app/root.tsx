@@ -32,7 +32,7 @@ export const links: Route.LinksFunction = () => [
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
   const params = useParams();
-  const localeParam = pathname.includes("/de") ? "de" : "en";
+  const localeParam = pathname.includes("/de") ? "de" : pathname.includes("/es") ? "es" : pathname.includes("/ar") ? "ar" : "en";
 
   return (
     <html lang={localeParam}>
@@ -49,8 +49,13 @@ export function Layout({children}: {children: React.ReactNode}) {
         />
         <link
           rel="alternate"
-          href={"https://kleinbyte.com" + pathname + "?lng=se"}
+          href={"https://kleinbyte.com" + pathname + "?lng=es"}
           hrefLang="es"
+        />
+        <link
+          rel="alternate"
+          href={"https://kleinbyte.com" + pathname + "?lng=ar"}
+          hrefLang="ar"
         />
         <script
           async

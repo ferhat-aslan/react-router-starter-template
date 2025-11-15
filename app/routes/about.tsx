@@ -5,12 +5,24 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {useI18n, translations, type Locale} from "../i18n/context";
+import {useLocation} from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "About Kleinbyte - All-in-One Digital Tools Platform",
-      description: "Kleinbyte provides every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
+      title: t("about.title") + " - " + "Kleinbyte - All-in-One Digital Tools Platform",
+      description: t("about.text") + ". " + "Kleinbyte provides every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
       url: "https://kleinbyte.com/about",
       image: "https://kleinbyte.com/og-image-about.png",
     },
@@ -21,15 +33,15 @@ export const meta: MetaFunction = () => {
           name: "Kleinbyte",
           url: "https://kleinbyte.com",
           logo: "https://kleinbyte.com/logo.png",
-          description: "Comprehensive suite of free online tools for PDFs, DOCX, Images, LaTeX, SEO and E-commerce",
+          description: t("home.meta.lt.web.description"),
           foundingDate: "2025",
         }),
       },
       {
         "script:ld+json": course({
           "@type": "AboutPage",
-          name: "About Kleinbyte",
-          description: "Learn about our mission to provide free digital tools for everyone",
+          name: t("about.title"),
+          description: t("about.text"),
         }),
       },
     ]
@@ -38,6 +50,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Home() {
+  const t = useI18n();
+
   return (
     <Layout>
       {/* Card Blog */}

@@ -1,11 +1,13 @@
 import React, {createContext, useContext} from "react";
 import en from "./en.json";
 import de from "./de.json";
+import es from "./es.json";
+import ar from "./ar.json";
 
-export type Locale = "en" | "de";
+export type Locale = "en" | "de" | "es" | "ar";
 type Messages = Record<any, any>;
 
-export const translations: Record<Locale, Messages> = {en, de};
+export const translations: Record<Locale, Messages> = {en, de, es, ar};
 
 const I18nContext: any = createContext<{t: (key: string) => string}>({
   t: (key) => key,

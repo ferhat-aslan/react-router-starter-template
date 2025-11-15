@@ -32,6 +32,7 @@ const baseRoutes: RouteConfig = [
 // 👇 generate localized routes without duplicate IDs
 const localizedRoutesDE = prefix("de", baseRoutes.map((r,i) => ({ ...r, id: `${r.id ?? i}-de-localized` })));
 const localizedRoutesES = prefix("es", baseRoutes.map((r,i) => ({ ...r, id: `${r.id ?? i}-es-localized` })));
+const localizedRoutesAR = prefix("ar", baseRoutes.map((r,i) => ({ ...r, id: `${r.id ?? i}-ar-localized` })));
 
 
-export default [...baseRoutes, ...localizedRoutesDE,...localizedRoutesES] satisfies RouteConfig;
+export default [...baseRoutes, ...localizedRoutesDE,...localizedRoutesES, ...localizedRoutesAR] satisfies RouteConfig;

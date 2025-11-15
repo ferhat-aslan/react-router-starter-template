@@ -14,8 +14,11 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {type MetaFunction} from "react-router";
 
 export const meta: MetaFunction = ({location}) => {
-  const locale: Locale =
-    location.pathname.split("/")?.[1] == "de" ? "de" : ("en" as Locale);
+  const firstPathSegment = location.pathname.split("/")?.[1];
+  const locale: Locale = 
+    firstPathSegment === "de" ? "de" : 
+    firstPathSegment === "es" ? "es" : 
+    firstPathSegment === "ar" ? "ar" : "en";
   const messages = translations[locale] ?? translations.en;
 
   function t(key: string) {
