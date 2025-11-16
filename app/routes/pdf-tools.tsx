@@ -1,5 +1,6 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
+import {LocaleLink} from "~/components/LocaleLink";
 import SVG from "/pdf.svg";
 import WORD from "/word.svg";
 import TXT from "/txt.svg";
@@ -64,9 +65,9 @@ export default function PDFTools() {
         </h6>
 
         <aside className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <a
+          <LocaleLink
             className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/merge-pdf"
+            to="/pdf-tools/merge-pdf"
           >
             <span className="flex relative">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
@@ -89,10 +90,10 @@ export default function PDFTools() {
             <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
             </div>
-          </a>
-          <a
+          </LocaleLink>
+          <LocaleLink
             className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/split-pdf"
+            to="/pdf-tools/split-pdf"
           >
             <span className="flex flex-row justify-start item-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
@@ -107,10 +108,10 @@ export default function PDFTools() {
             <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
             </div>
-          </a>
-          <a
+          </LocaleLink>
+          <LocaleLink
             className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/word-to-pdf"
+            to="/pdf-tools/word-to-pdf"
           >
             <span className="flex flex-row justify-start items-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
@@ -124,10 +125,10 @@ export default function PDFTools() {
             <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
             </div>
-          </a>
-          <a
+          </LocaleLink>
+          <LocaleLink
             className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/pdf-to-text"
+            to="/pdf-tools/pdf-to-text"
           >
             <span className="flex flex-row justify-start items-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
@@ -141,10 +142,10 @@ export default function PDFTools() {
             <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
             </div>
-          </a>
-          <a
+          </LocaleLink>
+          <LocaleLink
             className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/pdf-to-images"
+            to="/pdf-tools/pdf-to-images"
           >
             <span className="flex flex-row justify-start items-center gap-x-5">
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
@@ -158,9 +159,9 @@ export default function PDFTools() {
             <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
             </div>
-          </a>
-          <a
-            href="/amazon"
+          </LocaleLink>
+          <LocaleLink
+            to="/amazon"
             className="group flex hover:bg-neutral-100 cursor-pointer flex-col h-full bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
           >
             <div className="h-52 flex flex-col justify-center items-center bg-amber-500 rounded-t-xl">
@@ -181,7 +182,7 @@ export default function PDFTools() {
             <div className="mt-auto flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
             </div>
-          </a>
+          </LocaleLink>
         </aside>
       </section>
       {/* End Card Blog */}

@@ -1,5 +1,6 @@
 import {NavLink} from "react-router";
 import {ThemeSwitcher} from "./theme-switcher";
+import {LocaleLink} from "./LocaleLink";
 
 const Layout = ({children}: any) => {
   return (
@@ -21,9 +22,9 @@ const Layout = ({children}: any) => {
         "
         >
           <div>
-            <a href="/" className="font-bold  ">
-              Klein⁘Byte
-            </a>
+            <LocaleLink to="/" className="font-bold">
+              Kleinbyte
+            </LocaleLink>
           </div>
 
           <svg
@@ -55,54 +56,54 @@ const Layout = ({children}: any) => {
               md:pt-0 gap-x-3"
             >
               <li>
-                <NavLink
+                <LocaleLink
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/pdf-tools"
                 >
                   Pdf Tools
-                </NavLink>
+                </LocaleLink>
               </li>
               <li>
-                <NavLink
+                <LocaleLink
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/docx-tools"
                 >
                   Docx Tool
-                </NavLink>
+                </LocaleLink>
               </li>
               <li>
-                <NavLink
+                <LocaleLink
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/image-tools"
                 >
                   Image Tools
-                </NavLink>
+                </LocaleLink>
               </li>
               <li>
-                <NavLink
+                <LocaleLink
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/favicon-maker"
                 >
                   Favicon Maker
-                </NavLink>
+                </LocaleLink>
               </li>
               <li>
-                <NavLink
+                <LocaleLink
                   className={({isActive, isPending}) =>
                     `header-link ${isActive ? "active-link" : ""}`
                   }
                   to="/icon-resizer"
                 >
                   Icon Resizer
-                </NavLink>
+                </LocaleLink>
               </li>
             </ul>
           </div>
@@ -553,18 +554,18 @@ const Layout = ({children}: any) => {
               {/* End Language Dropdown */}
 
               <div className="space-x-4 text-sm">
-                <NavLink
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   to="/terms-and-conditions"
                 >
                   Terms
-                </NavLink>
-                <NavLink
+                </LocaleLink>
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   to="/privacy-policy"
                 >
                   Privacy
-                </NavLink>
+                </LocaleLink>
                 <a
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   href="#"

@@ -1,5 +1,6 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
+import {LocaleLink} from "~/components/LocaleLink";
 
 import PDF from "/pdf.svg";
 import WORD from "/word.svg";
@@ -15,10 +16,14 @@ import {type MetaFunction} from "react-router";
 
 export const meta: MetaFunction = ({location}) => {
   const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = 
-    firstPathSegment === "de" ? "de" : 
-    firstPathSegment === "es" ? "es" : 
-    firstPathSegment === "ar" ? "ar" : "en";
+  const locale: Locale =
+    firstPathSegment === "de"
+      ? "de"
+      : firstPathSegment === "es"
+      ? "es"
+      : firstPathSegment === "ar"
+      ? "ar"
+      : "en";
   const messages = translations[locale] ?? translations.en;
 
   function t(key: string) {
@@ -201,12 +206,12 @@ export default function Home({loaderData}: Route.ComponentProps) {
             >
               {t("home.hero.explore_btn")}
             </a>
-            <a
-              href="/pdf-tools"
+            <LocaleLink
+              to="/pdf-tools"
               className="px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold rounded-lg shadow-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-300 text-lg border border-gray-200 dark:border-slate-700 transform hover:scale-105"
             >
               {t("home.hero.pdf_btn")}
-            </a>
+            </LocaleLink>
           </div>
         </div>
       </section>
@@ -350,7 +355,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
               <div
                 key={index}
                 className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-slate-700 transform transition-all duration-300 hover:shadow-2xl animate-slide-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
+                style={{animationDelay: `${index * 100}ms`}}
               >
                 <div className="flex items-center mb-6">
                   <img
@@ -363,36 +368,71 @@ export default function Home({loaderData}: Route.ComponentProps) {
                   </h3>
                 </div>
                 <div className="space-y-4">
-                  {category.tools.map((tool, toolIdx) => (
-                    <a
-                      key={toolIdx}
-                      href={tool.link}
-                      className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:translate-x-1 hover:shadow-md"
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-white">
-                            {tool.name}
-                          </h4>
-                          <p className="text-gray-600 dark:text-gray-300 text-sm">
-                            {tool.description}
-                          </p>
-                        </div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-blue-600 dark:text-blue-400"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
+                  {category.tools.map((tool, toolIdx) => {
+                    if (tool.link !== "#") {
+                      return (
+                        <LocaleLink
+                          key={toolIdx}
+                          to={tool.link}
+                          className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:translate-x-1 hover:shadow-md"
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    </a>
-                  ))}
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="font-semibold text-gray-900 dark:text-white">
+                                {tool.name}
+                              </h4>
+                              <p className="text-gray-600 dark:text-gray-300 text-sm">
+                                {tool.description}
+                              </p>
+                            </div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-blue-600 dark:text-blue-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                        </LocaleLink>
+                      );
+                    } else {
+                      return (
+                        <a
+                          key={toolIdx}
+                          href={tool.link}
+                          className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:translate-x-1 hover:shadow-md"
+                        >
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="font-semibold text-gray-900 dark:text-white">
+                                {tool.name}
+                              </h4>
+                              <p className="text-gray-600 dark:text-gray-300 text-sm">
+                                {tool.description}
+                              </p>
+                            </div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-blue-600 dark:text-blue-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                        </a>
+                      );
+                    }
+                  })}
                 </div>
               </div>
             ))}
@@ -414,12 +454,12 @@ export default function Home({loaderData}: Route.ComponentProps) {
           <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-10 animate-fade-in animation-delay-200">
             {t("home.cta.subtitle")}
           </p>
-          <a
-            href="/pdf-tools"
+          <LocaleLink
+            to="/pdf-tools"
             className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all duration-300 text-lg transform hover:scale-105 animate-fade-in animation-delay-400"
           >
             {t("home.cta.button")}
-          </a>
+          </LocaleLink>
         </div>
       </section>
     </Layout>
