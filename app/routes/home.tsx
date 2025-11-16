@@ -50,7 +50,7 @@ export const meta: MetaFunction = ({location}) => {
       {
         "script:ld+json": course({
           "@type": "WebPage",
-          name: t("home.meta.lt.course.description"),
+          name: t("home.meta.lt.course.name"),
           description: t("home.meta.lt.course.description"),
         }),
       },
