@@ -1,5 +1,6 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
+import {LocaleLink} from "~/components/locale-link";
 import SVG from "/pdf.svg";
 import WORD from "/word.svg";
 import TXT from "/txt.svg";
