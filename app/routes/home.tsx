@@ -180,41 +180,41 @@ export default function Home({loaderData}: Route.ComponentProps) {
 
   return (
     <Layout>
-      <div className="min-h-screen ">
+      <div className="min-h-screen bg-white dark:bg-neutral-950 text-gray-900 dark:text-white transition-colors duration-300">
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 overflow-hidden">
           {/* Background Effects */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] rounded-full blur-[120px] opacity-50 pointer-events-none"></div>
-          <div className="absolute bottom-0 right-0 w-[800px] h-[600px]  rounded-full blur-[100px] opacity-30 pointer-events-none"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] rounded-full blur-[120px] opacity-50 pointer-events-none bg-blue-500/20 dark:bg-blue-500/10"></div>
+          <div className="absolute bottom-0 right-0 w-[800px] h-[600px]  rounded-full blur-[100px] opacity-30 pointer-events-none bg-purple-500/20 dark:bg-purple-500/10"></div>
           
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-5xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center px-4 py-1.5 mb-8 text-sm font-medium text-blue-300  rounded-full border border-blue-500/20 animate-fade-in backdrop-blur-sm">
+              <div className="inline-flex items-center justify-center px-4 py-1.5 mb-8 text-sm font-medium text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-transparent rounded-full border border-blue-200 dark:border-blue-500/20 animate-fade-in backdrop-blur-sm">
                 <span className="relative flex h-2 w-2 mr-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full  opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 "></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
                 {t("home.hero.new_tools")}
               </div>
               
-              <h1 className="text-6xl md:text-8xl font-bold tracking-tight  mb-8 animate-fade-in-up leading-tight">
+              <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 animate-fade-in-up leading-tight">
                 {t("home.hero.title")}
               </h1>
               
-              <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200 font-light">
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200 font-light">
                 {t("home.hero.subtitle")}
               </p>
               
               <div className="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up animation-delay-400">
                 <a
                   href="#tools"
-                  className="group relative px-8 py-4  text-black font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                  className="group relative px-8 py-4 bg-gray-900 dark:bg-white  dark:text-black font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] active:scale-95"
                 >
                   {t("home.hero.explore_btn")}
                 </a>
                 <a
                   href="/pdf-tools"
-                  className="px-8 py-4 bg-transparent  font-bold rounded-full border border-white/20  transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+                  className="px-8 py-4 bg-transparent text-gray-900 dark:text-white font-bold rounded-full border border-gray-200 dark:border-white/20 transition-all duration-300 hover:scale-105 hover:bg-gray-50 dark:hover:bg-white/10 backdrop-blur-sm active:scale-95"
                 >
                   {t("home.hero.pdf_btn")}
                 </a>
@@ -227,10 +227,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
         <section className="py-32 relative">
           <div className="container mx-auto px-6">
             <div className="mb-20">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in text-gray-900 dark:text-white">
                 {t("home.features.title")}
               </h2>
-              <p className="text-xl text-gray-400 max-w-2xl animate-fade-in animation-delay-200">
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl animate-fade-in animation-delay-200">
                 {t("home.features.description")}
               </p>
             </div>
@@ -243,8 +243,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
                   ),
                   title: t("home.features.document.title"),
                   desc: t("home.features.document.description"),
-                  color: "text-blue-400",
-                  bg: "bg-blue-500/10",
+                  color: "text-blue-600 dark:text-blue-400",
+                  bg: "bg-blue-50 dark:bg-blue-500/10",
                   border: "hover:border-blue-500/50"
                 },
                 {
@@ -253,8 +253,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
                   ),
                   title: t("home.features.image.title"),
                   desc: t("home.features.image.description"),
-                  color: "text-green-400",
-                  bg: "bg-green-500/10",
+                  color: "text-green-600 dark:text-green-400",
+                  bg: "bg-green-50 dark:bg-green-500/10",
                   border: "hover:border-green-500/50"
                 },
                 {
@@ -266,8 +266,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
                   ),
                   title: t("home.features.developer.title"),
                   desc: t("home.features.developer.description"),
-                  color: "text-purple-400",
-                  bg: "bg-purple-500/10",
+                  color: "text-purple-600 dark:text-purple-400",
+                  bg: "bg-purple-50 dark:bg-purple-500/10",
                   border: "hover:border-purple-500/50"
                 },
                 {
@@ -276,21 +276,21 @@ export default function Home({loaderData}: Route.ComponentProps) {
                   ),
                   title: t("home.features.ecommerce.title"),
                   desc: t("home.features.ecommerce.description"),
-                  color: "text-amber-400",
-                  bg: "bg-amber-500/10",
+                  color: "text-amber-600 dark:text-amber-400",
+                  bg: "bg-amber-50 dark:bg-amber-500/10",
                   border: "hover:border-amber-500/50"
                 }
               ].map((feature, index) => (
-                <div key={index} className={`group  p-8 rounded-3xl border border-white/5 ${feature.border} transition-all duration-300 hover:-translate-y-1`}>
+                <div key={index} className={`group p-8 rounded-3xl border border-gray-200 dark:border-white/5 bg-white dark:bg-white/5 ${feature.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none`}>
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${feature.bg} ${feature.color}`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       {feature.icon}
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold  mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400 leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                     {feature.desc}
                   </p>
                 </div>
@@ -303,10 +303,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
         <section id="tools" className="py-20 ">
           <div className="container mx-auto px-6">
             <div className="mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold  mb-6 animate-fade-in">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in text-gray-900 dark:text-white">
                 {t("home.tools.title")}
               </h2>
-              <p className="text-lg text-gray-400 max-w-2xl animate-fade-in animation-delay-200">
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl animate-fade-in animation-delay-200">
                 {t("home.tools.description")}
               </p>
             </div>
@@ -315,18 +315,18 @@ export default function Home({loaderData}: Route.ComponentProps) {
               {tools.map((category, index) => (
                 <div
                   key={index}
-                  className=" rounded-3xl p-8 border border-white/5 animate-slide-in-up"
+                  className="rounded-3xl p-8 border border-gray-200 dark:border-white/5 bg-white dark:bg-white/5 animate-slide-in-up"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="flex items-center mb-8">
-                    <div className="p-3 rounded-2xl mr-4 border border-white/10">
+                    <div className="p-3 rounded-2xl mr-4 border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5">
                       <img
                         src={category.icon}
                         alt={category.category}
-                        className="w-8 h-8 invert opacity-80"
+                        className="w-8 h-8 dark:invert opacity-80"
                       />
                     </div>
-                    <h3 className="text-2xl font-bold ">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                       {category.category}
                     </h3>
                   </div>
@@ -335,19 +335,19 @@ export default function Home({loaderData}: Route.ComponentProps) {
                       <a
                         key={toolIdx}
                         href={tool.link}
-                        className="group flex items-center justify-between p-4 ] rounded-xl border border-white/5 hover:border-blue-500/30  transition-all duration-300"
+                        className="group flex items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-white/5 hover:border-blue-500/30 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 active:scale-[0.98]"
                       >
                         <div>
-                          <h4 className="font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
+                          <h4 className="font-semibold text-gray-900 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                             {tool.name}
                           </h4>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
                             {tool.description}
                           </p>
                         </div>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-gray-600 group-hover:text-blue-400 transform group-hover:translate-x-1 transition-all"
+                          className="h-5 w-5 text-gray-400 dark:text-gray-600 group-hover:text-blue-600 dark:group-hover:text-blue-400 transform group-hover:translate-x-1 transition-all"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
@@ -370,20 +370,20 @@ export default function Home({loaderData}: Route.ComponentProps) {
         <section className="py-32 relative overflow-hidden">
           <div className="absolute inset-0 "></div>
           <div className="container mx-auto px-6 relative z-10">
-            <div className="relative rounded-[2.5rem] overflow-hidden  px-6 py-24 text-center border border-white/5">
-              <div className="absolute inset-0 opacity-20 bg-[url('/grid.svg')]"></div>
+            <div className="relative rounded-[2.5rem] overflow-hidden px-6 py-24 text-center border border-gray-200 dark:border-white/5 bg-white dark:bg-white/5 shadow-2xl dark:shadow-none">
+              <div className="absolute inset-0 opacity-10 dark:opacity-20 bg-[url('/grid.svg')]"></div>
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full  to-transparent pointer-events-none"></div>
               
               <div className="relative z-10 max-w-3xl mx-auto">
-                <h2 className="text-4xl md:text-6xl font-bold  mb-8">
+                <h2 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-8">
                   {t("home.cta.title")}
                 </h2>
-                <p className="text-xl text-gray-400 mb-12">
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
                   {t("home.cta.subtitle")}
                 </p>
                 <a
                   href="/pdf-tools"
-                  className="inline-block px-12 py-5  font-bold rounded-full shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] transition-all duration-300 text-lg transform hover:-translate-y-1"
+                  className="inline-block px-12 py-5 bg-blue-600  font-bold rounded-full shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition-all duration-300 text-lg transform hover:-translate-y-1 active:scale-95"
                 >
                   {t("home.cta.button")}
                 </a>
