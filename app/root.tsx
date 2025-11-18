@@ -17,7 +17,7 @@ import {I18nProvider} from "./i18n/context";
 import {renderToStaticMarkup} from "react-dom/server";
 
 export const links: Route.LinksFunction = () => [
-  /*   {rel: "preconnect", href: "https://fonts.googleapis.com"},
+  {rel: "preconnect", href: "https://fonts.googleapis.com"},
   {
     rel: "preconnect",
     href: "https://fonts.gstatic.com",
@@ -26,7 +26,7 @@ export const links: Route.LinksFunction = () => [
   {
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  }, */
+  },
 ];
 
 export function Layout({children}: {children: React.ReactNode}) {
@@ -34,6 +34,19 @@ export function Layout({children}: {children: React.ReactNode}) {
   const params = useParams();
   const localeParam = pathname.includes("/de") ? "de" : pathname.includes("/es") ? "es" : pathname.includes("/ar") ? "ar" : "en";
 
+  // Helper to get the pure path without locale prefix
+  const getPurePath = (p: string) => {
+    if (p.startsWith("/de/") || p === "/de") return p.substring(3);
+    if (p.startsWith("/es/") || p === "/es") return p.substring(3);
+    if (p.startsWith("/ar/") || p === "/ar") return p.substring(3);
+    return p;
+  };
+
+  let purePath = getPurePath(pathname);
+  if (!purePath.startsWith("/")) purePath = "/" + purePath;
+
+  const origin = "https://kleinbyte.com";
+  
   return (
     <html lang={localeParam}>
       <head>
@@ -41,21 +54,31 @@ export function Layout({children}: {children: React.ReactNode}) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <link rel="canonical" href={"https://kleinbyte.com" + pathname} />
+        <link rel="canonical" href={origin + pathname} />
         <link
           rel="alternate"
-          href={"https://kleinbyte.com" + pathname + "?lng=de"}
+          href={origin + purePath}
+          hrefLang="en"
+        />
+        <link
+          rel="alternate"
+          href={origin + "/de" + (purePath === "/" ? "" : purePath)}
           hrefLang="de"
         />
         <link
           rel="alternate"
-          href={"https://kleinbyte.com" + pathname + "?lng=es"}
+          href={origin + "/es" + (purePath === "/" ? "" : purePath)}
           hrefLang="es"
         />
         <link
           rel="alternate"
-          href={"https://kleinbyte.com" + pathname + "?lng=ar"}
+          href={origin + "/ar" + (purePath === "/" ? "" : purePath)}
           hrefLang="ar"
+        />
+        <link
+          rel="alternate"
+          href={origin + purePath}
+          hrefLang="x-default"
         />
         <script
           async

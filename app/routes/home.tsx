@@ -180,249 +180,218 @@ export default function Home({loaderData}: Route.ComponentProps) {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-20 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          {/* Animated background elements */}
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-          <div className="absolute top-40 right-20 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
-          <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 animate-fade-in-up">
-            {t("home.hero.title")}
-          </h1>
-          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-10 animate-fade-in-up animation-delay-200">
-            {t("home.hero.subtitle")}
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up animation-delay-400">
-            <a
-              href="#tools"
-              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 text-lg transform hover:scale-105"
-            >
-              {t("home.hero.explore_btn")}
-            </a>
-            <a
-              href="/pdf-tools"
-              className="px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold rounded-lg shadow-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-300 text-lg border border-gray-200 dark:border-slate-700 transform hover:scale-105"
-            >
-              {t("home.hero.pdf_btn")}
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-white dark:bg-slate-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 animate-fade-in">
-              {t("home.features.title")}
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-fade-in animation-delay-200">
-              {t("home.features.description")}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-blue-600 dark:text-blue-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
+      <div className="min-h-screen ">
+        {/* Hero Section */}
+        <section className="relative pt-32 pb-20 overflow-hidden">
+          {/* Background Effects */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] rounded-full blur-[120px] opacity-50 pointer-events-none"></div>
+          <div className="absolute bottom-0 right-0 w-[800px] h-[600px]  rounded-full blur-[100px] opacity-30 pointer-events-none"></div>
+          
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="inline-flex items-center justify-center px-4 py-1.5 mb-8 text-sm font-medium text-blue-300  rounded-full border border-blue-500/20 animate-fade-in backdrop-blur-sm">
+                <span className="relative flex h-2 w-2 mr-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full  opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 "></span>
+                </span>
+                New tools added weekly
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                {t("home.features.document.title")}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {t("home.features.document.description")}
+              
+              <h1 className="text-6xl md:text-8xl font-bold tracking-tight  mb-8 animate-fade-in-up leading-tight">
+                {t("home.hero.title")}
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200 font-light">
+                {t("home.hero.subtitle")}
+              </p>
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up animation-delay-400">
+                <a
+                  href="#tools"
+                  className="group relative px-8 py-4  text-black font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                >
+                  {t("home.hero.explore_btn")}
+                </a>
+                <a
+                  href="/pdf-tools"
+                  className="px-8 py-4 bg-transparent  font-bold rounded-full border border-white/20  transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+                >
+                  {t("home.hero.pdf_btn")}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-32 relative">
+          <div className="container mx-auto px-6">
+            <div className="mb-20">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
+                {t("home.features.title")}
+              </h2>
+              <p className="text-xl text-gray-400 max-w-2xl animate-fade-in animation-delay-200">
+                {t("home.features.description")}
               </p>
             </div>
 
-            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-green-600 dark:text-green-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                {t("home.features.image.title")}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {t("home.features.image.description")}
-              </p>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-purple-600 dark:text-purple-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                {t("home.features.developer.title")}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {t("home.features.developer.description")}
-              </p>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700">
-              <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-yellow-600 dark:text-yellow-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                {t("home.features.ecommerce.title")}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {t("home.features.ecommerce.description")}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tools Section */}
-      <section id="tools" className="py-16 bg-gray-50 dark:bg-slate-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 animate-fade-in">
-              {t("home.tools.title")}
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-fade-in animation-delay-200">
-              {t("home.tools.description")}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {tools.map((category, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-slate-700 transform transition-all duration-300 hover:shadow-2xl animate-slide-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="flex items-center mb-6">
-                  <img
-                    src={category.icon}
-                    alt={category.category}
-                    className="w-10 h-10 mr-3"
-                  />
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {category.category}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  icon: (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  ),
+                  title: t("home.features.document.title"),
+                  desc: t("home.features.document.description"),
+                  color: "text-blue-400",
+                  bg: "bg-blue-500/10",
+                  border: "hover:border-blue-500/50"
+                },
+                {
+                  icon: (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  ),
+                  title: t("home.features.image.title"),
+                  desc: t("home.features.image.description"),
+                  color: "text-green-400",
+                  bg: "bg-green-500/10",
+                  border: "hover:border-green-500/50"
+                },
+                {
+                  icon: (
+                    <>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </>
+                  ),
+                  title: t("home.features.developer.title"),
+                  desc: t("home.features.developer.description"),
+                  color: "text-purple-400",
+                  bg: "bg-purple-500/10",
+                  border: "hover:border-purple-500/50"
+                },
+                {
+                  icon: (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                  ),
+                  title: t("home.features.ecommerce.title"),
+                  desc: t("home.features.ecommerce.description"),
+                  color: "text-amber-400",
+                  bg: "bg-amber-500/10",
+                  border: "hover:border-amber-500/50"
+                }
+              ].map((feature, index) => (
+                <div key={index} className={`group  p-8 rounded-3xl border border-white/5 ${feature.border} transition-all duration-300 hover:-translate-y-1`}>
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${feature.bg} ${feature.color}`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      {feature.icon}
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold  mb-3">
+                    {feature.title}
                   </h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    {feature.desc}
+                  </p>
                 </div>
-                <div className="space-y-4">
-                  {category.tools.map((tool, toolIdx) => (
-                    <a
-                      key={toolIdx}
-                      href={tool.link}
-                      className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:translate-x-1 hover:shadow-md"
-                    >
-                      <div className="flex justify-between items-center">
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Tools Section */}
+        <section id="tools" className="py-20 ">
+          <div className="container mx-auto px-6">
+            <div className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold  mb-6 animate-fade-in">
+                {t("home.tools.title")}
+              </h2>
+              <p className="text-lg text-gray-400 max-w-2xl animate-fade-in animation-delay-200">
+                {t("home.tools.description")}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {tools.map((category, index) => (
+                <div
+                  key={index}
+                  className=" rounded-3xl p-8 border border-white/5 animate-slide-in-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="flex items-center mb-8">
+                    <div className="p-3 rounded-2xl mr-4 border border-white/10">
+                      <img
+                        src={category.icon}
+                        alt={category.category}
+                        className="w-8 h-8 invert opacity-80"
+                      />
+                    </div>
+                    <h3 className="text-2xl font-bold ">
+                      {category.category}
+                    </h3>
+                  </div>
+                  <div className="grid gap-3">
+                    {category.tools.map((tool, toolIdx) => (
+                      <a
+                        key={toolIdx}
+                        href={tool.link}
+                        className="group flex items-center justify-between p-4 ] rounded-xl border border-white/5 hover:border-blue-500/30  transition-all duration-300"
+                      >
                         <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-white">
+                          <h4 className="font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
                             {tool.name}
                           </h4>
-                          <p className="text-gray-600 dark:text-gray-300 text-sm">
+                          <p className="text-sm text-gray-500 mt-1">
                             {tool.description}
                           </p>
                         </div>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-blue-600 dark:text-blue-400"
+                          className="h-5 w-5 text-gray-600 group-hover:text-blue-400 transform group-hover:translate-x-1 transition-all"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
                           <path
                             fillRule="evenodd"
-                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                             clipRule="evenodd"
                           />
                         </svg>
-                      </div>
-                    </a>
-                  ))}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          {/* Animated background elements */}
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-          <div className="absolute bottom-40 right-20 w-72 h-72 bg-indigo-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 animate-fade-in">
-            {t("home.cta.title")}
-          </h2>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-10 animate-fade-in animation-delay-200">
-            {t("home.cta.subtitle")}
-          </p>
-          <a
-            href="/pdf-tools"
-            className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all duration-300 text-lg transform hover:scale-105 animate-fade-in animation-delay-400"
-          >
-            {t("home.cta.button")}
-          </a>
-        </div>
-      </section>
+        {/* CTA Section */}
+        <section className="py-32 relative overflow-hidden">
+          <div className="absolute inset-0 "></div>
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="relative rounded-[2.5rem] overflow-hidden  px-6 py-24 text-center border border-white/5">
+              <div className="absolute inset-0 opacity-20 bg-[url('/grid.svg')]"></div>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full  to-transparent pointer-events-none"></div>
+              
+              <div className="relative z-10 max-w-3xl mx-auto">
+                <h2 className="text-4xl md:text-6xl font-bold  mb-8">
+                  {t("home.cta.title")}
+                </h2>
+                <p className="text-xl text-gray-400 mb-12">
+                  {t("home.cta.subtitle")}
+                </p>
+                <a
+                  href="/pdf-tools"
+                  className="inline-block px-12 py-5  font-bold rounded-full shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] transition-all duration-300 text-lg transform hover:-translate-y-1"
+                >
+                  {t("home.cta.button")}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </Layout>
   );
 }
