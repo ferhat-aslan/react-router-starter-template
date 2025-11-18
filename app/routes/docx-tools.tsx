@@ -6,11 +6,23 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = () => {
+import {useI18n, translations, type Locale} from "../i18n/context";
+
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online DOCX Tools - Convert, Edit, Manipulate | Kleinbyte",
-      description: "Every tool you need to work with DOCX files in one place. 100% free DOCX tools including convert, edit, merge, split and manipulate DOCX documents with just a few clicks.",
+      title: t("docx.meta.title"),
+      description: t("docx.meta.description"),
       url: "https://kleinbyte.com/docx-tools",
       image: "https://kleinbyte.com/og-image-docx-tools.png",
     },
@@ -18,9 +30,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte DOCX Tools",
+          name: t("docx.title"),
           url: "https://kleinbyte.com/docx-tools",
-          description: "Comprehensive DOCX tools including convert, edit, merge and split functions",
+          description: t("docx.description"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -33,8 +45,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Use DOCX Tools",
-          description: "Simple steps to work with DOCX files using our tools",
+          name: t("docx.title"),
+          description: t("docx.description"),
         }),
       },
     ]
@@ -42,17 +54,16 @@ export const meta: MetaFunction = () => {
   return meta;
 };
 export default function DocxTools() {
+  const t = useI18n();
   return (
     <Layout>
       {/* Card Blog */}
       <section className="grid w-full grid-cols-12 container mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-4">
         <h1 className="col-span-12 text-center text-6xl font-bold">
-          Every tool you need to work with PDFs in one place
+          {t("docx.title")}
         </h1>
         <h6 className="col-span-10 col-start-2 text-center text-lg text-gray-600 dark:text-neutral-400">
-          Every tool you need to use PDFs, at your fingertips. All are 100% FREE
-          and easy to use! Merge, split, compress, convert, rotate, unlock and
-          watermark PDFs with just a few clicks.
+          {t("docx.description")}
         </h6>
         <div className="col-span-12 flex flex-wrap xl:flex-nowrap justify-center gap-4 mt-4 mb-8">
           <div className=" tag" data-filter="all">

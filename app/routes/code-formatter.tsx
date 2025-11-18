@@ -7,11 +7,23 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = () => {
+import {useI18n, translations, type Locale} from "../i18n/context";
+
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online Code Formatter - Format & Beautify Code | Kleinbyte",
-      description: "Every tool you need to format code in one place. 100% free code formatter for HTML, CSS, JavaScript, Python, Java, and more with just a few clicks.",
+      title: t("formatter.meta.title"),
+      description: t("formatter.meta.description"),
       url: "https://kleinbyte.com/code-formatter",
       image: "https://kleinbyte.com/og-image-code-formatter.png",
     },
@@ -19,9 +31,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte Code Formatter",
+          name: t("formatter.title"),
           url: "https://kleinbyte.com/code-formatter",
-          description: "Comprehensive code formatting and beautification tools for multiple languages",
+          description: t("formatter.description"),
           applicationCategory: "DeveloperApplication",
           operatingSystem: "Any",
           offers: {
@@ -34,8 +46,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Use Code Formatter",
-          description: "Simple steps to format your code using our tools",
+          name: t("formatter.title"),
+          description: t("formatter.description"),
         }),
       },
     ]
@@ -44,6 +56,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function CodeFormatter() {
+  const t = useI18n();
   const codeTools = [
     {
       name: "HTML Formatter",
@@ -89,10 +102,10 @@ export default function CodeFormatter() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Code Formatter
+              {t("formatter.title")}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Every tool you need to format code in one place. All tools are 100% FREE and easy to use!
+              {t("formatter.description")}
             </p>
           </div>
 

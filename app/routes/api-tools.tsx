@@ -6,12 +6,23 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {useI18n, translations, type Locale} from "../i18n/context";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online API Tools - Test, Debug & Monitor APIs | Kleinbyte",
-      description: "Every tool you need for API development in one place. 100% free API tools including testing, debugging, documentation, and monitoring with just a few clicks.",
+      title: t("api.meta.title"),
+      description: t("api.meta.description"),
       url: "https://kleinbyte.com/api-tools",
       image: "https://kleinbyte.com/og-image-api-tools.png",
     },
@@ -19,9 +30,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte API Tools",
+          name: t("api.title"),
           url: "https://kleinbyte.com/api-tools",
-          description: "Comprehensive API tools for testing, debugging and documentation",
+          description: t("api.description"),
           applicationCategory: "DeveloperApplication",
           operatingSystem: "Any",
           offers: {
@@ -34,8 +45,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Use API Tools",
-          description: "Simple steps to work with APIs using our tools",
+          name: t("api.title"),
+          description: t("api.description"),
         }),
       },
     ]
@@ -44,6 +55,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function ApiTools() {
+  const t = useI18n();
   const apiTools = [
     {
       name: "API Tester",
@@ -89,10 +101,10 @@ export default function ApiTools() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              API Tools
+              {t("api.title")}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Every tool you need for API development in one place. All tools are 100% FREE and easy to use!
+              {t("api.description")}
             </p>
           </div>
 

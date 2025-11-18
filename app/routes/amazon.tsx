@@ -7,11 +7,23 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = () => {
+import {useI18n, translations, type Locale} from "../i18n/context";
+
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "E-commerce Tools - Amazon Integration & API | Kleinbyte",
-      description: "Every tool you need for e-commerce in one place. Amazon integration, product management, API tools and more to help grow your online business. 100% free and easy to use!",
+      title: t("amazon.meta.title"),
+      description: t("amazon.meta.description"),
       url: "https://kleinbyte.com/amazon",
       image: "https://kleinbyte.com/og-image-ecommerce-tools.png",
     },
@@ -19,9 +31,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte E-commerce Tools",
+          name: t("amazon.title"),
           url: "https://kleinbyte.com/amazon",
-          description: "Comprehensive e-commerce tools including Amazon integration",
+          description: t("amazon.description"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -34,8 +46,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Use E-commerce Tools",
-          description: "Step-by-step guide on managing your e-commerce business with our tools",
+          name: t("amazon.title"),
+          description: t("amazon.description"),
         }),
       },
     ]

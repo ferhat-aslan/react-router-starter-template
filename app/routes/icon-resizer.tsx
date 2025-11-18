@@ -7,11 +7,23 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = () => {
+import {useI18n, translations, type Locale} from "../i18n/context";
+
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online Icon Resizer - Resize Images & Icons | Kleinbyte",
-      description: "Resize your images and icons to multiple dimensions at once. Convert PNG, JPG, GIF, and other formats to different sizes. 100% free image resizer tool.",
+      title: t("icon.meta.title"),
+      description: t("icon.meta.description"),
       url: "https://kleinbyte.com/icon-resizer",
       image: "https://kleinbyte.com/og-image-icon-resizer.png",
     },
@@ -19,9 +31,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte Icon Resizer",
+          name: t("icon.title"),
           url: "https://kleinbyte.com/icon-resizer",
-          description: "Resize images and icons to multiple dimensions at once",
+          description: t("icon.description"),
           applicationCategory: "GraphicsApplication",
           operatingSystem: "Any",
           offers: {
@@ -34,8 +46,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Resize Icons",
-          description: "Simple steps to resize your images and icons",
+          name: t("icon.title"),
+          description: t("icon.description"),
         }),
       },
     ]
@@ -44,16 +56,17 @@ export const meta: MetaFunction = () => {
 };
 
 export default function IconResizer() {
+  const t = useI18n();
   return (
     <Layout>
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Icon Resizer
+              {t("icon.title")}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Resize your images and icons to multiple dimensions at once. Perfect for app icons, website graphics, and social media. All tools are 100% FREE and easy to use!
+              {t("icon.description")}
             </p>
           </div>
 

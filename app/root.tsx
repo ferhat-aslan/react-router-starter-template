@@ -48,7 +48,7 @@ export function Layout({children}: {children: React.ReactNode}) {
   const origin = "https://kleinbyte.com";
   
   return (
-    <html lang={localeParam}>
+    <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

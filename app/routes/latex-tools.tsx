@@ -6,11 +6,23 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = () => {
+import {useI18n, translations, type Locale} from "../i18n/context";
+
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online LaTeX Tools - Create, Edit, Convert | Kleinbyte",
-      description: "Every tool you need to work with LaTeX files in one place. 100% free LaTeX tools including create, edit, convert and manipulate LaTeX documents with just a few clicks.",
+      title: t("latex.meta.title"),
+      description: t("latex.meta.description"),
       url: "https://kleinbyte.com/latex-tools",
       image: "https://kleinbyte.com/og-image-latex-tools.png",
     },
@@ -18,9 +30,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte LaTeX Tools",
+          name: t("latex.title"),
           url: "https://kleinbyte.com/latex-tools",
-          description: "Comprehensive LaTeX tools including create, edit, and convert functions",
+          description: t("latex.description"),
           applicationCategory: "EducationalApplication",
           operatingSystem: "Any",
           offers: {
@@ -33,8 +45,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Use LaTeX Tools",
-          description: "Simple steps to work with LaTeX files using our tools",
+          name: t("latex.title"),
+          description: t("latex.description"),
         }),
       },
     ]
@@ -43,15 +55,15 @@ export const meta: MetaFunction = () => {
 };
 
 export default function LatexTools() {
+  const t = useI18n();
   return (
     <Layout>
       <section className="grid w-full grid-cols-12 container mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-4">
         <h1 className="col-span-12 text-center text-6xl font-bold">
-          Latex Tools
+          {t("latex.title")}
         </h1>
         <h6 className="col-span-10 col-start-2 text-center text-lg text-gray-600 dark:text-neutral-400">
-          Every tool you need to use Latex, at your fingertips. All are 100%
-          FREE and easy to use!
+          {t("latex.description")}
         </h6>
       </section>
     </Layout>

@@ -12,12 +12,23 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 
+import {useI18n, translations, type Locale} from "../i18n/context";
+
 export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online PDF Tools - Merge, Split, Convert, Edit | Kleinbyte",
-      description:
-        "Every tool you need to work with PDFs in one place. 100% free PDF tools including merge, split, compress, convert, rotate, unlock and watermark PDFs with just a few clicks.",
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
       url: "https://kleinbyte.com/pdf-tools",
       image: "https://kleinbyte.com/og-image-pdf-tools.png",
     },
@@ -25,10 +36,9 @@ export const meta: MetaFunction = ({location}) => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte PDF Tools",
+          name: t("pdf.title"),
           url: "https://kleinbyte.com/pdf-tools",
-          description:
-            "Comprehensive PDF tools including merge, split, convert, and edit functions",
+          description: t("pdf.description"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -41,8 +51,8 @@ export const meta: MetaFunction = ({location}) => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Use PDF Tools",
-          description: "Simple steps to work with PDF files using our tools",
+          name: t("pdf.title"),
+          description: t("pdf.description"),
         }),
       },
     ]
@@ -51,17 +61,16 @@ export const meta: MetaFunction = ({location}) => {
 };
 
 export default function PDFTools() {
+  const t = useI18n();
   return (
     <Layout>
       {/* Card Blog */}
       <section className="flex flex-col md:grid w-full grid-cols-12 container mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-16">
         <h1 className="col-span-12 text-center text-6xl font-bold">
-          Every tool you need to work with PDFs in one place
+          {t("pdf.title")}
         </h1>
         <h6 className="col-span-10 col-start-2 text-center text-lg text-gray-600 dark:text-neutral-400">
-          Every tool you need to use PDFs, at your fingertips. All are 100% FREE
-          and easy to use! Merge, split, compress, convert, rotate, unlock and
-          watermark PDFs with just a few clicks.
+          {t("pdf.description")}
         </h6>
 
         <aside className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -82,10 +91,9 @@ export default function PDFTools() {
                 className="mb-4 size-14 absolute left-4 bottom-4 shadow-xl"
               />
             </span>
-            <h3 className="text-xl font-semibold mb-2">Merge PDF</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("pdf.merge.title")}</h3>
             <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
+              {t("pdf.merge.description")}
             </p>
             <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
@@ -100,10 +108,9 @@ export default function PDFTools() {
               <img src={SVG} alt="PDF Icon" className="mb-4 size-10" />
               <img src={SVG} alt="PDF Icon" className="mb-4 size-6" />
             </span>
-            <h3 className="text-xl font-semibold mb-2">Split PDF Pages</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("pdf.split.title")}</h3>
             <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
+              {t("pdf.split.description")}
             </p>
             <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
@@ -117,10 +124,9 @@ export default function PDFTools() {
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={WORD} alt="Word Icon" className="mb-4 size-14" />
             </span>
-            <h3 className="text-xl font-semibold mb-2">Word to PDF</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("pdf.word.title")}</h3>
             <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
+              {t("pdf.word.description")}
             </p>
             <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
@@ -134,10 +140,9 @@ export default function PDFTools() {
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={TXT} alt="Txt Icon" className="mb-4 size-14" />
             </span>
-            <h3 className="text-xl font-semibold mb-2">PDF to Text</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("pdf.text.title")}</h3>
             <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
+              {t("pdf.text.description")}
             </p>
             <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →
@@ -151,10 +156,9 @@ export default function PDFTools() {
               <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
               <img src={JPG} alt="Jpg Icon" className="mb-4 size-14" />
             </span>
-            <h3 className="text-xl font-semibold mb-2">PDF to Images</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("pdf.images.title")}</h3>
             <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
+              {t("pdf.images.description")}
             </p>
             <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
               Go to Tool →

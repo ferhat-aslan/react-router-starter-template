@@ -7,11 +7,23 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = () => {
+import {useI18n, translations, type Locale} from "../i18n/context";
+
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online Favicon Maker - Create Favicon from Images | Kleinbyte",
-      description: "Create favicons from your images in multiple sizes. Convert JPG, PNG, GIF, and other formats to ICO files for your website. 100% free favicon generator tool.",
+      title: t("favicon.meta.title"),
+      description: t("favicon.meta.description"),
       url: "https://kleinbyte.com/favicon-maker",
       image: "https://kleinbyte.com/og-image-favicon-maker.png",
     },
@@ -19,9 +31,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte Favicon Maker",
+          name: t("favicon.title"),
           url: "https://kleinbyte.com/favicon-maker",
-          description: "Create favicons from your images in multiple sizes",
+          description: t("favicon.description"),
           applicationCategory: "GraphicsApplication",
           operatingSystem: "Any",
           offers: {
@@ -34,8 +46,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Create a Favicon",
-          description: "Simple steps to generate a favicon for your website",
+          name: t("favicon.title"),
+          description: t("favicon.description"),
         }),
       },
     ]
@@ -44,16 +56,17 @@ export const meta: MetaFunction = () => {
 };
 
 export default function FaviconMaker() {
+  const t = useI18n();
   return (
     <Layout>
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Favicon Maker
+              {t("favicon.title")}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Create beautiful favicons from your images in multiple sizes. Perfect for websites, apps, and browsers. All tools are 100% FREE and easy to use!
+              {t("favicon.description")}
             </p>
           </div>
 

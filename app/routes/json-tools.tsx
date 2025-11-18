@@ -7,11 +7,23 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = () => {
+import {useI18n, translations, type Locale} from "../i18n/context";
+
+export const meta: MetaFunction = ({location}) => {
+  const locale: Locale = 
+    location.pathname.split("/")?.[1] === "de" ? "de" : 
+    location.pathname.split("/")?.[1] === "es" ? "es" : 
+    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
+  const messages = translations[locale] ?? translations.en;
+
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   const meta = generateMeta(
     {
-      title: "Free Online JSON Tools - Validate, Format & Manipulate | Kleinbyte",
-      description: "Every tool you need to work with JSON in one place. 100% free JSON tools including validate, format, minify, prettify, and manipulate JSON data with just a few clicks.",
+      title: t("json.meta.title"),
+      description: t("json.meta.description"),
       url: "https://kleinbyte.com/json-tools",
       image: "https://kleinbyte.com/og-image-json-tools.png",
     },
@@ -19,9 +31,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
-          name: "Kleinbyte JSON Tools",
+          name: t("json.title"),
           url: "https://kleinbyte.com/json-tools",
-          description: "Comprehensive JSON tools for validation, formatting and manipulation",
+          description: t("json.description"),
           applicationCategory: "DeveloperApplication",
           operatingSystem: "Any",
           offers: {
@@ -34,8 +46,8 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": course({
           "@type": "HowTo",
-          name: "How to Use JSON Tools",
-          description: "Simple steps to work with JSON using our tools",
+          name: t("json.title"),
+          description: t("json.description"),
         }),
       },
     ]
@@ -44,6 +56,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function JsonTools() {
+  const t = useI18n();
   const jsonTools = [
     {
       name: "JSON Formatter",
@@ -89,10 +102,10 @@ export default function JsonTools() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              JSON Tools
+              {t("json.title")}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Every tool you need to work with JSON in one place. All tools are 100% FREE and easy to use!
+              {t("json.description")}
             </p>
           </div>
 
