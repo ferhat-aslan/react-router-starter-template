@@ -148,5 +148,8 @@
   "pdf.text.title": "PDF zu Text",
   "pdf.text.description": "Extrahieren Sie Text aus PDF-Dateien.",
   "pdf.text.meta.title": "PDF zu Text - Kleinbyte",
-  "pdf.text.meta.description": "Text kostenlos online aus PDF extrahieren."
+  "pdf.text.meta.description": "Text kostenlos online aus PDF extrahieren.",
+  "tools.video.category": "Video-Tools",
+  "tools.video.compressor.name": "Videokompressor",
+  "tools.video.compressor.description": "Videodateien effizient komprimieren"
 }

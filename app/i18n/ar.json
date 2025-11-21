@@ -133,5 +133,8 @@
   "pdf.text.title": "PDF إلى نص",
   "pdf.text.description": "استخراج النص من ملفات PDF.",
   "pdf.text.meta.title": "PDF إلى نص - كلاين بايت",
-  "pdf.text.meta.description": "استخراج النص من PDF عبر الإنترنت مجانًا."
+  "pdf.text.meta.description": "استخراج النص من PDF عبر الإنترنت مجانًا.",
+  "tools.video.category": "أدوات الفيديو",
+  "tools.video.compressor.name": "ضاغط الفيديو",
+  "tools.video.compressor.description": "ضغط ملفات الفيديو بكفاءة"
 }

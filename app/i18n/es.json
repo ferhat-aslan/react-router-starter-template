@@ -148,5 +148,8 @@
   "pdf.text.title": "PDF a texto",
   "pdf.text.description": "Extrae texto de archivos PDF.",
   "pdf.text.meta.title": "PDF a texto - Kleinbyte",
-  "pdf.text.meta.description": "Extrae texto de PDF en línea de forma gratuita."
+  "pdf.text.meta.description": "Extrae texto de PDF en línea de forma gratuita.",
+  "tools.video.category": "Herramientas de video",
+  "tools.video.compressor.name": "Compresor de video",
+  "tools.video.compressor.description": "Comprime archivos de video eficientemente"
 }

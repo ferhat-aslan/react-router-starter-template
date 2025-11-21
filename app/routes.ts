@@ -19,6 +19,8 @@ const baseRoutes: RouteConfig = [
   route("icon-resizer", "routes/icon-resizer.tsx"),
   route("privacy-policy", "routes/privacy-policy.tsx"),
   route("terms-and-conditions", "routes/terms-and-conditions.tsx"),
+  route("tools/video-compressor", "routes/tools/video-compressor.tsx"),
+  route("tools/image-converter", "routes/tools/image-converter.tsx"),
   ...prefix("pdf-tools", [
     index("routes/pdf-tools.tsx"),
     route("merge-pdf", "routes/pdf-tools/merge-pdf.tsx"),
@@ -30,9 +32,9 @@ const baseRoutes: RouteConfig = [
 ];
 
 // 👇 generate localized routes without duplicate IDs
-const localizedRoutesDE = prefix("de", baseRoutes.map((r,i) => ({ ...r, id: `${r.id ?? i}-de-localized` })));
-const localizedRoutesES = prefix("es", baseRoutes.map((r,i) => ({ ...r, id: `${r.id ?? i}-es-localized` })));
-const localizedRoutesAR = prefix("ar", baseRoutes.map((r,i) => ({ ...r, id: `${r.id ?? i}-ar-localized` })));
+const localizedRoutesDE = prefix("de", baseRoutes.map((r, i) => ({ ...r, id: `${r.id ?? i}-de-localized` })));
+const localizedRoutesES = prefix("es", baseRoutes.map((r, i) => ({ ...r, id: `${r.id ?? i}-es-localized` })));
+const localizedRoutesAR = prefix("ar", baseRoutes.map((r, i) => ({ ...r, id: `${r.id ?? i}-ar-localized` })));
 
 
-export default [...baseRoutes, ...localizedRoutesDE,...localizedRoutesES, ...localizedRoutesAR] satisfies RouteConfig;
+export default [...baseRoutes, ...localizedRoutesDE, ...localizedRoutesES, ...localizedRoutesAR] satisfies RouteConfig;

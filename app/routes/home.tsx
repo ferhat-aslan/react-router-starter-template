@@ -131,7 +131,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
         {
           name: t("tools.images.converter.name"),
           description: t("tools.images.converter.description"),
-          link: "#",
+          link: "/tools/image-converter",
         },
         {
           name: t("tools.images.compressor.name"),
@@ -147,6 +147,17 @@ export default function Home({loaderData}: Route.ComponentProps) {
           name: t("tools.images.resizer.name"),
           description: t("tools.images.resizer.description"),
           link: "#",
+        },
+      ],
+    },
+    {
+      category: t("tools.video.category"),
+      icon: JPG,
+      tools: [
+        {
+          name: t("tools.video.compressor.name"),
+          description: t("tools.video.compressor.description"),
+          link: "/tools/video-compressor",
         },
       ],
     },
