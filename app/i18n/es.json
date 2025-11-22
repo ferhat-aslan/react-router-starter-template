@@ -151,5 +151,10 @@
   "pdf.text.meta.description": "Extrae texto de PDF en línea de forma gratuita.",
   "tools.video.category": "Herramientas de video",
   "tools.video.compressor.name": "Compresor de video",
-  "tools.video.compressor.description": "Comprime archivos de video eficientemente"
+  "tools.video.compressor.description": "Comprime archivos de video eficientemente",
+  "search.meta.title": "Resultados de búsqueda - Kleinbyte",
+  "search.meta.description": "Resultados de búsqueda para herramientas de Kleinbyte.",
+  "search.results_title": "Resultados de búsqueda para",
+  "search.default_title": "Buscar herramientas",
+  "search.no_results": "No se encontraron herramientas que coincidan con su búsqueda."
 }

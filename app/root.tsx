@@ -13,8 +13,34 @@ import type {Route} from "./+types/root";
 import "./app.css";
 import {generateCanonicalLinks} from "@forge42/seo-tools/canonical";
 
-import {I18nProvider} from "./i18n/context";
 import {renderToStaticMarkup} from "react-dom/server";
+const LANGUAGES = ["en", "de", "es", "ar"] as const;
+
+export const loader = async ({request}: Route.LoaderArgs) => {
+  const cookieHeader = request.headers.get("Cookie");
+  let userId = null;
+
+  if (cookieHeader) {
+    const cookies = Object.fromEntries(
+      cookieHeader.split("; ").map((c) => c.split("="))
+    );
+    userId = cookies["user-id"];
+  }
+
+  if (!userId) {
+    userId = crypto.randomUUID();
+    return Response.json(
+      {userId},
+      {
+        headers: {
+          "Set-Cookie": `user-id=${userId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`, // 1 year
+        },
+      }
+    );
+  }
+
+  return {userId};
+};
 
 export const links: Route.LinksFunction = () => [
   /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
@@ -29,111 +55,127 @@ export const links: Route.LinksFunction = () => [
   }, */
 ];
 
+import {I18nProvider, type Locale} from "./i18n/context";
+
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
-  const params = useParams();
+
   const localeParam = pathname.includes("/de") ? "de" : pathname.includes("/es") ? "es" : pathname.includes("/ar") ? "ar" : "en";
-
-  // Helper to get the pure path without locale prefix
-  const getPurePath = (p: string) => {
-    if (p.startsWith("/de/") || p === "/de") return p.substring(3);
-    if (p.startsWith("/es/") || p === "/es") return p.substring(3);
-    if (p.startsWith("/ar/") || p === "/ar") return p.substring(3);
-    return p;
-  };
-
-  let purePath = getPurePath(pathname);
-  if (!purePath.startsWith("/")) purePath = "/" + purePath;
-
   const origin = "https://kleinbyte.com";
+
+  const pathnameNoTrailingSlash = pathname.replace(/\/$/, "");
+ // detect language from URL
+  const segments = pathnameNoTrailingSlash.split("/").filter(Boolean);
+  const first = segments[0];
+
+  const currentLang = LANGUAGES.includes(first as any) ? first : "en";
+    // build the base path WITHOUT language prefix
+  // /de/pdf-tools → /pdf-tools
+  const pathWithoutLang =
+    currentLang === "en"
+      ? pathnameNoTrailingSlash
+      : "/" + segments.slice(1).join("/");
+
+  // canonical URL (language-aware)
+  const canonical =
+    currentLang === "en"
+      ? `${origin}${pathWithoutLang}`
+      : `${origin}/${currentLang}${pathWithoutLang}`;
+  
+   // build hreflang URLs for all languages
+  const alternates = LANGUAGES.map((lang) => {
+    const href =
+      lang === "en"
+        ? `${origin}${pathWithoutLang}`
+        : `${origin}/${lang}${pathWithoutLang}`;
+
+    return {
+   
+      rel: "alternate",
+      hrefLang: lang,
+      href,
+    };
+  });
+
+  
+    // x-default → English (your default)
+   const xDefault = {
+    
+      rel: "alternate",
+      hrefLang: "x-default",
+      href: `${origin}${pathWithoutLang}`,
+    };
   
   return (
-    <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"}>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-        <link rel="canonical" href={origin + pathname} />
-        <link
-          rel="alternate"
-          href={origin + purePath}
-          hrefLang="en"
-        />
-        <link
-          rel="alternate"
-          href={origin + "/de" + (purePath === "/" ? "" : purePath)}
-          hrefLang="de"
-        />
-        <link
-          rel="alternate"
-          href={origin + "/es" + (purePath === "/" ? "" : purePath)}
-          hrefLang="es"
-        />
-        <link
-          rel="alternate"
-          href={origin + "/ar" + (purePath === "/" ? "" : purePath)}
-          hrefLang="ar"
-        />
-        <link
-          rel="alternate"
-          href={origin + purePath}
-          hrefLang="x-default"
-        />
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-HRC6G6L65K');`,
-          }}
-        ></script>
-      </head>
-      <body>
-        <I18nProvider locale={localeParam}>
+    <I18nProvider locale={localeParam as Locale}>
+      <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"}>
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <Meta />
+          <Links />
+          <link rel="canonical" href={canonical} />
+          {alternates.map((alt) => (
+            <link key={alt.href} {...alt} />
+          ))}
+          {xDefault && (
+            <link {...xDefault} />
+          )}
+        
+        
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `  window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-HRC6G6L65K');`,
+            }}
+          ></script>
+        </head>
+        <body>
           {children}
           <ScrollRestoration />
           <Scripts />
-        </I18nProvider>
-      </body>
-      <script
-        async={true}
-        dangerouslySetInnerHTML={{
-          __html: `
-		const button = document.querySelector('#menu-button');
-const menu = document.querySelector('#menu');
-
-
-button.addEventListener('click', () => {
-  menu.classList.toggle('hidden');});
-
-  const storedTheme = localStorage.getItem('theme');
-  const prefersDark =
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-  if (storedTheme) {
-    document.documentElement.classList.add(storedTheme);
-  } else if (prefersDark) {
-    document.documentElement.classList.add('dark');
-  }
-window.addEventListener('scroll', function() {
-    if (window.scrollY > 0) {
-        document.body.classList.add('scrolled');
-    } else {
-        document.body.classList.remove('scrolled');
+        </body>
+        <script
+          async={true}
+          dangerouslySetInnerHTML={{
+            __html: `
+      const button = document.querySelector('#menu-button');
+  const menu = document.querySelector('#menu');
+  
+  
+  button.addEventListener('click', () => {
+    menu.classList.toggle('hidden');});
+  
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+    if (storedTheme) {
+      document.documentElement.classList.add(storedTheme);
+    } else if (prefersDark) {
+      document.documentElement.classList.add('dark');
     }
-});
-
-`,
-        }}
-      />
-    </html>
+  window.addEventListener('scroll', function() {
+      if (window.scrollY > 0) {
+          document.body.classList.add('scrolled');
+      } else {
+          document.body.classList.remove('scrolled');
+      }
+  });
+  
+  `,
+          }}
+        />
+      </html>
+    </I18nProvider>
   );
 }
 

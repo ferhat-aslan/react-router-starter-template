@@ -1,188 +1,239 @@
-import Layout from "~/components/layout";
-import type {Route} from "../+types/home";
-import SelectFilesInput from "~/components/select-files-input";
-import {useState} from "react";
-import Free from "~/components/free";
+import { useState } from "react";
+import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, FileType, Trash2 } from "lucide-react";
+import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
+import type { Route } from "./+types/word-to-pdf";
+import { useI18n } from "~/i18n/context";
 
-import {webApp} from "@forge42/seo-tools/structured-data/web-app";
-import {course} from "@forge42/seo-tools/structured-data/course";
-import {type MetaFunction} from "react-router";
-import {generateMeta} from "@forge42/seo-tools/remix/metadata";
-
-export const meta: MetaFunction = () => {
-  const meta = generateMeta(
-    {
-      title: "Free Online Word to PDF Converter - DOC, DOCX to PDF | Kleinbyte",
-      description: "Convert Word documents to PDF files online for free. Support for DOC, DOCX, and RTF files. No installation or registration required. Fast, secure and easy-to-use Word to PDF converter.",
-      url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
-      image: "https://kleinbyte.com/og-image-word-to-pdf.png",
-    },
-    [
-      {
-        "script:ld+json": webApp({
-          "@type": "SoftwareApplication",
-          name: "Kleinbyte Word to PDF Converter",
-          url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
-          description: "Convert Word documents to PDF files",
-          applicationCategory: "BusinessApplication",
-          operatingSystem: "Any",
-          offers: {
-            "@type": "Offer",
-            price: "0",
-            priceCurrency: "USD"
-          }
-        }),
-      },
-      {
-        "script:ld+json": course({
-          "@type": "HowTo",
-          name: "How to Convert Word to PDF",
-          description: "Step-by-step guide on converting DOC/DOCX files to PDF",
-        }),
-      },
-    ]
-  );
-  return meta;
-};
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Word to PDF - Tinker" },
+    { name: "description", content: "Convert Word documents to PDF." },
+  ];
+}
 
 export default function WordToPdf() {
+  const t = useI18n();
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "uploading" | "processing" | "success" | "error">("idle");
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Word to PDF",
-    description: "Convert Word files to PDF with one click.",
-    url:
-      typeof window !== "undefined"
-        ? window.location.href
-        : "https://your-domain.example/pdf-tools/word-to-pdf",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://your-domain.example/",
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setStatus("idle");
+      setError(null);
+      setDownloadUrl(null);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+
+    setStatus("uploading");
+    setError(null);
+
+    try {
+      // 1. Upload to R2
+      const key = await uploadToR2(file);
+      
+      setStatus("processing");
+
+      // 2. Send key to backend
+      const response = await fetch("http://localhost:8000/word-to-pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "PDF Tools",
-          item: "https://your-domain.example/pdf-tools",
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: "Word to PDF",
-          item: "https://your-domain.example/pdf-tools/word-to-pdf",
-        },
-      ],
-    },
+        body: JSON.stringify({ file_key: key }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json() as any;
+        throw new Error(errorData.error || "Conversion failed");
+      }
+
+      const data = await response.json() as any;
+      
+      // 3. Get download URL
+      const url = getDownloadUrl(data.result_key);
+      setDownloadUrl(url);
+      setStatus("success");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "An unexpected error occurred");
+      setStatus("error");
+    }
   };
 
   return (
-    <Layout>
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6 justify-start items-center">
-        <h1 className="text-4xl font-bold mb-4">Word → PDF</h1>
-
-        <p className="text-2xl text-gray-700 dark:text-neutral-300 max-w-3xl leading-relaxed">
-          Convert a Word document to PDF. Choose your file and press "Convert".
-          Supported formats: .doc, .docx, .rtf.
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+          {t("pdfTools.wordToPdf.title")}
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          {t("pdfTools.wordToPdf.description")}
         </p>
+      </div>
 
-        <div className="w-full max-w-2xl mt-4">
-          <div className="text-xl font-medium mb-2">1. Choose a Word file</div>
-          <SelectFilesInput
-            accept=".doc,.docx,.rtf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf"
-            onChange={(newFiles: any) => {
-              setFile(newFiles && newFiles.length ? newFiles[0] : null);
-            }}
-          />
+      <div className="grid gap-8 md:grid-cols-2">
+        {/* Upload Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Upload className="w-5 h-5 text-blue-700" />
+              Upload Word Doc
+            </h2>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative group">
+                <input
+                  type="file"
+                  accept=".doc,.docx,.rtf"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="word-upload"
+                />
+                <label
+                  htmlFor="word-upload"
+                  className={`
+                    flex flex-col items-center justify-center w-full h-48 
+                    border-2 border-dashed rounded-lg cursor-pointer 
+                    transition-all duration-200
+                    ${file 
+                      ? "border-blue-700 bg-blue-50/50 dark:bg-blue-950/20" 
+                      : "border-muted-foreground/25 hover:border-blue-700 hover:bg-muted/50"
+                    }
+                  `}
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                    {file ? (
+                      <>
+                        <FileType className="w-10 h-10 text-blue-700 mb-3" />
+                        <p className="text-sm font-medium text-foreground truncate max-w-full">
+                          {file.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {(file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-10 h-10 text-muted-foreground mb-3 group-hover:text-blue-700 transition-colors" />
+                        <p className="text-sm text-foreground font-medium">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          DOC, DOCX, RTF
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </label>
+              </div>
 
-          <div className="text-xl font-medium mt-6">
-            2. Convert and download
-          </div>
-          <button
-            className="mt-4 px-6 py-3 disabled:opacity-40 disabled:pointer-events-none bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-lg"
-            disabled={!file || loading}
-            onClick={async () => {
-              if (!file) return;
-              setLoading(true);
-              try {
-                const form = new FormData();
-                form.append("file", file);
-
-                const res = await fetch("http://localhost:8000/word-to-pdf", {
-                  method: "POST",
-                  body: form,
-                });
-
-                if (!res.ok) {
-                  const text = await res.text();
-                  alert("Conversion error: " + text);
-                  setLoading(false);
-                  return;
-                }
-
-                const blob = await res.blob();
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                // use original basename if available
-                const name =
-                  file && file.name
-                    ? file.name.replace(/\.[^.]+$/, ".pdf")
-                    : "converted.pdf";
-                a.download = name;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-              } catch (err) {
-                console.error("Error converting file:", err);
-                alert("Error converting file");
-              } finally {
-                setLoading(false);
-              }
-            }}
-          >
-            {loading ? "Converting..." : "Convert to PDF"}
-          </button>
-
-          {/* Quick example buttons for older users */}
-          <div className="mt-4 flex gap-3">
-            <button
-              className="px-4 py-2 rounded bg-green-600 text-white"
-              onClick={() => {
-                alert(
-                  "Pick a Word file and press Convert. Example: select 'example.docx' from your files."
-                );
-              }}
-            >
-              Example: Convert my resume
-            </button>
-            <button
-              className="px-4 py-2 rounded bg-yellow-600 text-white"
-              onClick={() => {
-                alert(
-                  "If you only have a .docx file, it will be converted to PDF with the same name."
-                );
-              }}
-            >
-              Tip: .docx → PDF
-            </button>
+              <button
+                type="submit"
+                disabled={!file || status === "uploading" || status === "processing"}
+                className={`
+                  w-full py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2
+                  transition-all duration-200
+                  ${!file || status === "uploading" || status === "processing"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-blue-700 hover:bg-blue-800 text-white shadow-md hover:shadow-lg"
+                  }
+                `}
+              >
+                {status === "uploading" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : status === "processing" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Converting...
+                  </>
+                ) : (
+                  "Convert to PDF"
+                )}
+              </button>
+            </form>
           </div>
         </div>
 
-        <Free />
-      </section>
+        {/* Status/Result Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm h-full flex flex-col">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Download className="w-5 h-5 text-green-500" />
+              Result
+            </h2>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
-      />
-    </Layout>
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
+              {status === "idle" && (
+                <div className="text-muted-foreground">
+                  <FileText className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                  <p>Upload a Word document to start conversion</p>
+                </div>
+              )}
+
+              {(status === "uploading" || status === "processing") && (
+                <div className="space-y-4 w-full max-w-xs">
+                  <Loader2 className="w-12 h-12 mx-auto text-blue-700 animate-spin" />
+                  <div>
+                    <p className="font-medium text-foreground">
+                      {status === "uploading" ? "Uploading document..." : "Converting to PDF..."}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Please wait...
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {status === "error" && (
+                <div className="text-destructive space-y-3">
+                  <AlertCircle className="w-12 h-12 mx-auto" />
+                  <p className="font-medium">Conversion Failed</p>
+                  <p className="text-sm opacity-90">{error}</p>
+                </div>
+              )}
+
+              {status === "success" && downloadUrl && (
+                <div className="space-y-6 w-full">
+                  <div className="text-green-600 dark:text-green-500">
+                    <CheckCircle className="w-16 h-16 mx-auto mb-3" />
+                    <p className="text-lg font-semibold">Conversion Complete!</p>
+                  </div>
+                  
+                  <a
+                    href={downloadUrl}
+                    download
+                    className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md transition-all hover:scale-[1.02]"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download PDF
+                  </a>
+                  
+                  <button 
+                    onClick={() => {
+                      setFile(null);
+                      setStatus("idle");
+                      setDownloadUrl(null);
+                    }}
+                    className="text-sm text-muted-foreground hover:text-foreground underline"
+                  >
+                    Convert another document
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

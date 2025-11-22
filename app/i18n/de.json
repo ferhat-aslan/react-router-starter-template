@@ -151,5 +151,10 @@
   "pdf.text.meta.description": "Text kostenlos online aus PDF extrahieren.",
   "tools.video.category": "Video-Tools",
   "tools.video.compressor.name": "Videokompressor",
-  "tools.video.compressor.description": "Videodateien effizient komprimieren"
+  "tools.video.compressor.description": "Videodateien effizient komprimieren",
+  "search.meta.title": "Suchergebnisse - Kleinbyte",
+  "search.meta.description": "Suchergebnisse für Kleinbyte-Tools.",
+  "search.results_title": "Suchergebnisse für",
+  "search.default_title": "Tools suchen",
+  "search.no_results": "Keine Tools gefunden, die Ihrer Suche entsprechen."
 }

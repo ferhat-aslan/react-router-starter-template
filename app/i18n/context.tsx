@@ -5,12 +5,18 @@ import es from "./es.json";
 import ar from "./ar.json";
 
 export type Locale = "en" | "de" | "es" | "ar";
-type Messages = Record<any, any>;
+type Messages = Record<string, string>;
 
 export const translations: Record<Locale, Messages> = {en, de, es, ar};
 
-const I18nContext: any = createContext<{t: (key: string) => string}>({
+interface I18nContextType {
+  t: (key: string) => string;
+  locale: Locale;
+}
+
+const I18nContext = createContext<I18nContextType>({
   t: (key) => key,
+  locale: "en",
 });
 
 export function I18nProvider({
@@ -26,9 +32,15 @@ export function I18nProvider({
     return messages[key] ?? key;
   }
 
-  return <I18nContext.Provider value={{t}}>{children}</I18nContext.Provider>;
+  return (
+    <I18nContext.Provider value={{t, locale}}>{children}</I18nContext.Provider>
+  );
 }
 
 export function useI18n() {
-  return (useContext(I18nContext) as any).t;
+  const context = useContext(I18nContext);
+  if (!context) {
+    throw new Error("useI18n must be used within an I18nProvider");
+  }
+  return context.t;
 }

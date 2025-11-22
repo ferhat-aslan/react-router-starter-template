@@ -2,6 +2,7 @@ import { type RouteConfig, index, prefix, route } from "@react-router/dev/routes
 
 const baseRoutes: RouteConfig = [
   index("routes/home.tsx"),
+  route("search", "routes/search.tsx"),
   route("about", "routes/about.tsx"),
   route("amazon", "routes/amazon.tsx"),
   route("robots.txt", "routes/robots[.]txt.ts"),

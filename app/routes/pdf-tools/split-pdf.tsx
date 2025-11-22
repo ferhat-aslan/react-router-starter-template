@@ -1,238 +1,286 @@
-import Layout from "~/components/layout";
-import type {Route} from "../+types/home";
-import PDF from "/pdf.svg";
-import SelectFilesInput from "~/components/select-files-input";
-import Dragging from "~/components/dragging";
-import {useEffect, useRef, useState} from "react";
-import Free from "~/components/free";
+import { useState } from "react";
+import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Scissors, Trash2 } from "lucide-react";
+import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
+import type { Route } from "./+types/split-pdf";
+import { useI18n } from "~/i18n/context";
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Split PDF - Tinker" },
+    { name: "description", content: "Split PDF files by page ranges." },
+  ];
+}
 
-import {webApp} from "@forge42/seo-tools/structured-data/web-app";
-import {course} from "@forge42/seo-tools/structured-data/course";
-import {type MetaFunction} from "react-router";
-import {generateMeta} from "@forge42/seo-tools/remix/metadata";
-
-export const meta: MetaFunction = () => {
-  const meta = generateMeta(
-    {
-      title: "Free Online PDF Splitter - Split PDF Pages | Kleinbyte",
-      description: "Split PDF files by page ranges online for free. Extract specific pages or remove unwanted pages. No installation or registration required. Fast, secure and easy-to-use PDF splitter tool.",
-      url: "https://kleinbyte.com/pdf-tools/split-pdf",
-      image: "https://kleinbyte.com/og-image-split-pdf.png",
-    },
-    [
-      {
-        "script:ld+json": webApp({
-          "@type": "SoftwareApplication",
-          name: "Kleinbyte PDF Splitter",
-          url: "https://kleinbyte.com/pdf-tools/split-pdf",
-          description: "Split PDF files by page ranges",
-          applicationCategory: "BusinessApplication",
-          operatingSystem: "Any",
-          offers: {
-            "@type": "Offer",
-            price: "0",
-            priceCurrency: "USD"
-          }
-        }),
-      },
-      {
-        "script:ld+json": course({
-          "@type": "HowTo",
-          name: "How to Split PDF Files",
-          description: "Step-by-step guide on splitting PDF files by page ranges",
-        }),
-      },
-    ]
-  );
-  return meta;
-};
-
-export default function Home() {
+export default function SplitPdf() {
+  const  t  = useI18n();
   const [file, setFile] = useState<File | null>(null);
-  const [ranges, setRanges] = useState<string>(""); // e.g. "1-3,5"
+  const [ranges, setRanges] = useState<string>("");
   const [mode, setMode] = useState<"keep" | "remove">("keep");
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "uploading" | "processing" | "success" | "error">("idle");
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Split PDF Pages",
-    description:
-      "Split PDFs and produce a single PDF containing just the pages you choose. Supports page ranges and keep/remove modes.",
-    url:
-      typeof window !== "undefined"
-        ? window.location.href
-        : "https://your-domain.example/pdf-tools/split-pdf",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://your-domain.example/",
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setStatus("idle");
+      setError(null);
+      setDownloadUrl(null);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+
+    setStatus("uploading");
+    setError(null);
+
+    try {
+      // 1. Upload to R2
+      const key = await uploadToR2(file);
+      
+      setStatus("processing");
+
+      // 2. Send key to backend
+      const response = await fetch("http://localhost:8000/split-pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "PDF Tools",
-          item: "https://your-domain.example/pdf-tools",
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: "Split PDF",
-          item: "https://your-domain.example/pdf-tools/split-pdf",
-        },
-      ],
-    },
+        body: JSON.stringify({ 
+          file_key: key,
+          ranges: ranges,
+          mode: mode
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json() as any;
+        throw new Error(errorData.error || "Split failed");
+      }
+
+      const data = await response.json() as any;
+      
+      // 3. Get download URL
+      const url = getDownloadUrl(data.result_key);
+      setDownloadUrl(url);
+      setStatus("success");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "An unexpected error occurred");
+      setStatus("error");
+    }
   };
 
   return (
-    <Layout>
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6 justify-start items-center">
-        <h1 className="text-4xl font-bold mb-4">Split PDF Pages</h1>
-
-        {/* Big, clear instructions for older users */}
-        <p className="text-2xl text-gray-700 dark:text-neutral-300 max-w-3xl leading-relaxed">
-          Upload a PDF. Type the pages you want and choose whether to keep only
-          those pages or remove them. Example formats: "1-3", "2,4,7", or
-          "1-3,5".
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+          {t("pdfTools.split.title")}
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          {t("pdfTools.split.description")}
         </p>
+      </div>
 
-        {/* Simple numbered steps with larger font */}
-        <div className="w-full max-w-3xl mt-4 space-y-3">
-          <div className="text-xl font-medium">1. Choose a PDF file</div>
-          <SelectFilesInput
-            onChange={(newFiles: any) => {
-              setFile(newFiles && newFiles.length ? newFiles[0] : null);
-            }}
-          />
+      <div className="grid gap-8 md:grid-cols-2">
+        {/* Upload Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Upload className="w-5 h-5 text-orange-500" />
+              Upload PDF
+            </h2>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative group">
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="pdf-upload"
+                />
+                <label
+                  htmlFor="pdf-upload"
+                  className={`
+                    flex flex-col items-center justify-center w-full h-48 
+                    border-2 border-dashed rounded-lg cursor-pointer 
+                    transition-all duration-200
+                    ${file 
+                      ? "border-orange-500 bg-orange-50/50 dark:bg-orange-950/20" 
+                      : "border-muted-foreground/25 hover:border-orange-500 hover:bg-muted/50"
+                    }
+                  `}
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                    {file ? (
+                      <>
+                        <FileText className="w-10 h-10 text-orange-500 mb-3" />
+                        <p className="text-sm font-medium text-foreground truncate max-w-full">
+                          {file.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {(file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-10 h-10 text-muted-foreground mb-3 group-hover:text-orange-500 transition-colors" />
+                        <p className="text-sm text-foreground font-medium">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          PDF Files only
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </label>
+              </div>
 
-          <div className="text-xl font-medium mt-4">2. Enter page ranges</div>
-          <input
-            type="text"
-            placeholder="e.g. 1-3,5  (leave empty to use all pages)"
-            value={ranges}
-            onChange={(e) => setRanges(e.target.value)}
-            className="w-full mt-2 p-3 text-lg border rounded"
-            aria-label="Page ranges"
-          />
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-1.5 block">Page Ranges</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 1-3,5"
+                    value={ranges}
+                    onChange={(e) => setRanges(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border bg-background"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Leave empty to split all pages
+                  </p>
+                </div>
 
-          {/* Mode radio, larger and clearer */}
-          <div className="flex items-center gap-6 mt-2 text-lg">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="mode"
-                value="keep"
-                checked={mode === "keep"}
-                onChange={() => setMode("keep")}
-              />
-              <span className="ml-1">Keep (only these pages)</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="mode"
-                value="remove"
-                checked={mode === "remove"}
-                onChange={() => setMode("remove")}
-              />
-              <span className="ml-1">Remove (exclude these pages)</span>
-            </label>
-          </div>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="keep"
+                      checked={mode === "keep"}
+                      onChange={() => setMode("keep")}
+                      className="text-orange-600 focus:ring-orange-500"
+                    />
+                    <span className="text-sm">Keep Selected</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="remove"
+                      checked={mode === "remove"}
+                      onChange={() => setMode("remove")}
+                      className="text-orange-600 focus:ring-orange-500"
+                    />
+                    <span className="text-sm">Remove Selected</span>
+                  </label>
+                </div>
+              </div>
 
-          {/* Example quick buttons for older users (fills ranges and mode) */}
-          <div className="mt-3 flex flex-col sm:flex-row gap-3">
-            <button
-              className="px-4 py-3 bg-green-600 text-white rounded text-lg"
-              onClick={() => {
-                setRanges("3-5");
-                setMode("keep");
-              }}
-            >
-              Example: Keep pages 3–5
-            </button>
-            <button
-              className="px-4 py-3 bg-yellow-600 text-white rounded text-lg"
-              onClick={() => {
-                setRanges("1-2");
-                setMode("remove");
-              }}
-            >
-              Example: Remove pages 1–2
-            </button>
-            <button
-              className="px-4 py-3 bg-blue-600 text-white rounded text-lg"
-              onClick={() => {
-                setRanges("");
-                setMode("keep");
-              }}
-            >
-              Example: Split all pages
-            </button>
+              <button
+                type="submit"
+                disabled={!file || status === "uploading" || status === "processing"}
+                className={`
+                  w-full py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2
+                  transition-all duration-200
+                  ${!file || status === "uploading" || status === "processing"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-orange-600 hover:bg-orange-700 text-white shadow-md hover:shadow-lg"
+                  }
+                `}
+              >
+                {status === "uploading" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : status === "processing" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Splitting...
+                  </>
+                ) : (
+                  "Split PDF"
+                )}
+              </button>
+            </form>
           </div>
         </div>
 
-        <div className="w-full max-w-3xl">
-          <div className="text-xl font-medium mt-6">3. Split and download</div>
+        {/* Status/Result Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm h-full flex flex-col">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Download className="w-5 h-5 text-green-500" />
+              Result
+            </h2>
 
-          <button
-            className="mt-4 px-6 py-3 disabled:opacity-40 disabled:pointer-events-none bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-lg"
-            disabled={!file || loading}
-            onClick={async () => {
-              if (!file) return;
-              setLoading(true);
-              try {
-                const form = new FormData();
-                form.append("file", file);
-                form.append("ranges", ranges);
-                form.append("mode", mode);
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
+              {status === "idle" && (
+                <div className="text-muted-foreground">
+                  <Scissors className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                  <p>Upload a PDF to start splitting</p>
+                </div>
+              )}
 
-                const res = await fetch("http://localhost:8000/split-pdf", {
-                  method: "POST",
-                  body: form,
-                });
+              {(status === "uploading" || status === "processing") && (
+                <div className="space-y-4 w-full max-w-xs">
+                  <Loader2 className="w-12 h-12 mx-auto text-orange-500 animate-spin" />
+                  <div>
+                    <p className="font-medium text-foreground">
+                      {status === "uploading" ? "Uploading PDF..." : "Splitting PDF..."}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Please wait...
+                    </p>
+                  </div>
+                </div>
+              )}
 
-                if (!res.ok) {
-                  const text = await res.text();
-                  console.error("Server error:", text);
-                  alert("Server error: " + text);
-                  setLoading(false);
-                  return;
-                }
+              {status === "error" && (
+                <div className="text-destructive space-y-3">
+                  <AlertCircle className="w-12 h-12 mx-auto" />
+                  <p className="font-medium">Split Failed</p>
+                  <p className="text-sm opacity-90">{error}</p>
+                </div>
+              )}
 
-                // Expect single PDF file in response
-                const data = await res.blob();
-                const url = URL.createObjectURL(data);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "split.pdf";
-                document.body.appendChild(a);
-                a.setAttribute("target", "_blank");
-                a.click();
-                a.remove();
-              } catch (err) {
-                console.error("Error splitting PDF:", err);
-                alert("Error splitting PDF");
-              } finally {
-                setLoading(false);
-              }
-            }}
-          >
-            {loading ? "Processing..." : "Split PDF pages"}
-          </button>
+              {status === "success" && downloadUrl && (
+                <div className="space-y-6 w-full">
+                  <div className="text-green-600 dark:text-green-500">
+                    <CheckCircle className="w-16 h-16 mx-auto mb-3" />
+                    <p className="text-lg font-semibold">Split Complete!</p>
+                  </div>
+                  
+                  <a
+                    href={downloadUrl}
+                    download
+                    className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md transition-all hover:scale-[1.02]"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download Split PDF
+                  </a>
+                  
+                  <button 
+                    onClick={() => {
+                      setFile(null);
+                      setStatus("idle");
+                      setDownloadUrl(null);
+                      setRanges("");
+                    }}
+                    className="text-sm text-muted-foreground hover:text-foreground underline"
+                  >
+                    Split another PDF
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-
-        <Free />
-      </section>
-
-      {/* insert JSON-LD for crawlers */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
-      />
-    </Layout>
+      </div>
+    </div>
   );
 }

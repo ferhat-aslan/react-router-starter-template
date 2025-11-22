@@ -1,164 +1,255 @@
 import { useState } from "react";
+import { Upload, Image as ImageIcon, Download, AlertCircle, CheckCircle, Loader2, RefreshCw } from "lucide-react";
+import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/image-converter";
+import { useI18n } from "~/i18n/context";
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Image Converter - Tinker" },
-    { name: "description", content: "Convert images to different formats." },
+    { name: "description", content: "Convert images between formats (PNG, JPG, WEBP)." },
   ];
 }
 
 export default function ImageConverter() {
+  const t = useI18n();
   const [file, setFile] = useState<File | null>(null);
-  const [format, setFormat] = useState("jpg");
-  const [isConverting, setIsConverting] = useState(false);
+  const [format, setFormat] = useState<string>("png");
+  const [status, setStatus] = useState<"idle" | "uploading" | "processing" | "success" | "error">("idle");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
-      setDownloadUrl(null);
+      setStatus("idle");
       setError(null);
+      setDownloadUrl(null);
     }
   };
 
-  const handleConvert = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!file) return;
 
-    setIsConverting(true);
+    setStatus("uploading");
     setError(null);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("format", format);
-
     try {
+      // 1. Upload to R2
+      const key = await uploadToR2(file);
+      
+      setStatus("processing");
+
+      // 2. Send key to backend
       const response = await fetch("http://localhost:8000/convert-image", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          file_key: key,
+          format: format 
+        }),
       });
 
       if (!response.ok) {
-        const errorData = (await response.json()) as any;
+        const errorData = await response.json() as any;
         throw new Error(errorData.error || "Conversion failed");
       }
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      const data:any = await response.json();
+      
+      // 3. Get download URL
+      const url = getDownloadUrl(data.result_key);
       setDownloadUrl(url);
+      setStatus("success");
     } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsConverting(false);
+      console.error(err);
+      setError(err.message || "An unexpected error occurred");
+      setStatus("error");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8 font-sans">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-pink-400 to-orange-500 bg-clip-text text-transparent">
-          Image Converter
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          {t("imageTools.converter.title")}
         </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          {t("imageTools.converter.description")}
+        </p>
+      </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 backdrop-blur-sm">
-          <div className="mb-8">
-            <label className="block text-sm font-medium text-gray-400 mb-2">
+      <div className="grid gap-8 md:grid-cols-2">
+        {/* Upload Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Upload className="w-5 h-5 text-purple-500" />
               Upload Image
-            </label>
-            <div className="relative border-2 border-dashed border-gray-700 rounded-xl p-8 text-center hover:border-pink-500 transition-colors">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              {file ? (
-                <div className="text-pink-400 font-medium">
-                  {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+            </h2>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative group">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className={`
+                    flex flex-col items-center justify-center w-full h-48 
+                    border-2 border-dashed rounded-lg cursor-pointer 
+                    transition-all duration-200
+                    ${file 
+                      ? "border-purple-500 bg-purple-50/50 dark:bg-purple-950/20" 
+                      : "border-muted-foreground/25 hover:border-purple-500 hover:bg-muted/50"
+                    }
+                  `}
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                    {file ? (
+                      <>
+                        <ImageIcon className="w-10 h-10 text-purple-500 mb-3" />
+                        <p className="text-sm font-medium text-foreground truncate max-w-full">
+                          {file.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {(file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-10 h-10 text-muted-foreground mb-3 group-hover:text-purple-500 transition-colors" />
+                        <p className="text-sm text-foreground font-medium">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          JPG, PNG, WEBP, GIF
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </label>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Convert to:</label>
+                <select
+                  value={format}
+                  onChange={(e) => setFormat(e.target.value)}
+                  className="w-full p-2.5 rounded-lg border bg-background"
+                >
+                  <option value="png">PNG</option>
+                  <option value="jpg">JPG</option>
+                  <option value="webp">WEBP</option>
+                  <option value="gif">GIF</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                disabled={!file || status === "uploading" || status === "processing"}
+                className={`
+                  w-full py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2
+                  transition-all duration-200
+                  ${!file || status === "uploading" || status === "processing"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-purple-600 hover:bg-purple-700 text-white shadow-md hover:shadow-lg"
+                  }
+                `}
+              >
+                {status === "uploading" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : status === "processing" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Converting...
+                  </>
+                ) : (
+                  "Convert Image"
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Status/Result Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm h-full flex flex-col">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Download className="w-5 h-5 text-green-500" />
+              Result
+            </h2>
+
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
+              {status === "idle" && (
+                <div className="text-muted-foreground">
+                  <RefreshCw className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                  <p>Upload an image to start conversion</p>
                 </div>
-              ) : (
-                <div className="text-gray-500">
-                  <span className="text-pink-400">Click to upload</span> or drag and drop
-                  <br />
-                  PNG, JPG, WEBP, etc.
+              )}
+
+              {(status === "uploading" || status === "processing") && (
+                <div className="space-y-4 w-full max-w-xs">
+                  <Loader2 className="w-12 h-12 mx-auto text-purple-500 animate-spin" />
+                  <div>
+                    <p className="font-medium text-foreground">
+                      {status === "uploading" ? "Uploading image..." : "Converting format..."}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Please wait...
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {status === "error" && (
+                <div className="text-destructive space-y-3">
+                  <AlertCircle className="w-12 h-12 mx-auto" />
+                  <p className="font-medium">Conversion Failed</p>
+                  <p className="text-sm opacity-90">{error}</p>
+                </div>
+              )}
+
+              {status === "success" && downloadUrl && (
+                <div className="space-y-6 w-full">
+                  <div className="text-green-600 dark:text-green-500">
+                    <CheckCircle className="w-16 h-16 mx-auto mb-3" />
+                    <p className="text-lg font-semibold">Conversion Complete!</p>
+                  </div>
+                  
+                  <a
+                    href={downloadUrl}
+                    download
+                    className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md transition-all hover:scale-[1.02]"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download Image
+                  </a>
+                  
+                  <button 
+                    onClick={() => {
+                      setFile(null);
+                      setStatus("idle");
+                      setDownloadUrl(null);
+                    }}
+                    className="text-sm text-muted-foreground hover:text-foreground underline"
+                  >
+                    Convert another image
+                  </button>
                 </div>
               )}
             </div>
           </div>
-
-          <div className="mb-8">
-            <label className="block text-sm font-medium text-gray-400 mb-2">
-              Target Format
-            </label>
-            <div className="grid grid-cols-4 gap-4">
-              {["jpg", "png", "webp", "avif"].map((fmt) => (
-                <button
-                  key={fmt}
-                  onClick={() => setFormat(fmt)}
-                  className={`py-3 px-4 rounded-xl font-medium transition-all ${
-                    format === fmt
-                      ? "bg-pink-600 text-white shadow-lg shadow-pink-500/20"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                  }`}
-                >
-                  {fmt.toUpperCase()}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
-              {error}
-            </div>
-          )}
-
-          <div className="flex items-center justify-end gap-4">
-            {isConverting && (
-              <div className="flex items-center gap-2 text-gray-400">
-                <div className="w-4 h-4 border-2 border-pink-500 border-t-transparent rounded-full animate-spin" />
-                Converting...
-              </div>
-            )}
-            
-            <button
-              onClick={handleConvert}
-              disabled={!file || isConverting}
-              className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
-                !file || isConverting
-                  ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                  : "bg-pink-600 hover:bg-pink-500 text-white shadow-lg shadow-pink-500/20"
-              }`}
-            >
-              {isConverting ? "Processing..." : "Convert Image"}
-            </button>
-          </div>
-
-          {downloadUrl && (
-            <div className="mt-8 p-6 bg-green-500/10 border border-green-500/20 rounded-xl animate-in fade-in slide-in-from-bottom-4">
-              <h3 className="text-lg font-semibold text-green-400 mb-2">
-                Conversion Complete!
-              </h3>
-              <p className="text-gray-400 text-sm mb-4">
-                Your image is ready to download.
-              </p>
-              <div className="flex gap-4 items-center">
-                <a
-                  href={downloadUrl}
-                  download={`converted_${file?.name.split('.')[0] || "image"}.${format}`}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium text-sm transition-colors"
-                >
-                  Download Image
-                </a>
-                <img 
-                  src={downloadUrl} 
-                  alt="Preview" 
-                  className="h-16 w-auto rounded border border-gray-700 bg-black/50 object-contain"
-                />
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

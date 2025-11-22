@@ -151,5 +151,10 @@
   "pdf.text.meta.description": "Extract text from PDF online for free.",
   "tools.video.category": "Video Tools",
   "tools.video.compressor.name": "Video Compressor",
-  "tools.video.compressor.description": "Compress video files efficiently"
+  "tools.video.compressor.description": "Compress video files efficiently",
+  "search.meta.title": "Search Results - Kleinbyte",
+  "search.meta.description": "Search results for Kleinbyte tools.",
+  "search.results_title": "Search results for",
+  "search.default_title": "Search Tools",
+  "search.no_results": "No tools found matching your search."
 }

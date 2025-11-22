@@ -1,145 +1,239 @@
-import Layout from "~/components/layout";
-import type {Route} from "../+types/home";
-import SelectFilesInput from "~/components/select-files-input";
-import {useState} from "react";
-import Free from "~/components/free";
-import {webApp} from "@forge42/seo-tools/structured-data/web-app";
-import {course} from "@forge42/seo-tools/structured-data/course";
-import {type MetaFunction} from "react-router";
-import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import { useState } from "react";
+import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Image as ImageIcon, Trash2 } from "lucide-react";
+import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
+import type { Route } from "./+types/pdf-to-images";
+import { useI18n } from "~/i18n/context";
 
-export const meta: MetaFunction = () => {
-  const meta = generateMeta(
-    {
-      title: "Free Online PDF Tools | Kleinbyte",
-      description:
-        "A comprehensive suite of free online PDF tools. Merge, split, compress, convert, and edit your PDF files with ease. No installation or registration required.",
-      url: "https://kleinbyte.com/pdf-tools",
-      image: "https://picsum.photos/200/300",
-    },
-    [
-      {
-        "script:ld+json": webApp({
-          "@type": "WebApplication",
-          headline: "The Ultimate Guide to Free Online PDF Tools",
-          image: "https://kleinbyte.com/og-image-pdf-tools.png",
-          datePublished: "2025-11-04T00:00:00Z",
-        }),
-      },
-      {
-        "script:ld+json": course({
-          "@type": "Course",
-          name: "Mastering PDF Manipulation with Kleinbyte Tools",
-          description:
-            "A comprehensive course on how to use our free online PDF tools to manage your documents efficiently.",
-        }),
-      },
-    ]
-  );
-  return meta;
-};
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "PDF to Images - Tinker" },
+    { name: "description", content: "Convert PDF pages to images." },
+  ];
+}
 
 export default function PdfToImages() {
+  const t = useI18n();
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "uploading" | "processing" | "success" | "error">("idle");
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "PDF to Images",
-    description:
-      "Convert PDF pages into PNG images and download them as a zip file.",
-    url:
-      typeof window !== "undefined"
-        ? window.location.href
-        : "https://your-domain.example/pdf-tools/pdf-to-images",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://your-domain.example/",
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setStatus("idle");
+      setError(null);
+      setDownloadUrl(null);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+
+    setStatus("uploading");
+    setError(null);
+
+    try {
+      // 1. Upload to R2
+      const key = await uploadToR2(file);
+      
+      setStatus("processing");
+
+      // 2. Send key to backend
+      const response = await fetch("http://localhost:8000/pdf-to-images", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "PDF Tools",
-          item: "https://your-domain.example/pdf-tools",
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: "PDF to Images",
-          item: "https://your-domain.example/pdf-tools/pdf-to-images",
-        },
-      ],
-    },
+        body: JSON.stringify({ file_key: key }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json() as any;
+        throw new Error(errorData.error || "Conversion failed");
+      }
+
+      const data = await response.json() as any;
+      
+      // 3. Get download URL
+      const url = getDownloadUrl(data.result_key);
+      setDownloadUrl(url);
+      setStatus("success");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "An unexpected error occurred");
+      setStatus("error");
+    }
   };
 
   return (
-    <Layout>
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6 justify-start items-center">
-        <h1 className="text-4xl font-bold mb-4">PDF → Images</h1>
-        <p className="text-2xl text-gray-700 dark:text-neutral-300 max-w-3xl leading-relaxed">
-          Convert each page of your PDF to a PNG image. Download all images as a
-          zip file.
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+          {t("pdfTools.toImages.title")}
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          {t("pdfTools.toImages.description")}
         </p>
-        <div className="w-full max-w-2xl mt-4">
-          <div className="text-xl font-medium mb-2">1. Choose a PDF file</div>
-          <SelectFilesInput
-            accept=".pdf,application/pdf"
-            onChange={(newFiles: any) => {
-              setFile(newFiles && newFiles.length ? newFiles[0] : null);
-            }}
-          />
-          <div className="text-xl font-medium mt-6">
-            2. Convert and download
+      </div>
+
+      <div className="grid gap-8 md:grid-cols-2">
+        {/* Upload Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Upload className="w-5 h-5 text-blue-500" />
+              Upload PDF
+            </h2>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative group">
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="pdf-upload"
+                />
+                <label
+                  htmlFor="pdf-upload"
+                  className={`
+                    flex flex-col items-center justify-center w-full h-48 
+                    border-2 border-dashed rounded-lg cursor-pointer 
+                    transition-all duration-200
+                    ${file 
+                      ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20" 
+                      : "border-muted-foreground/25 hover:border-blue-500 hover:bg-muted/50"
+                    }
+                  `}
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                    {file ? (
+                      <>
+                        <FileText className="w-10 h-10 text-blue-500 mb-3" />
+                        <p className="text-sm font-medium text-foreground truncate max-w-full">
+                          {file.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {(file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-10 h-10 text-muted-foreground mb-3 group-hover:text-blue-500 transition-colors" />
+                        <p className="text-sm text-foreground font-medium">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          PDF Files only
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                disabled={!file || status === "uploading" || status === "processing"}
+                className={`
+                  w-full py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2
+                  transition-all duration-200
+                  ${!file || status === "uploading" || status === "processing"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg"
+                  }
+                `}
+              >
+                {status === "uploading" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : status === "processing" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Converting...
+                  </>
+                ) : (
+                  "Convert to Images"
+                )}
+              </button>
+            </form>
           </div>
-          <button
-            className="mt-4 px-6 py-3 disabled:opacity-40 disabled:pointer-events-none bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-lg"
-            disabled={!file || loading}
-            onClick={async () => {
-              if (!file) return;
-              setLoading(true);
-              try {
-                const form = new FormData();
-                form.append("file", file);
-                const res = await fetch("http://localhost:8000/pdf-to-images", {
-                  method: "POST",
-                  body: form,
-                });
-                if (!res.ok) {
-                  const text = await res.text();
-                  alert("Conversion error: " + text);
-                  setLoading(false);
-                  return;
-                }
-                const blob = await res.blob();
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "pdf-images.zip";
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-              } catch (err) {
-                alert("Error converting PDF to images");
-              } finally {
-                setLoading(false);
-              }
-            }}
-          >
-            {loading ? "Converting..." : "Convert to Images"}
-          </button>
         </div>
-        <Free />
-      </section>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
-      />
-    </Layout>
+
+        {/* Status/Result Section */}
+        <div className="space-y-6">
+          <div className="bg-card border rounded-xl p-6 shadow-sm h-full flex flex-col">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Download className="w-5 h-5 text-green-500" />
+              Result
+            </h2>
+
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
+              {status === "idle" && (
+                <div className="text-muted-foreground">
+                  <ImageIcon className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                  <p>Upload a PDF to start conversion</p>
+                </div>
+              )}
+
+              {(status === "uploading" || status === "processing") && (
+                <div className="space-y-4 w-full max-w-xs">
+                  <Loader2 className="w-12 h-12 mx-auto text-blue-500 animate-spin" />
+                  <div>
+                    <p className="font-medium text-foreground">
+                      {status === "uploading" ? "Uploading PDF..." : "Converting to images..."}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Please wait...
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {status === "error" && (
+                <div className="text-destructive space-y-3">
+                  <AlertCircle className="w-12 h-12 mx-auto" />
+                  <p className="font-medium">Conversion Failed</p>
+                  <p className="text-sm opacity-90">{error}</p>
+                </div>
+              )}
+
+              {status === "success" && downloadUrl && (
+                <div className="space-y-6 w-full">
+                  <div className="text-green-600 dark:text-green-500">
+                    <CheckCircle className="w-16 h-16 mx-auto mb-3" />
+                    <p className="text-lg font-semibold">Conversion Complete!</p>
+                  </div>
+                  
+                  <a
+                    href={downloadUrl}
+                    download
+                    className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md transition-all hover:scale-[1.02]"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download Images (ZIP)
+                  </a>
+                  
+                  <button 
+                    onClick={() => {
+                      setFile(null);
+                      setStatus("idle");
+                      setDownloadUrl(null);
+                    }}
+                    className="text-sm text-muted-foreground hover:text-foreground underline"
+                  >
+                    Convert another PDF
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

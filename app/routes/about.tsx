@@ -5,7 +5,7 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
-import {useI18n, translations, type Locale} from "../i18n/context";
+import {translations, type Locale} from "../i18n/context";
 import {useLocation} from "react-router";
 
 export const meta: MetaFunction = ({location}) => {
@@ -16,7 +16,7 @@ export const meta: MetaFunction = ({location}) => {
   const messages = translations[locale] ?? translations.en;
 
   function t(key: string) {
-    return messages[key] ?? key;
+    return messages[key];
   }
 
   const meta = generateMeta(
@@ -50,7 +50,7 @@ export const meta: MetaFunction = ({location}) => {
 };
 
 export default function Home() {
-  const t = useI18n();
+
 
   return (
     <Layout>

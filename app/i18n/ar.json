@@ -136,5 +136,10 @@
   "pdf.text.meta.description": "استخراج النص من PDF عبر الإنترنت مجانًا.",
   "tools.video.category": "أدوات الفيديو",
   "tools.video.compressor.name": "ضاغط الفيديو",
-  "tools.video.compressor.description": "ضغط ملفات الفيديو بكفاءة"
+  "tools.video.compressor.description": "ضغط ملفات الفيديو بكفاءة",
+  "search.meta.title": "نتائج البحث - كلاين بايت",
+  "search.meta.description": "نتائج البحث لأدوات كلاين بايت.",
+  "search.results_title": "نتائج البحث عن",
+  "search.default_title": "أدوات البحث",
+  "search.no_results": "لم يتم العثور على أدوات تطابق بحثك."
 }
