@@ -1,7 +1,7 @@
 import type { Route } from "./+types/search";
 import Layout from "~/components/layout";
 import { useSearchParams } from "react-router";
-import { useI18n, translations, type Locale } from "../i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 import { type MetaFunction } from "react-router";
 
 import PDF from "/pdf.svg";
@@ -30,7 +30,7 @@ export const meta: MetaFunction = ({ location }) => {
 export default function Search() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
-  const t = useI18n();
+  const { t } = useTranslation();
 
   const tools = [
     {

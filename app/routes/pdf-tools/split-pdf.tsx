@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Scissors, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/split-pdf";
-import { useI18n } from "~/i18n/context";
+import { useTranslation } from "~/i18n/context";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Split PDF - Tinker" },
@@ -11,7 +11,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function SplitPdf() {
-  const  t  = useI18n();
+  const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [ranges, setRanges] = useState<string>("");
   const [mode, setMode] = useState<"keep" | "remove">("keep");

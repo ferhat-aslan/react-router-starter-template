@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Plus, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/merge-pdf";
-import { useI18n } from "~/i18n/context";
+import { useTranslation } from "~/i18n/context";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,7 +12,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function MergePdf() {
-  const  t  = useI18n();
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [status, setStatus] = useState<"idle" | "uploading" | "processing" | "success" | "error">("idle");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);

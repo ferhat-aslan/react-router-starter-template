@@ -7,7 +7,7 @@ import WORD from "/word.svg";
 import JPG from "/jpg.svg";
 import TXT from "/txt.svg";
 import FOLDER from "/folder.svg";
-import {useI18n, translations, type Locale} from "../i18n/context";
+import {useTranslation, translations, type Locale} from "../i18n/context";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {course} from "@forge42/seo-tools/structured-data/course";
@@ -64,7 +64,7 @@ export function loader({context}: Route.LoaderArgs) {
 }
 
 export default function Home({loaderData}: Route.ComponentProps) {
-  const t = useI18n();
+  const { t } = useTranslation();
 
   const tools = [
     {

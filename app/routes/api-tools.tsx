@@ -1,12 +1,11 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
-
 import FOLDER from "/folder.svg";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
-import {useI18n, translations, type Locale} from "../i18n/context";
+import {useTranslation, translations, type Locale} from "~/i18n/context";
 
 export const meta: MetaFunction = ({location}) => {
   const locale: Locale = 
@@ -55,7 +54,7 @@ export const meta: MetaFunction = ({location}) => {
 };
 
 export default function ApiTools() {
-  const t = useI18n();
+  const { t } = useTranslation();
   const apiTools = [
     {
       name: "API Tester",

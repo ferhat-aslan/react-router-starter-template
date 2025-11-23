@@ -55,7 +55,7 @@ export const links: Route.LinksFunction = () => [
   }, */
 ];
 
-import {I18nProvider, type Locale} from "./i18n/context";
+import {type Locale} from "./i18n/context";
 
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
@@ -107,75 +107,73 @@ export function Layout({children}: {children: React.ReactNode}) {
     };
   
   return (
-    <I18nProvider locale={localeParam as Locale}>
-      <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"}>
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <Meta />
-          <Links />
-          <link rel="canonical" href={canonical} />
-          {alternates.map((alt) => (
-            <link key={alt.href} {...alt} />
-          ))}
-          {xDefault && (
-            <link {...xDefault} />
-          )}
-        
-        
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
-          ></script>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `  window.dataLayer = window.dataLayer || [];
+    <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"}>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+        <link rel="canonical" href={canonical} />
+        {alternates.map((alt) => (
+          <link key={alt.href} {...alt} />
+        ))}
+        {xDefault && (
+          <link {...xDefault} />
+        )}
+      
+      
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `  window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
   
     gtag('config', 'G-HRC6G6L65K');`,
-            }}
-          ></script>
-        </head>
-        <body>
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-        </body>
-        <script
-          async={true}
-          dangerouslySetInnerHTML={{
-            __html: `
-      const button = document.querySelector('#menu-button');
-  const menu = document.querySelector('#menu');
-  
-  
-  button.addEventListener('click', () => {
-    menu.classList.toggle('hidden');});
-  
-    const storedTheme = localStorage.getItem('theme');
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
-    if (storedTheme) {
-      document.documentElement.classList.add(storedTheme);
-    } else if (prefersDark) {
-      document.documentElement.classList.add('dark');
-    }
-  window.addEventListener('scroll', function() {
-      if (window.scrollY > 0) {
-          document.body.classList.add('scrolled');
-      } else {
-          document.body.classList.remove('scrolled');
-      }
-  });
-  
-  `,
           }}
-        />
-      </html>
-    </I18nProvider>
+        ></script>
+      </head>
+      <body>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+      <script
+        async={true}
+        dangerouslySetInnerHTML={{
+          __html: `
+    const button = document.querySelector('#menu-button');
+const menu = document.querySelector('#menu');
+
+
+button.addEventListener('click', () => {
+  menu.classList.toggle('hidden');});
+
+  const storedTheme = localStorage.getItem('theme');
+  const prefersDark =
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (storedTheme) {
+    document.documentElement.classList.add(storedTheme);
+  } else if (prefersDark) {
+    document.documentElement.classList.add('dark');
+  }
+window.addEventListener('scroll', function() {
+    if (window.scrollY > 0) {
+        document.body.classList.add('scrolled');
+    } else {
+        document.body.classList.remove('scrolled');
+    }
+});
+
+`,
+        }}
+      />
+    </html>
   );
 }
 

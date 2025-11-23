@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Upload, Image as ImageIcon, Download, AlertCircle, CheckCircle, Loader2, RefreshCw } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/image-converter";
-import { useI18n } from "~/i18n/context";
+import { useTranslation } from "~/i18n/context";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,7 +12,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function ImageConverter() {
-  const t = useI18n();
+  const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [format, setFormat] = useState<string>("png");
   const [status, setStatus] = useState<"idle" | "uploading" | "processing" | "success" | "error">("idle");

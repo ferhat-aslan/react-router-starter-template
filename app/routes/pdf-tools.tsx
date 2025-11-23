@@ -12,7 +12,7 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 
-import {useI18n, translations, type Locale} from "../i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 
 export const meta: MetaFunction = ({location}) => {
   const locale: Locale = 
@@ -61,7 +61,7 @@ export const meta: MetaFunction = ({location}) => {
 };
 
 export default function PDFTools() {
-  const t = useI18n();
+  const { t } = useTranslation();
   return (
     <Layout>
       {/* Card Blog */}
