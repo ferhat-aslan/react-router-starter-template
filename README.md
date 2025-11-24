@@ -107,3 +107,25 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 ---
 
 Built with ❤️ using React Router.
+
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "react-router-starter-template",
+	"main": "./workers/app.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	"vars": {
+		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
+	}
+	,
+	"r2_buckets": [
+		{
+			"binding": "R2_BUCKET",
+			"bucket_name": "kleinbyte-uploads"
+		}
+	]
+}
