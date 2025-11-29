@@ -156,5 +156,13 @@
   "search.meta.description": "Resultados de búsqueda para herramientas de Kleinbyte.",
   "search.results_title": "Resultados de búsqueda para",
   "search.default_title": "Buscar herramientas",
-  "search.no_results": "No se encontraron herramientas que coincidan con su búsqueda."
+  "search.no_results": "No se encontraron herramientas que coincidan con su búsqueda.",
+  "blog.title": "Blog",
+  "blog.description": "Últimas noticias, actualizaciones y guías de Kleinbyte.",
+  "blog.meta.title": "Blog - Herramientas Digitales Kleinbyte",
+  "blog.meta.description": "Lea los últimos artículos, guías y actualizaciones sobre nuestras herramientas digitales.",
+  "blog.read_more": "Leer más",
+  "blog.back_to_blog": "Volver al blog",
+  "blog.published_on": "Publicado el",
+  "blog.by": "por"
 }

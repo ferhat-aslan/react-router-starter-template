@@ -24,6 +24,11 @@
   "home.features.ecommerce.description": "Amazon integration, product management, and business tools",
   "home.tools.title": "All-in-One Tools Suite",
   "home.tools.description": "Browse our complete collection of digital tools organized by category",
+  "home.tools.pdf.description": "Merge, split, convert and edit PDF files",
+  "home.tools.documents.description": "Tools for Word, Excel, PowerPoint and more",
+  "home.tools.images.description": "Convert, resize and optimize your images",
+  "home.tools.video.description": "Compress and convert video files",
+  "home.tools.developer.description": "Utilities for developers and SEO professionals",
   "home.cta.title": "Ready to boost your productivity?",
   "home.cta.subtitle": "Join thousands of users who rely on our free tools every day to work more efficiently",
   "home.cta.button": "Start Using Tools Now",
@@ -156,5 +161,13 @@
   "search.meta.description": "Search results for Kleinbyte tools.",
   "search.results_title": "Search results for",
   "search.default_title": "Search Tools",
-  "search.no_results": "No tools found matching your search."
+  "search.no_results": "No tools found matching your search.",
+  "blog.title": "Blog",
+  "blog.description": "Latest news, updates, and guides from Kleinbyte.",
+  "blog.meta.title": "Blog - Kleinbyte Digital Tools",
+  "blog.meta.description": "Read the latest articles, guides, and updates about our digital tools.",
+  "blog.read_more": "Read More",
+  "blog.back_to_blog": "Back to Blog",
+  "blog.published_on": "Published on",
+  "blog.by": "by"
 }

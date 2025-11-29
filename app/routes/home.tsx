@@ -1,6 +1,7 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
 import {LocaleLink} from "~/components/locale-link";
+import { ToolCategoryCard } from "~/components/tool-category-card";
 
 import PDF from "/pdf.svg";
 import WORD from "/word.svg";
@@ -69,6 +70,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
   const tools = [
     {
       category: t("tools.pdf.category"),
+      id: "pdf",
+      link: "/pdf-tools",
       icon: PDF,
       tools: [
         {
@@ -100,6 +103,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
     },
     {
       category: t("tools.documents.category"),
+      id: "documents",
+      link: "/docx-tools",
       icon: WORD,
       tools: [
         {
@@ -126,6 +131,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
     },
     {
       category: t("tools.images.category"),
+      id: "images",
+      link: "/tools/image-converter",
       icon: JPG,
       tools: [
         {
@@ -152,6 +159,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
     },
     {
       category: t("tools.video.category"),
+      id: "video",
+      link: "/tools/video-compressor",
       icon: JPG,
       tools: [
         {
@@ -163,6 +172,8 @@ export default function Home({loaderData}: Route.ComponentProps) {
     },
     {
       category: t("tools.developer.category"),
+      id: "developer",
+      link: "#",
       icon: FOLDER,
       tools: [
         {
@@ -322,55 +333,21 @@ export default function Home({loaderData}: Route.ComponentProps) {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {tools.map((category, index) => (
                 <div
                   key={index}
-                  className="rounded-3xl p-8 border border-gray-200 dark:border-white/5 bg-white dark:bg-white/5 animate-slide-in-up"
+                  className="animate-slide-in-up h-full"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex items-center mb-8">
-                    <div className="p-3 rounded-2xl mr-4 border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5">
-                      <img
-                        src={category.icon}
-                        alt={category.category}
-                        className="w-8 h-8 dark:invert opacity-80"
-                      />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {category.category}
-                    </h3>
-                  </div>
-                  <div className="grid gap-3">
-                    {category.tools.map((tool, toolIdx) => (
-                      <a
-                        key={toolIdx}
-                        href={tool.link}
-                        className="group flex items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-white/5 hover:border-blue-500/30 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 active:scale-[0.98]"
-                      >
-                        <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            {tool.name}
-                          </h4>
-                          <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-                            {tool.description}
-                          </p>
-                        </div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-gray-400 dark:text-gray-600 group-hover:text-blue-600 dark:group-hover:text-blue-400 transform group-hover:translate-x-1 transition-all"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </a>
-                    ))}
-                  </div>
+                  <ToolCategoryCard
+                    title={category.category}
+                    description={t(`home.tools.${category.id}.description`) || `${category.tools.length} tools available`}
+                    count={category.tools.length}
+                    icon={<img src={category.icon} alt={category.category} className="w-6 h-6 dark:invert" />}
+                    link={category.link || category.tools[0]?.link || "#"}
+                    badge="Available"
+                  />
                 </div>
               ))}
             </div>

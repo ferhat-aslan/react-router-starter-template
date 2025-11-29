@@ -22,6 +22,8 @@ const baseRoutes: RouteConfig = [
   route("terms-and-conditions", "routes/terms-and-conditions.tsx"),
   route("tools/video-compressor", "routes/tools/video-compressor.tsx"),
   route("tools/image-converter", "routes/tools/image-converter.tsx"),
+  route("blog", "routes/blog/blog.tsx"),
+  route("blog/:slug", "routes/blog/post.tsx"),
   ...prefix("pdf-tools", [
     index("routes/pdf-tools.tsx"),
     route("merge-pdf", "routes/pdf-tools/merge-pdf.tsx"),

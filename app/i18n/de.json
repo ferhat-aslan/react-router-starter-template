@@ -156,5 +156,13 @@
   "search.meta.description": "Suchergebnisse für Kleinbyte-Tools.",
   "search.results_title": "Suchergebnisse für",
   "search.default_title": "Tools suchen",
-  "search.no_results": "Keine Tools gefunden, die Ihrer Suche entsprechen."
+  "search.no_results": "Keine Tools gefunden, die Ihrer Suche entsprechen.",
+  "blog.title": "Blog",
+  "blog.description": "Neueste Nachrichten, Updates und Anleitungen von Kleinbyte.",
+  "blog.meta.title": "Blog - Kleinbyte Digitale Tools",
+  "blog.meta.description": "Lesen Sie die neuesten Artikel, Anleitungen und Updates zu unseren digitalen Tools.",
+  "blog.read_more": "Weiterlesen",
+  "blog.back_to_blog": "Zurück zum Blog",
+  "blog.published_on": "Veröffentlicht am",
+  "blog.by": "von"
 }

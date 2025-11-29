@@ -141,5 +141,13 @@
   "search.meta.description": "نتائج البحث لأدوات كلاين بايت.",
   "search.results_title": "نتائج البحث عن",
   "search.default_title": "أدوات البحث",
-  "search.no_results": "لم يتم العثور على أدوات تطابق بحثك."
+  "search.no_results": "لم يتم العثور على أدوات تطابق بحثك.",
+  "blog.title": "المدونة",
+  "blog.description": "آخر الأخبار والتحديثات والأدلة من Kleinbyte.",
+  "blog.meta.title": "المدونة - أدوات Kleinbyte الرقمية",
+  "blog.meta.description": "اقرأ أحدث المقالات والأدلة والتحديثات حول أدواتنا الرقمية.",
+  "blog.read_more": "اقرأ المزيد",
+  "blog.back_to_blog": "العودة إلى المدونة",
+  "blog.published_on": "نشر في",
+  "blog.by": "بواسطة"
 }
