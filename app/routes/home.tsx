@@ -202,44 +202,124 @@ export default function Home({loaderData}: Route.ComponentProps) {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-white dark:bg-neutral-950 text-gray-900 dark:text-white transition-colors duration-300">
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 overflow-hidden">
-          {/* Background Effects */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] rounded-full blur-[120px] opacity-50 pointer-events-none bg-blue-500/20 dark:bg-blue-500/10"></div>
-          <div className="absolute bottom-0 right-0 w-[800px] h-[600px]  rounded-full blur-[100px] opacity-30 pointer-events-none bg-purple-500/20 dark:bg-purple-500/10"></div>
+      <div className="min-h-screen  transition-colors duration-300">
+        {/* Hero Section - Shadcn Inspired */}
+        <section className="relative pt-24 pb-32 overflow-hidden border-b border-gray-200 dark:border-neutral-700">
+        
           
           <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-5xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center px-4 py-1.5 mb-8 text-sm font-medium text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-transparent rounded-full border border-blue-200 dark:border-blue-500/20 animate-fade-in backdrop-blur-sm">
-                <span className="relative flex h-2 w-2 mr-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            <div className="max-w-6xl mx-auto text-center">
+              {/* Badge */}
+              <div className="inline-flex items-center justify-center px-3 py-1 mb-8 text-sm font-medium border border-gray-200 dark:border-neutral-700 rounded-full bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm">
+                <span className="mr-2">✨</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Free & No signup & Secure & Fast & Easy & Simple...
                 </span>
-                {t("home.hero.new_tools")}
+                <span className="ml-2">🚀</span>
               </div>
               
-              <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 animate-fade-in-up leading-tight">
-                {t("home.hero.title")}
+              {/* Main Headline */}
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 leading-[1.1]">
+                <span className="text-gray-900 dark:text-white">
+                  Use Free Tools with {" "}
+                </span>
+                <span className="relative inline-block">
+                  <span className="text-gray-900 dark:text-white">Kleinbyte</span>
+                  <svg
+                    className="absolute -bottom-2 left-0 w-full"
+                    height="8"
+                    viewBox="0 0 300 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1 5.5C50 2.5 100 1 150 1.5C200 2 250 3.5 299 5.5"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      className="text-gray-900 dark:text-white"
+                    />
+                  </svg>
+                </span>
+                <br />
+                <span className="text-gray-900 dark:text-white">at Warp Speed </span>
+                <span className="inline-block">⚡</span>
               </h1>
               
-              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200 font-light">
-                {t("home.hero.subtitle")}
+              {/* Subtitle */}
+              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Transform your workflow with our collection of{" "}
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  free, fast, and secure online tools
+                </span>{" "}
+                for PDF, documents, images, and more. No signup required 🚀.
               </p>
-              
-              <div className="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up animation-delay-400">
-                <a
-                  href="#tools"
-                  className="group relative px-8 py-4 bg-gray-900 dark:bg-white  dark:text-black font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] active:scale-95"
-                >
-                  {t("home.hero.explore_btn")}
-                </a>
-                <a
-                  href="/pdf-tools"
-                  className="px-8 py-4 bg-transparent text-gray-900 dark:text-white font-bold rounded-full border border-gray-200 dark:border-white/20 transition-all duration-300 hover:scale-105 hover:bg-gray-50 dark:hover:bg-white/10 backdrop-blur-sm active:scale-95"
-                >
-                  {t("home.hero.pdf_btn")}
-                </a>
+
+            
+
+              {/* Social Proof */}
+              <div className="flex items-center justify-center gap-6 mb-10">
+                {/* User Avatars */}
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div
+                      key={i}
+                      className="w-10 h-10 rounded-full border-2 border-white dark:border-neutral-900 bg-gradient-to-br from-blue-400 to-purple-600"
+                    />
+                  ))}
+                </div>
+                
+                {/* Rating */}
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[1, 2, 3, 4].map((i) => (
+                      <svg key={i} className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                    <svg className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
+                      <defs>
+                        <linearGradient id="half-star">
+                          <stop offset="50%" stopColor="currentColor" />
+                          <stop offset="50%" stopColor="#d1d5db" />
+                        </linearGradient>
+                      </defs>
+                      <path fill="url(#half-star)" d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">4.5</span>
+                </div>
+
+                {/* Loved by */}
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  Loved by <span className="font-semibold text-gray-900 dark:text-white">great customers</span>
+                </span>
+              </div>
+
+              {/* Tool Icons */}
+              <div className="flex items-center justify-center gap-4 mb-12">
+                {[
+                  { icon: "📄", label: "PDF" },
+                  { icon: "✏️", label: "Edit" },
+                  { icon: "🔄", label: "Convert" },
+                  { icon: "🎨", label: "Design" },
+                  { icon: "💾", label: "Save" },
+                  { icon: "⚙️", label: "Tools" },
+                ].map((tool, i) => (
+                  <div
+                    key={i}
+                    className="w-12 h-12 rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex items-center justify-center text-xl hover:scale-110 transition-transform cursor-pointer"
+                    title={tool.label}
+                  >
+                    {tool.icon}
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                
+                
               </div>
             </div>
           </div>

@@ -6,11 +6,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import viteCompression from 'vite-plugin-compression';
 
 export default defineConfig({
-	assetsInclude: ['**/*.svg',],
+	assetsInclude: ['**/*.svg'],
+
 	ssr: {
-
-
-		noExternal: true,
+		// ❌ external KULLANILMAZ (Cloudflare izin vermez)
+		// ❌ noExternal: true da kullanma (dev build şişirir)
 	},
 
 	plugins: [
@@ -18,38 +18,30 @@ export default defineConfig({
 		tailwindcss(),
 		reactRouter(),
 		tsconfigPaths(),
-		// Compression plugins
-		viteCompression({
-			algorithm: 'gzip',
-			ext: '.gz',
-			threshold: 10240,
-			deleteOriginFile: false,
-		}),
-		viteCompression({
-			algorithm: 'brotliCompress',
-			ext: '.br',
-			threshold: 10240,
-			deleteOriginFile: false,
-		}),
 
+		viteCompression({ algorithm: "gzip", ext: ".gz" }),
+		viteCompression({ algorithm: "brotliCompress", ext: ".br" }),
 	],
+
 	build: {
 		cssMinify: true,
 		cssCodeSplit: true,
-		ssr: true,
-
-		chunkSizeWarningLimit: 1000,
-		minify: 'esbuild',
 		sourcemap: false,
+		minify: "esbuild",
+
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					sanity: ["@sanity/client", "@sanity/image-url"],
+					portabletext: ["@portabletext/react"],
+					og: ["satori", "@resvg/resvg-wasm"],
+				}
+			}
+		}
 	},
 
 	optimizeDeps: {
-		include: ['react', 'react-dom', 'react-router'],
-		exclude: ['@sanity/client', '@sanity/image-url', '@portabletext/react'],
-	},
-
-
-
-
-
+		// ❗ include serbest, ama exclude yasak
+		include: ["react", "react-dom", "react-router"]
+	}
 });

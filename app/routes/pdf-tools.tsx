@@ -1,6 +1,7 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
 import {LocaleLink} from "~/components/locale-link";
+import { ToolCategoryCard } from "~/components/tool-category-card";
 import SVG from "/pdf.svg";
 import WORD from "/word.svg";
 import TXT from "/txt.svg";
@@ -62,134 +63,93 @@ export const meta: MetaFunction = ({location}) => {
 
 export default function PDFTools() {
   const { t } = useTranslation();
+  
+  const tools = [
+    {
+      title: t("pdf.merge.title"),
+      description: t("pdf.merge.description"),
+      link: "/pdf-tools/merge-pdf",
+      icon: (
+        <span className="flex relative">
+          <img src={SVG} alt="PDF Icon" className="size-8 dark:invert" />
+        </span>
+      ),
+      badge: "Popular",
+    },
+    {
+      title: t("pdf.split.title"),
+      description: t("pdf.split.description"),
+      link: "/pdf-tools/split-pdf",
+      icon: <img src={SVG} alt="PDF Icon" className="size-8 dark:invert" />,
+      badge: "Available",
+    },
+    {
+      title: t("pdf.word.title"),
+      description: t("pdf.word.description"),
+      link: "/pdf-tools/word-to-pdf",
+      icon: (
+        <span className="flex gap-1">
+          <img src={WORD} alt="Word Icon" className="size-6 dark:invert" />
+          <span>→</span>
+          <img src={SVG} alt="PDF Icon" className="size-6 dark:invert" />
+        </span>
+      ),
+      badge: "Available",
+    },
+    {
+      title: t("pdf.text.title"),
+      description: t("pdf.text.description"),
+      link: "/pdf-tools/pdf-to-text",
+      icon: (
+        <span className="flex gap-1">
+          <img src={SVG} alt="PDF Icon" className="size-6 dark:invert" />
+          <span>→</span>
+          <img src={TXT} alt="Text Icon" className="size-6 dark:invert" />
+        </span>
+      ),
+      badge: "Available",
+    },
+    {
+      title: t("pdf.images.title"),
+      description: t("pdf.images.description"),
+      link: "/pdf-tools/pdf-to-images",
+      icon: (
+        <span className="flex gap-1">
+          <img src={SVG} alt="PDF Icon" className="size-6 dark:invert" />
+          <span>→</span>
+          <img src={JPG} alt="Image Icon" className="size-6 dark:invert" />
+        </span>
+      ),
+      badge: "Available",
+    },
+  ];
+
   return (
     <Layout>
-      {/* Card Blog */}
-      <section className="flex flex-col md:grid w-full grid-cols-12 container mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-16">
-        <h1 className="col-span-12 text-center text-6xl font-bold">
-          {t("pdf.title")}
-        </h1>
-        <h6 className="col-span-10 col-start-2 text-center text-lg text-gray-600 dark:text-neutral-400">
-          {t("pdf.description")}
-        </h6>
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
+            {t("pdf.title")}
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            {t("pdf.description")}
+          </p>
+        </div>
 
-        <aside className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <a
-            className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/merge-pdf"
-          >
-            <span className="flex relative">
-              <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-              <img
-                src={SVG}
-                alt="PDF Icon"
-                className="mb-4 size-14 absolute left-2 bottom-2 shadow-lg"
-              />
-              <img
-                src={SVG}
-                alt="PDF Icon"
-                className="mb-4 size-14 absolute left-4 bottom-4 shadow-xl"
-              />
-            </span>
-            <h3 className="text-xl font-semibold mb-2">{t("pdf.merge.title")}</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              {t("pdf.merge.description")}
-            </p>
-            <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
-              Go to Tool →
-            </div>
-          </a>
-          <a
-            className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/split-pdf"
-          >
-            <span className="flex flex-row justify-start item-center gap-x-5">
-              <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-              <img src={SVG} alt="PDF Icon" className="mb-4 size-10" />
-              <img src={SVG} alt="PDF Icon" className="mb-4 size-6" />
-            </span>
-            <h3 className="text-xl font-semibold mb-2">{t("pdf.split.title")}</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              {t("pdf.split.description")}
-            </p>
-            <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
-              Go to Tool →
-            </div>
-          </a>
-          <a
-            className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/word-to-pdf"
-          >
-            <span className="flex flex-row justify-start items-center gap-x-5">
-              <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-              <img src={WORD} alt="Word Icon" className="mb-4 size-14" />
-            </span>
-            <h3 className="text-xl font-semibold mb-2">{t("pdf.word.title")}</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              {t("pdf.word.description")}
-            </p>
-            <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
-              Go to Tool →
-            </div>
-          </a>
-          <a
-            className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/pdf-to-text"
-          >
-            <span className="flex flex-row justify-start items-center gap-x-5">
-              <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-              <img src={TXT} alt="Txt Icon" className="mb-4 size-14" />
-            </span>
-            <h3 className="text-xl font-semibold mb-2">{t("pdf.text.title")}</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              {t("pdf.text.description")}
-            </p>
-            <div className=" flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
-              Go to Tool →
-            </div>
-          </a>
-          <a
-            className="option-grid-box bg-background group  flex flex-col justify-center "
-            href="/pdf-tools/pdf-to-images"
-          >
-            <span className="flex flex-row justify-start items-center gap-x-5">
-              <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-              <img src={JPG} alt="Jpg Icon" className="mb-4 size-14" />
-            </span>
-            <h3 className="text-xl font-semibold mb-2">{t("pdf.images.title")}</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              {t("pdf.images.description")}
-            </p>
-            <div className="flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
-              Go to Tool →
-            </div>
-          </a>
-          <a
-            href="/amazon"
-            className="group flex hover:bg-neutral-100 cursor-pointer flex-col h-full bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70"
-          >
-            <div className="h-52 flex flex-col justify-center items-center bg-amber-500 rounded-t-xl">
-              <img src={SVG} alt="Slack Logo" className=" w-32" />
-            </div>
-            <div className="p-4 md:p-6">
-              <span className="block mb-1 text-xs font-semibold uppercase text-amber-500">
-                Pdf tools
-              </span>
-              <h3 className="text-xl font-semibold text-gray-800 dark:text-neutral-300 dark:hover:text-white">
-                Pdf Generation
-              </h3>
-              <p className="mt-3 text-gray-500 dark:text-neutral-500">
-                Email collaboration and email service desk made easy.
-              </p>
-            </div>
-
-            <div className="mt-auto flex group-hover:translate-x-1 transition-all duration-300 items-center font-semibold px-5 justify-center text-violet-500  h-10  cursor-pointer  text-center w-full border-gray-200 divide-x divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
-              Go to Tool →
-            </div>
-          </a>
-        </aside>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tools.map((tool, index) => (
+            <ToolCategoryCard
+              key={index}
+              title={tool.title}
+              description={tool.description}
+              count={1}
+              icon={tool.icon}
+              link={tool.link}
+              badge={tool.badge}
+            />
+          ))}
+        </div>
       </section>
-      {/* End Card Blog */}
     </Layout>
   );
 }

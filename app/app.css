@@ -17,10 +17,12 @@
   }
 }
 
+
 /* Defaults hover styles on all devices */
 @custom-variant hover (&:hover);
 
 * {
+  
   scroll-behavior: smooth !important;
 }
 
@@ -49,27 +51,9 @@ body {
   @apply w-full p-6 border  border-gray-200 bg-white dark:bg-neutral-800 dark:border-neutral-700 rounded-2xl duration-200 hover:shadow-lg transition aspect-square cursor-pointer;
 }
 
-body {
-  background-image: linear-gradient(rgb(251 251 251) 2px, transparent 2px),
-    linear-gradient(90deg, rgb(251 251 251) 2px, transparent 2px),
-    linear-gradient(rgb(251 251 251) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(251 251 251) 1px, rgb(255 255 255 / 63%) 1px);
-  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
-}
 
-.dark body {
-  background-image: linear-gradient(rgb(28 28 28) 2px, transparent 2px),
-    linear-gradient(90deg, rgb(28 28 28) 2px, transparent 2px),
-    linear-gradient(rgb(28 28 28) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(28 28 28) 1px, rgb(0 0 0 / 63%) 1px);
-  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
-}
 
-.dark body footer {
-  background: #262626;
-}
+
 
 .bg-background {
   @apply bg-white dark:bg-neutral-800;

@@ -1,6 +1,8 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
+import { ToolCategoryCard } from "~/components/tool-category-card";
 import SVG from "/pdf.svg";
+import WORD from "/word.svg";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
@@ -53,98 +55,81 @@ export const meta: MetaFunction = ({location}) => {
   );
   return meta;
 };
+
 export default function DocxTools() {
   const { t } = useTranslation();
+  
+  const tools = [
+    {
+      title: "DOCX Converter",
+      description: "Convert DOCX files to PDF and other formats easily.",
+      link: "/docx-tools",
+      icon: <img src={WORD} alt="DOCX Icon" className="size-8 dark:invert" />,
+      badge: "Available",
+    },
+    {
+      title: "DOCX Editor",
+      description: "Edit and modify DOCX documents online.",
+      link: "/docx-tools",
+      icon: <img src={WORD} alt="DOCX Icon" className="size-8 dark:invert" />,
+      badge: "Coming Soon",
+    },
+    {
+      title: "DOCX Merger",
+      description: "Combine multiple DOCX files into one document.",
+      link: "/docx-tools",
+      icon: <img src={WORD} alt="DOCX Icon" className="size-8 dark:invert" />,
+      badge: "Coming Soon",
+    },
+    {
+      title: "DOCX Splitter",
+      description: "Split DOCX documents into separate files.",
+      link: "/docx-tools",
+      icon: <img src={WORD} alt="DOCX Icon" className="size-8 dark:invert" />,
+      badge: "Coming Soon",
+    },
+    {
+      title: "DOCX to HTML",
+      description: "Convert DOCX files to HTML format.",
+      link: "/docx-tools",
+      icon: <img src={WORD} alt="DOCX Icon" className="size-8 dark:invert" />,
+      badge: "Coming Soon",
+    },
+    {
+      title: "DOCX Compressor",
+      description: "Reduce DOCX file size without quality loss.",
+      link: "/docx-tools",
+      icon: <img src={WORD} alt="DOCX Icon" className="size-8 dark:invert" />,
+      badge: "Coming Soon",
+    },
+  ];
+
   return (
     <Layout>
-      {/* Card Blog */}
-      <section className="grid w-full grid-cols-12 container mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-4">
-        <h1 className="col-span-12 text-center text-6xl font-bold">
-          {t("docx.title")}
-        </h1>
-        <h6 className="col-span-10 col-start-2 text-center text-lg text-gray-600 dark:text-neutral-400">
-          {t("docx.description")}
-        </h6>
-        <div className="col-span-12 flex flex-wrap xl:flex-nowrap justify-center gap-4 mt-4 mb-8">
-          <div className=" tag" data-filter="all">
-            All
-          </div>
-          <div className="tag" data-filter="workflows">
-            Workflows
-          </div>
-          <div className="tag" data-filter="organize">
-            Organize PDF
-          </div>
-          <div className="tag" data-filter="optimize">
-            Optimize PDF
-          </div>
-          <div className="tag" data-filter="convert">
-            Convert PDF
-          </div>
-          <div className="tag" data-filter="edit">
-            Edit PDF
-          </div>
-          <div className="tag" data-filter="security">
-            PDF Security
-          </div>
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
+            {t("docx.title")}
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            {t("docx.description")}
+          </p>
         </div>
-        <aside className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="option-grid-box">
-            <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-            <h3 className="text-xl font-semibold mb-2">Merge PDF</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
-            </p>
-          </div>
-          <div className="option-grid-box">
-            <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
 
-            <h3 className="text-xl font-semibold mb-2">Merge PDF</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
-            </p>
-          </div>
-          <div className="option-grid-box">
-            <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-
-            <h3 className="text-xl font-semibold mb-2">Merge PDF</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
-            </p>
-          </div>
-          <div className="option-grid-box">
-            <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-
-            <h3 className="text-xl font-semibold mb-2">Merge PDF</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
-            </p>
-          </div>
-          <div className="option-grid-box">
-            <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-
-            <h3 className="text-xl font-semibold mb-2">Merge PDF</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
-            </p>
-          </div>
-          <div className="option-grid-box">
-            <img src={SVG} alt="PDF Icon" className="mb-4 size-14" />
-
-            <h3 className="text-xl font-semibold mb-2">Merge PDF</h3>
-            <p className="text-gray-600 dark:text-neutral-400">
-              Combine multiple PDF files into a single document quickly and
-              easily.
-            </p>
-          </div>
-        </aside>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tools.map((tool, index) => (
+            <ToolCategoryCard
+              key={index}
+              title={tool.title}
+              description={tool.description}
+              count={1}
+              icon={tool.icon}
+              link={tool.link}
+              badge={tool.badge}
+            />
+          ))}
+        </div>
       </section>
-      {/* End Card Blog */}
     </Layout>
   );
 }
