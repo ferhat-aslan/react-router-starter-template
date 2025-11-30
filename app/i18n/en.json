@@ -169,5 +169,16 @@
   "blog.read_more": "Read More",
   "blog.back_to_blog": "Back to Blog",
   "blog.published_on": "Published on",
-  "blog.by": "by"
+  "blog.by": "by",
+  "tools.subtitle.category": "Subtitle Tools",
+  "tools.subtitle.edit.name": "Subtitle Editor",
+  "tools.subtitle.edit.description": "Edit subtitle files with box-by-box pagination",
+  "tools.subtitle.convert.name": "Subtitle Converter",
+  "tools.subtitle.convert.description": "Convert and translate subtitles with side-by-side editing",
+  "tools.subtitle.merge.name": "Subtitle Merger",
+  "tools.subtitle.merge.description": "Merge two subtitle files with time offset controls",
+  "subtitle.title": "Subtitle Tools",
+  "subtitle.description": "Edit, convert, and merge subtitle files",
+  "subtitle.meta.title": "Subtitle Tools - Kleinbyte",
+  "subtitle.meta.description": "Free online subtitle tools for editing, converting, and merging SRT, VTT, and ASS files."
 }
