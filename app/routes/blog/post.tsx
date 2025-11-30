@@ -5,20 +5,42 @@ import { type MetaFunction } from "react-router";
 import { sanityClient, postBySlugQuery, type BlogPost } from "./sanity";
 import { PortableText } from '@portabletext/react';
 
-export const meta: MetaFunction = ({ params, location }) => {
+export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   const firstPathSegment = location.pathname.split("/")?.[1];
   const locale: Locale =
     firstPathSegment === "de" ? "de" :
     firstPathSegment === "es" ? "es" :
     firstPathSegment === "ar" ? "ar" : "en";
 
+  // If no data (404), return default meta
+  if (!data || typeof data !== 'object' || !('post' in data)) {
+    return [
+      { title: "Blog Post Not Found - Kleinbyte" },
+      { name: "description", content: "The requested blog post could not be found" },
+    ];
+  }
+
+  const post = data.post as BlogPost;
+  const title = `${post.title} - Kleinbyte Blog`;
+  const description = post.excerpt || `Read ${post.title} on Kleinbyte blog`;
+
   return [
-    { title: `Blog Post - Kleinbyte` },
-    { name: "description", content: "Read our latest blog post" },
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:type", content: "article" },
+    { property: "og:image", content: post.coverImage || "https://kleinbyte.com/og-image-blog.png" },
+    { property: "article:published_time", content: post.publishedAt },
+    { property: "article:author", content: post.author },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: post.coverImage || "https://kleinbyte.com/og-image-blog.png" },
   ];
 };
 
-export const loader = async ({ params }: Route.LoaderArgs) => {
+export const loader = async ({ params }: Route.LoaderArgs): Promise<{ post: BlogPost }> => {
   try {
     const post = await sanityClient.fetch<BlogPost>(postBySlugQuery(params.slug));
     if (!post) {
