@@ -9,7 +9,6 @@ const baseRoutes: RouteConfig = [
   route("sitemap.xml", "routes/sitemap[.]xml.ts"),
   route("docx-tools", "routes/docx-tools.tsx"),
   route("latex-tools", "routes/latex-tools.tsx"),
-  route("image-tools", "routes/image-tools.tsx"),
   route("text-tools", "routes/text-tools.tsx"),
   route("spreadsheet-tools", "routes/spreadsheet-tools.tsx"),
   route("seo-tools", "routes/seo-tools.tsx"),
@@ -31,6 +30,10 @@ const baseRoutes: RouteConfig = [
     route("word-to-pdf", "routes/pdf-tools/word-to-pdf.tsx"),
     route("pdf-to-images", "routes/pdf-tools/pdf-to-images.tsx"),
     route("pdf-to-text", "routes/pdf-tools/pdf-to-text.tsx"),
+  ]),
+  ...prefix("image-tools", [
+    index("routes/image-tools.tsx"),
+    route("images-to-pdf", "routes/image-tools/images-to-pdf.tsx"),
   ]),
 ];
 

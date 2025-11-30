@@ -57,34 +57,10 @@ export default function Home() {
   return (
     <Layout>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6 justify-start items-center">
-        <h1 className="text-4xl font-bold mb-4">Merge PDFs</h1>
-        <p className="text-lg text-gray-600 dark:text-neutral-400">
-          Easy - Fast - Free PDF Merger. Combine multiple PDF files into a
-          single document online. No installation or registration/login and
-          required and secured.
-        </p>
-        <span className="text-red-500 font-bold text-2xl underline">
-          Just in 3 Steps:
-        </span>
-        <span className="flex justify-start w-full items-center font-medium text-xl">
-          1. Select PDF files
-        </span>
-        <SelectFilesInput
-          onChange={(newFiles: any) => {
-            (draggingRef.current as any)?.setBoxes(Array.from(newFiles));
-            setFiles(newFiles);
-            setOrderedFiles(Array.from(newFiles));
-          }}
-        />
-        <span className="flex justify-start w-full items-center font-medium text-xl">
-          2. Sort files as you want{" "}
-          <span
-            className="text-blue-500 cursor-pointer ml-5 border rounded-lg px-5 text-base hover:bg-blue-100"
-            onClick={() => setFiles(null)}
-          >
-            Clear
-          </span>
-        </span>
+        
+        
+        
+        
 
         <Dragging
           list={files ? Array.from(files) : []}
