@@ -4,12 +4,54 @@ import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/word-to-pdf";
 import { useTranslation } from "~/i18n/context";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Word to PDF - Tinker" },
-    { name: "description", content: "Convert Word documents to PDF." },
-  ];
-}
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
+    {
+      title: "Free Word to PDF Converter Online | Kleinbyte",
+      description: "Convert Word documents (DOC, DOCX, RTF) to PDF online for free. No installation or registration required. Fast, secure and easy-to-use converter.",
+      url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
+      image: "https://kleinbyte.com/og-image-word-to-pdf.png",
+    },
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "SoftwareApplication",
+          name: "Kleinbyte Word to PDF Converter",
+          url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
+          description: "Convert Word documents to PDF format",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "HowTo",
+          name: "How to Convert Word to PDF",
+          description: "Step-by-step guide on converting Word documents to PDF",
+        }),
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free Word to PDF Converter Online | Kleinbyte" },
+      { name: "twitter:description", content: "Convert Word documents (DOC, DOCX, RTF) to PDF online for free. No installation required." },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-word-to-pdf.png" },
+      { name: "keywords", content: "word to pdf, docx to pdf, doc to pdf, convert word to pdf, free word converter, online word to pdf" },
+      { name: "author", content: "Kleinbyte" },
+    ]
+  );
+  return meta;
+};
 
 export default function WordToPdf() {
   const { t } = useTranslation();

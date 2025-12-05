@@ -3,12 +3,54 @@ import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Scissors
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/split-pdf";
 import { useTranslation } from "~/i18n/context";
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Split PDF - Tinker" },
-    { name: "description", content: "Split PDF files by page ranges." },
-  ];
-}
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
+    {
+      title: "Free Online PDF Splitter - Split PDF by Pages | Kleinbyte",
+      description: "Split PDF files by page ranges online for free. Keep or remove specific pages. No installation required. Fast, secure and easy-to-use PDF splitter tool.",
+      url: "https://kleinbyte.com/pdf-tools/split-pdf",
+      image: "https://kleinbyte.com/og-image-split-pdf.png",
+    },
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "SoftwareApplication",
+          name: "Kleinbyte PDF Splitter",
+          url: "https://kleinbyte.com/pdf-tools/split-pdf",
+          description: "Split PDF files by page ranges",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "HowTo",
+          name: "How to Split PDF Files",
+          description: "Step-by-step guide on splitting PDF files by page ranges",
+        }),
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free Online PDF Splitter - Split PDF by Pages | Kleinbyte" },
+      { name: "twitter:description", content: "Split PDF files by page ranges online for free. Keep or remove specific pages. No installation required." },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-split-pdf.png" },
+      { name: "keywords", content: "split pdf, pdf splitter, extract pdf pages, remove pdf pages, split pdf by pages, free pdf splitter" },
+      { name: "author", content: "Kleinbyte" },
+    ]
+  );
+  return meta;
+};
 
 export default function SplitPdf() {
   const { t } = useTranslation();

@@ -48,6 +48,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("api.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("api.meta.title") },
+      { name: "twitter:description", content: t("api.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-api-tools.png" },
+      { name: "keywords", content: "api tools, api tester, api debugger, api documentation, rest api, graphql, oauth, free api tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

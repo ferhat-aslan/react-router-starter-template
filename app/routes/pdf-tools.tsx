@@ -56,6 +56,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("pdf.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("pdf.meta.title") },
+      { name: "twitter:description", content: t("pdf.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-pdf-tools.png" },
+      { name: "keywords", content: "pdf tools, merge pdf, split pdf, pdf converter, word to pdf, pdf to text, pdf to images, free pdf tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

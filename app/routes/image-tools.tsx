@@ -50,6 +50,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("image.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("image.meta.title") },
+      { name: "twitter:description", content: t("image.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-image-tools.png" },
+      { name: "keywords", content: "image tools, image converter, image compressor, image editor, image resizer, free image tools, online image tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

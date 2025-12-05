@@ -50,6 +50,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("favicon.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("favicon.meta.title") },
+      { name: "twitter:description", content: t("favicon.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-favicon-maker.png" },
+      { name: "keywords", content: "favicon maker, favicon generator, create favicon, ico generator, free favicon tool" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

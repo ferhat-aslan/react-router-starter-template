@@ -5,12 +5,54 @@ import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/pdf-to-text";
 import { useTranslation } from "~/i18n/context";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "PDF to Text - Tinker" },
-    { name: "description", content: "Extract text from PDF files." },
-  ];
-}
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
+    {
+      title: "Free PDF to Text Converter - Extract Text from PDF | Kleinbyte",
+      description: "Extract text from PDF files online for free. Convert PDF to plain text format. No installation or registration required. Fast and secure PDF text extraction.",
+      url: "https://kleinbyte.com/pdf-tools/pdf-to-text",
+      image: "https://kleinbyte.com/og-image-pdf-to-text.png",
+    },
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "SoftwareApplication",
+          name: "Kleinbyte PDF to Text Converter",
+          url: "https://kleinbyte.com/pdf-tools/pdf-to-text",
+          description: "Extract text content from PDF files",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "HowTo",
+          name: "How to Extract Text from PDF",
+          description: "Step-by-step guide on extracting text from PDF files",
+        }),
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free PDF to Text Converter - Extract Text from PDF | Kleinbyte" },
+      { name: "twitter:description", content: "Extract text from PDF files online for free. Convert PDF to plain text format. No installation required." },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-pdf-to-text.png" },
+      { name: "keywords", content: "pdf to text, extract text from pdf, pdf text extractor, convert pdf to text, free pdf to text converter" },
+      { name: "author", content: "Kleinbyte" },
+    ]
+  );
+  return meta;
+};
 
 export default function PdfToText() {
   const { t } = useTranslation();

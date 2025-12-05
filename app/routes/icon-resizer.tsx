@@ -50,6 +50,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("icon.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("icon.meta.title") },
+      { name: "twitter:description", content: t("icon.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-icon-resizer.png" },
+      { name: "keywords", content: "icon resizer, image resizer, resize icons, batch resize, free icon resizer" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

@@ -51,6 +51,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("docx.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("docx.meta.title") },
+      { name: "twitter:description", content: t("docx.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-docx-tools.png" },
+      { name: "keywords", content: "docx tools, word tools, docx converter, docx editor, docx merger, document tools, free docx tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

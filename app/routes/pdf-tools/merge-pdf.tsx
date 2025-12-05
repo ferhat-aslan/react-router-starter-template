@@ -44,6 +44,14 @@ export const meta: MetaFunction = () => {
             "Step-by-step guide on combining multiple PDF files into one",
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free Online PDF Merger - Combine Multiple PDFs | Kleinbyte" },
+      { name: "twitter:description", content: "Merge multiple PDF files into a single document online for free. No installation or registration required. Fast, secure and easy-to-use PDF merger tool." },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-merge-pdf.png" },
+      { name: "keywords", content: "merge pdf, combine pdf, pdf merger, join pdf files, concatenate pdf, free pdf merger, online pdf merger" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

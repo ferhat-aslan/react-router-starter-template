@@ -32,6 +32,14 @@ export const meta: MetaFunction = () => {
           },
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free Online Subtitle Tools | Edit, Convert & Merge Subtitles | Kleinbyte" },
+      { name: "twitter:description", content: "Professional subtitle tools for editing, converting, and merging subtitle files. Support for SRT, VTT, and ASS formats." },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-subtitle-tools.png" },
+      { name: "keywords", content: "subtitle tools, subtitle editor, subtitle converter, subtitle merger, srt, vtt, ass, free subtitle tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

@@ -50,6 +50,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("formatter.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("formatter.meta.title") },
+      { name: "twitter:description", content: t("formatter.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-code-formatter.png" },
+      { name: "keywords", content: "code formatter, html formatter, css formatter, javascript formatter, python formatter, free code formatter" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

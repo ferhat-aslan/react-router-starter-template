@@ -50,6 +50,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("spreadsheet.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("spreadsheet.meta.title") },
+      { name: "twitter:description", content: t("spreadsheet.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-spreadsheet-tools.png" },
+      { name: "keywords", content: "spreadsheet tools, excel converter, csv editor, spreadsheet merger, data cleaner, free spreadsheet tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

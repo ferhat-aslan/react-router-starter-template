@@ -129,3 +129,6 @@ Built with ❤️ using React Router.
 		}
 	]
 }
+
+
+https://ploomber.io/blog/pdf-ocr/

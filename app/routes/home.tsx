@@ -55,6 +55,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("home.meta.lt.course.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("home.meta.title") },
+      { name: "twitter:description", content: t("home.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-all-tools.png" },
+      { name: "keywords", content: "free online tools, pdf tools, document converter, image tools, developer tools, no signup required" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

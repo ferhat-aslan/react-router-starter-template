@@ -49,6 +49,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("latex.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("latex.meta.title") },
+      { name: "twitter:description", content: t("latex.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-latex-tools.png" },
+      { name: "keywords", content: "latex tools, latex editor, latex converter, latex to pdf, free latex tools, online latex" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

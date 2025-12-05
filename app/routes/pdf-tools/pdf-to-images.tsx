@@ -4,12 +4,54 @@ import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/pdf-to-images";
 import { useTranslation } from "~/i18n/context";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "PDF to Images - Tinker" },
-    { name: "description", content: "Convert PDF pages to images." },
-  ];
-}
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+
+export const meta: MetaFunction = () => {
+  const meta = generateMeta(
+    {
+      title: "Free PDF to Images Converter - Convert PDF to JPG/PNG | Kleinbyte",
+      description: "Convert PDF pages to images (JPG, PNG) online for free. Extract all pages as images. No installation or registration required. Fast and secure PDF to image converter.",
+      url: "https://kleinbyte.com/pdf-tools/pdf-to-images",
+      image: "https://kleinbyte.com/og-image-pdf-to-images.png",
+    },
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "SoftwareApplication",
+          name: "Kleinbyte PDF to Images Converter",
+          url: "https://kleinbyte.com/pdf-tools/pdf-to-images",
+          description: "Convert PDF pages to image files",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        }),
+      },
+      {
+        "script:ld+json": course({
+          "@type": "HowTo",
+          name: "How to Convert PDF to Images",
+          description: "Step-by-step guide on converting PDF pages to image files",
+        }),
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free PDF to Images Converter - Convert PDF to JPG/PNG | Kleinbyte" },
+      { name: "twitter:description", content: "Convert PDF pages to images (JPG, PNG) online for free. Extract all pages as images. No installation required." },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-pdf-to-images.png" },
+      { name: "keywords", content: "pdf to images, pdf to jpg, pdf to png, convert pdf to images, extract images from pdf, free pdf to image converter" },
+      { name: "author", content: "Kleinbyte" },
+    ]
+  );
+  return meta;
+};
 
 export default function PdfToImages() {
   const { t } = useTranslation();

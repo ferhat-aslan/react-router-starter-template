@@ -7,7 +7,7 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 
 export const meta: MetaFunction = ({location}) => {
   const locale: Locale = 
@@ -50,6 +50,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("json.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("json.meta.title") },
+      { name: "twitter:description", content: t("json.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-json-tools.png" },
+      { name: "keywords", content: "json tools, json formatter, json validator, json minifier, json to csv, csv to json, free json tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;

@@ -7,7 +7,7 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 
 export const meta: MetaFunction = ({location}) => {
   // The meta function needs to determine locale and access translations without a hook.
@@ -127,6 +127,14 @@ export const meta: MetaFunction = ({location}) => {
           description: t("seo.description"),
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("seo.meta.title") },
+      { name: "twitter:description", content: t("seo.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-seo-tools.png" },
+      { name: "keywords", content: "seo tools, keyword analyzer, meta tag generator, sitemap generator, robots.txt, schema markup, free seo tools" },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;
