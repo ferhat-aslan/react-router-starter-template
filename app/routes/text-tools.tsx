@@ -56,7 +56,7 @@ export const meta: MetaFunction = ({location}) => {
       { name: "twitter:title", content: t("text.meta.title") },
       { name: "twitter:description", content: t("text.meta.description") },
       { name: "twitter:image", content: "https://kleinbyte.com/og-image-text-tools.png" },
-      { name: "keywords", content: "text tools, text formatter, case converter, text counter, text reverser, lorem ipsum, free text tools" },
+      { name: "keywords", content: t("text.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -171,6 +171,35 @@ export default function TextTools() {
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Free</h3>
                 <p className="text-gray-600 dark:text-gray-300">All tools are completely free to use</p>
               </div>
+            </div>
+          </div>
+
+          {/* SEO Content: FAQ */}
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+              {t("faq.title")}
+            </h2>
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("text.faq.q1")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("text.faq.a1")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("text.faq.q2")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("text.faq.a2")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("text.faq.q3")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("text.faq.a3")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("text.faq.q4")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("text.faq.a4")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("text.faq.q5")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("text.faq.a5")}</p>
+              </details>
             </div>
           </div>
         </div>

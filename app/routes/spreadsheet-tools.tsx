@@ -56,7 +56,7 @@ export const meta: MetaFunction = ({location}) => {
       { name: "twitter:title", content: t("spreadsheet.meta.title") },
       { name: "twitter:description", content: t("spreadsheet.meta.description") },
       { name: "twitter:image", content: "https://kleinbyte.com/og-image-spreadsheet-tools.png" },
-      { name: "keywords", content: "spreadsheet tools, excel converter, csv editor, spreadsheet merger, data cleaner, free spreadsheet tools" },
+      { name: "keywords", content: t("spreadsheet.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -152,6 +152,35 @@ export default function SpreadsheetTools() {
                   {format}
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* SEO Content: FAQ */}
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+              {t("faq.title")}
+            </h2>
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("spreadsheet.faq.q1")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("spreadsheet.faq.a1")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("spreadsheet.faq.q2")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("spreadsheet.faq.a2")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("spreadsheet.faq.q3")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("spreadsheet.faq.a3")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("spreadsheet.faq.q4")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("spreadsheet.faq.a4")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("spreadsheet.faq.q5")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("spreadsheet.faq.a5")}</p>
+              </details>
             </div>
           </div>
         </div>

@@ -2,17 +2,20 @@ import Layout from "~/components/layout";
 import { Link } from "react-router";
 import { FileText, RefreshCw, Merge, Edit3 } from "lucide-react";
 import type { Route } from "./+types/subtitle-tools";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { type MetaFunction } from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free Online Subtitle Tools | Edit, Convert & Merge Subtitles | Kleinbyte",
-      description:
-        "Professional subtitle tools for editing, converting, and merging subtitle files. Support for SRT, VTT, and ASS formats. Edit subtitles with pagination, convert between formats, and merge multiple subtitle files.",
+      title: t("subtitle.meta.title"),
+      description: t("subtitle.meta.description"),
       url: "https://kleinbyte.com/subtitle-tools",
       image: "https://kleinbyte.com/og-image-subtitle-tools.png",
     },
@@ -20,9 +23,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte Subtitle Tools",
+          name: t("subtitle.meta.name"),
           url: "https://kleinbyte.com/subtitle-tools",
-          description: "Professional subtitle editing, conversion, and merging tools",
+          description: t("subtitle.meta.app_desc"),
           applicationCategory: "MultimediaApplication",
           operatingSystem: "Any",
           offers: {
@@ -35,10 +38,10 @@ export const meta: MetaFunction = () => {
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Kleinbyte" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Free Online Subtitle Tools | Edit, Convert & Merge Subtitles | Kleinbyte" },
-      { name: "twitter:description", content: "Professional subtitle tools for editing, converting, and merging subtitle files. Support for SRT, VTT, and ASS formats." },
+      { name: "twitter:title", content: t("subtitle.meta.title") },
+      { name: "twitter:description", content: t("subtitle.meta.description") },
       { name: "twitter:image", content: "https://kleinbyte.com/og-image-subtitle-tools.png" },
-      { name: "keywords", content: "subtitle tools, subtitle editor, subtitle converter, subtitle merger, srt, vtt, ass, free subtitle tools" },
+      { name: "keywords", content: t("subtitle.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -197,6 +200,35 @@ export default function SubtitleTools() {
             <p className="text-sm text-gray-600 dark:text-gray-400">
               No installation or registration required
             </p>
+          </div>
+        </div>
+
+        {/* SEO Content: FAQ */}
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            {t("faq.title")}
+          </h2>
+          <div className="space-y-4 max-w-3xl mx-auto">
+            <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q1")}</summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a1")}</p>
+            </details>
+            <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q2")}</summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a2")}</p>
+            </details>
+            <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q3")}</summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a3")}</p>
+            </details>
+            <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q4")}</summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a4")}</p>
+            </details>
+            <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q5")}</summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a5")}</p>
+            </details>
           </div>
         </div>
       </section>

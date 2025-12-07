@@ -2,18 +2,22 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Image as ImageIcon, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/pdf-to-images";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free PDF to Images Converter - Convert PDF to JPG/PNG | Kleinbyte",
-      description: "Convert PDF pages to images (JPG, PNG) online for free. Extract all pages as images. No installation or registration required. Fast and secure PDF to image converter.",
+      title: t("pdf.images.meta.title"),
+      description: t("pdf.images.meta.description"),
       url: "https://kleinbyte.com/pdf-tools/pdf-to-images",
       image: "https://kleinbyte.com/og-image-pdf-to-images.png",
     },
@@ -21,9 +25,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte PDF to Images Converter",
+          name: t("pdf.images.meta.name"),
           url: "https://kleinbyte.com/pdf-tools/pdf-to-images",
-          description: "Convert PDF pages to image files",
+          description: t("pdf.images.meta.app_desc"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -43,10 +47,7 @@ export const meta: MetaFunction = () => {
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Kleinbyte" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Free PDF to Images Converter - Convert PDF to JPG/PNG | Kleinbyte" },
-      { name: "twitter:description", content: "Convert PDF pages to images (JPG, PNG) online for free. Extract all pages as images. No installation required." },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-pdf-to-images.png" },
-      { name: "keywords", content: "pdf to images, pdf to jpg, pdf to png, convert pdf to images, extract images from pdf, free pdf to image converter" },
+      { name: "keywords", content: t("pdf.images.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -276,6 +277,96 @@ export default function PdfToImages() {
           </div>
         </div>
       </div>
+
+      {/* SEO Content: Benefits Section */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Why Convert PDF to Images?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Easy Sharing</h3>
+            <p className="text-gray-600 dark:text-gray-300">Images are universally viewable. Share on social media, presentations, or anywhere.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">High Quality</h3>
+            <p className="text-gray-600 dark:text-gray-300">Convert with crisp, high-resolution output perfect for printing or web use.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Batch Download</h3>
+            <p className="text-gray-600 dark:text-gray-300">All pages converted at once and delivered as a convenient ZIP file.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: How It Works */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          How to Convert PDF to Images
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Upload PDF</h3>
+            <p className="text-gray-600 dark:text-gray-400">Select the PDF file you want to convert to images.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Convert</h3>
+            <p className="text-gray-600 dark:text-gray-400">Our tool converts each page to a high-quality image.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Download ZIP</h3>
+            <p className="text-gray-600 dark:text-gray-400">Get all images in a ZIP file, ready to use.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: FAQ */}
+      <section className="w-full max-w-4xl mx-auto mt-16 mb-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          {t("faq.title")}
+        </h2>
+        <div className="space-y-4">
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.images.faq.q1")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.images.faq.a1")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.images.faq.q2")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.images.faq.a2")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.images.faq.q3")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.images.faq.a3")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.images.faq.q4")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.images.faq.a4")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.images.faq.q5")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.images.faq.a5")}</p>
+          </details>
+        </div>
+      </section>
     </div>
   );
 }

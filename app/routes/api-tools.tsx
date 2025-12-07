@@ -152,6 +152,36 @@ export default function ApiTools() {
               ))}
             </div>
           </div>
+
+          {/* SEO Content: FAQ */}
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+              {t("faq.title")}
+            </h2>
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("api.faq.q1")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("api.faq.a1")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("api.faq.q2")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("api.faq.a2")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("api.faq.q3")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("api.faq.a3")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("api.faq.q4")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("api.faq.a4")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("api.faq.q5")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("api.faq.a5")}</p>
+              </details>
+            </div>
+          </div>
+
         </div>
       </section>
     </Layout>

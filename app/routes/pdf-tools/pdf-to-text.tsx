@@ -3,18 +3,22 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, AlignLeft, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/pdf-to-text";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free PDF to Text Converter - Extract Text from PDF | Kleinbyte",
-      description: "Extract text from PDF files online for free. Convert PDF to plain text format. No installation or registration required. Fast and secure PDF text extraction.",
+      title: t("pdf.text.meta.title"),
+      description: t("pdf.text.meta.description"),
       url: "https://kleinbyte.com/pdf-tools/pdf-to-text",
       image: "https://kleinbyte.com/og-image-pdf-to-text.png",
     },
@@ -22,9 +26,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte PDF to Text Converter",
+          name: t("pdf.text.meta.name"),
           url: "https://kleinbyte.com/pdf-tools/pdf-to-text",
-          description: "Extract text content from PDF files",
+          description: t("pdf.text.meta.app_desc"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -44,10 +48,7 @@ export const meta: MetaFunction = () => {
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Kleinbyte" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Free PDF to Text Converter - Extract Text from PDF | Kleinbyte" },
-      { name: "twitter:description", content: "Extract text from PDF files online for free. Convert PDF to plain text format. No installation required." },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-pdf-to-text.png" },
-      { name: "keywords", content: "pdf to text, extract text from pdf, pdf text extractor, convert pdf to text, free pdf to text converter" },
+      { name: "keywords", content: t("pdf.text.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -277,6 +278,95 @@ export default function PdfToText() {
           </div>
         </div>
       </div>
+
+      {/* SEO Content: Benefits Section */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Why Extract Text from PDF?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Edit Content</h3>
+            <p className="text-gray-600 dark:text-gray-300">Extract text to edit, copy, or repurpose content from locked PDFs.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Search & Index</h3>
+            <p className="text-gray-600 dark:text-gray-300">Plain text is searchable and can be indexed by search engines.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Accessible Format</h3>
+            <p className="text-gray-600 dark:text-gray-300">Plain text works in any application and is accessible for screen readers.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: How It Works */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          How to Extract Text from PDF
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Upload PDF</h3>
+            <p className="text-gray-600 dark:text-gray-400">Select the PDF file containing the text you want to extract.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Extract</h3>
+            <p className="text-gray-600 dark:text-gray-400">Our tool extracts all text content from your PDF.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Download</h3>
+            <p className="text-gray-600 dark:text-gray-400">Download the plain text file to use anywhere.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: FAQ */}
+      <section className="w-full max-w-4xl mx-auto mt-16 mb-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          {t("faq.title")}
+        </h2>
+        <div className="space-y-4">
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.text.faq.q1")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.text.faq.a1")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.text.faq.q2")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.text.faq.a2")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.text.faq.q3")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.text.faq.a3")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.text.faq.q4")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.text.faq.a4")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.text.faq.q5")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.text.faq.a5")}</p>
+          </details>
+        </div>
+      </section>
     </div>
   );
 }

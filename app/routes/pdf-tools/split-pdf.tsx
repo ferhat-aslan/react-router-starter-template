@@ -2,17 +2,21 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Scissors, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/split-pdf";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free Online PDF Splitter - Split PDF by Pages | Kleinbyte",
-      description: "Split PDF files by page ranges online for free. Keep or remove specific pages. No installation required. Fast, secure and easy-to-use PDF splitter tool.",
+      title: t("pdf.split.meta.title"),
+      description: t("pdf.split.meta.description"),
       url: "https://kleinbyte.com/pdf-tools/split-pdf",
       image: "https://kleinbyte.com/og-image-split-pdf.png",
     },
@@ -20,9 +24,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte PDF Splitter",
+          name: t("pdf.split.meta.name"),
           url: "https://kleinbyte.com/pdf-tools/split-pdf",
-          description: "Split PDF files by page ranges",
+          description: t("pdf.split.meta.app_desc"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -42,10 +46,7 @@ export const meta: MetaFunction = () => {
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Kleinbyte" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Free Online PDF Splitter - Split PDF by Pages | Kleinbyte" },
-      { name: "twitter:description", content: "Split PDF files by page ranges online for free. Keep or remove specific pages. No installation required." },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-split-pdf.png" },
-      { name: "keywords", content: "split pdf, pdf splitter, extract pdf pages, remove pdf pages, split pdf by pages, free pdf splitter" },
+      { name: "keywords", content: t("pdf.split.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -323,6 +324,95 @@ export default function SplitPdf() {
           </div>
         </div>
       </div>
+
+      {/* SEO Content: Benefits Section */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Why Use Our PDF Splitter?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Extract Specific Pages</h3>
+            <p className="text-gray-600 dark:text-gray-300">Select exactly which pages to keep or remove. Perfect for extracting chapters or sections.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Secure Processing</h3>
+            <p className="text-gray-600 dark:text-gray-300">Your files are encrypted and automatically deleted. We never store your documents.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Instant Results</h3>
+            <p className="text-gray-600 dark:text-gray-300">Split PDFs in seconds with no waiting. Download your result immediately.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: How It Works */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          How to Split PDF Files
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Upload PDF</h3>
+            <p className="text-gray-600 dark:text-gray-400">Select the PDF file you want to split from your device.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Select Pages</h3>
+            <p className="text-gray-600 dark:text-gray-400">Enter page ranges like "1-3,5,8-10" to keep or remove.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Download</h3>
+            <p className="text-gray-600 dark:text-gray-400">Click split and download your new PDF with selected pages.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: FAQ */}
+      <section className="w-full max-w-4xl mx-auto mt-16 mb-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          {t("faq.title")}
+        </h2>
+        <div className="space-y-4">
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.split.faq.q1")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.split.faq.a1")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.split.faq.q2")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.split.faq.a2")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.split.faq.q3")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.split.faq.a3")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.split.faq.q4")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.split.faq.a4")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.split.faq.q5")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.split.faq.a5")}</p>
+          </details>
+        </div>
+      </section>
     </div>
   );
 }

@@ -4,18 +4,21 @@ import Dragging from "~/components/dragging";
 import { Download, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { apiClient } from "~/lib/api-client";
 import type { Route } from "./+types/images-to-pdf";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { course } from "@forge42/seo-tools/structured-data/course";
 import { type MetaFunction } from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free Online Images to PDF Converter | Kleinbyte",
-      description:
-        "Convert multiple images to PDF online for free. Combine JPG, PNG, and other image formats into a single PDF document. No installation or registration required.",
+      title: t("image.pdf.meta.title"),
+      description: t("image.pdf.meta.description"),
       url: "https://kleinbyte.com/image-tools/images-to-pdf",
       image: "https://kleinbyte.com/og-image-images-to-pdf.png",
     },
@@ -23,9 +26,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte Images to PDF Converter",
+          name: t("image.pdf.meta.name"),
           url: "https://kleinbyte.com/image-tools/images-to-pdf",
-          description: "Convert multiple images to a single PDF document",
+          description: t("image.pdf.meta.app_desc"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -43,6 +46,14 @@ export const meta: MetaFunction = () => {
             "Step-by-step guide on converting multiple images into a single PDF file",
         }),
       },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Kleinbyte" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: t("image.pdf.meta.title") },
+      { name: "twitter:description", content: t("image.pdf.meta.description") },
+      { name: "twitter:image", content: "https://kleinbyte.com/og-image-images-to-pdf.png" },
+      { name: "keywords", content: t("image.pdf.meta.keywords") },
+      { name: "author", content: "Kleinbyte" },
     ]
   );
   return meta;
@@ -240,6 +251,35 @@ export default function ImagesToPdf() {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Quick conversion in seconds
               </p>
+            </div>
+          </div>
+
+          {/* SEO Content: FAQ */}
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+              {t("faq.title")}
+            </h2>
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q1")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a1")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q2")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a2")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q3")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a3")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q4")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a4")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q5")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a5")}</p>
+              </details>
             </div>
           </div>
         </div>

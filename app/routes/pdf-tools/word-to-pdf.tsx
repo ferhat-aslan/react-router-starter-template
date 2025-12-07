@@ -2,18 +2,22 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, FileType, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/word-to-pdf";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free Word to PDF Converter Online | Kleinbyte",
-      description: "Convert Word documents (DOC, DOCX, RTF) to PDF online for free. No installation or registration required. Fast, secure and easy-to-use converter.",
+      title: t("pdf.word.meta.title"),
+      description: t("pdf.word.meta.description"),
       url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
       image: "https://kleinbyte.com/og-image-word-to-pdf.png",
     },
@@ -21,9 +25,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte Word to PDF Converter",
+          name: t("pdf.word.meta.name"),
           url: "https://kleinbyte.com/pdf-tools/word-to-pdf",
-          description: "Convert Word documents to PDF format",
+          description: t("pdf.word.meta.app_desc"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
           offers: {
@@ -43,10 +47,7 @@ export const meta: MetaFunction = () => {
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Kleinbyte" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Free Word to PDF Converter Online | Kleinbyte" },
-      { name: "twitter:description", content: "Convert Word documents (DOC, DOCX, RTF) to PDF online for free. No installation required." },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-word-to-pdf.png" },
-      { name: "keywords", content: "word to pdf, docx to pdf, doc to pdf, convert word to pdf, free word converter, online word to pdf" },
+      { name: "keywords", content: t("pdf.word.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -276,6 +277,95 @@ export default function WordToPdf() {
           </div>
         </div>
       </div>
+
+      {/* SEO Content: Benefits Section */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Why Convert Word to PDF?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Universal Format</h3>
+            <p className="text-gray-600 dark:text-gray-300">PDF works on any device without requiring Microsoft Word or special software.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Preserve Formatting</h3>
+            <p className="text-gray-600 dark:text-gray-300">PDF maintains your exact layout, fonts, and images across all platforms.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Professional Sharing</h3>
+            <p className="text-gray-600 dark:text-gray-300">PDF is the standard for resumes, contracts, and official documents.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: How It Works */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          How to Convert Word to PDF
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Upload Document</h3>
+            <p className="text-gray-600 dark:text-gray-400">Select your DOC, DOCX, or RTF file from your device.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Convert</h3>
+            <p className="text-gray-600 dark:text-gray-400">Click convert and we'll transform your document to PDF.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Download</h3>
+            <p className="text-gray-600 dark:text-gray-400">Download your PDF, ready to share or print.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: FAQ */}
+      <section className="w-full max-w-4xl mx-auto mt-16 mb-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          {t("faq.title")}
+        </h2>
+        <div className="space-y-4">
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.word.faq.q1")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.word.faq.a1")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.word.faq.q2")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.word.faq.a2")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.word.faq.q3")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.word.faq.a3")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.word.faq.q4")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.word.faq.a4")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("pdf.word.faq.q5")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("pdf.word.faq.a5")}</p>
+          </details>
+        </div>
+      </section>
     </div>
   );
 }

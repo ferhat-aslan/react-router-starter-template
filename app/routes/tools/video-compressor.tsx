@@ -6,10 +6,17 @@ import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/video-compressor";
 import { useTranslation } from "~/i18n/context";
 
-export function meta({}: Route.MetaArgs) {
+import { translations, type Locale } from "~/i18n/context";
+
+export function meta({ location }: Route.MetaArgs) {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   return [
-    { title: "Video Compressor - Tinker" },
-    { name: "description", content: "Compress video files efficiently" },
+    { title: t("video.meta.title") },
+    { name: "description", content: t("video.meta.description") },
+    { name: "keywords", content: t("video.meta.keywords") },
   ];
 }
 
@@ -237,6 +244,71 @@ export default function VideoCompressor() {
           </div>
         </div>
       </div>
+
+      {/* SEO Content: Benefits Section */}
+      <section className="w-full max-w-4xl mx-auto mt-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Why Compress Videos?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Easy Sharing</h3>
+            <p className="text-gray-600 dark:text-gray-300">Smaller files upload faster to social media and email.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Save Storage</h3>
+            <p className="text-gray-600 dark:text-gray-300">Reduce video file sizes by up to 80% without visible quality loss.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Faster Streaming</h3>
+            <p className="text-gray-600 dark:text-gray-300">Compressed videos stream smoother with less buffering.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content: FAQ */}
+      <section className="w-full max-w-4xl mx-auto mt-16 mb-16 px-6">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          {t("faq.title")}
+        </h2>
+        <div className="space-y-4">
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("video.faq.q1")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("video.faq.a1")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("video.faq.q2")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("video.faq.a2")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("video.faq.q3")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("video.faq.a3")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("video.faq.q4")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("video.faq.a4")}</p>
+          </details>
+          <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+            <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("video.faq.q5")}</summary>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">{t("video.faq.a5")}</p>
+          </details>
+        </div>
+      </section>
     </div>
   );
 }

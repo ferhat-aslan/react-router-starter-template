@@ -56,7 +56,7 @@ export const meta: MetaFunction = ({location}) => {
       { name: "twitter:title", content: t("json.meta.title") },
       { name: "twitter:description", content: t("json.meta.description") },
       { name: "twitter:image", content: "https://kleinbyte.com/og-image-json-tools.png" },
-      { name: "keywords", content: "json tools, json formatter, json validator, json minifier, json to csv, csv to json, free json tools" },
+      { name: "keywords", content: t("json.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );
@@ -171,6 +171,35 @@ export default function JsonTools() {
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Free</h3>
                 <p className="text-gray-600 dark:text-gray-300">All JSON tools are completely free to use</p>
               </div>
+            </div>
+          </div>
+
+          {/* SEO Content: FAQ */}
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+              {t("faq.title")}
+            </h2>
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("json.faq.q1")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("json.faq.a1")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("json.faq.q2")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("json.faq.a2")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("json.faq.q3")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("json.faq.a3")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("json.faq.q4")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("json.faq.a4")}</p>
+              </details>
+              <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("json.faq.q5")}</summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("json.faq.a5")}</p>
+              </details>
             </div>
           </div>
         </div>

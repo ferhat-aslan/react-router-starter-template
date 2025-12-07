@@ -5,17 +5,20 @@ import { Download, Upload, Copy, Languages, ArrowRight } from "lucide-react";
 import type { SubtitleEntry, SubtitleFormat } from "~/utils/subtitle-parser";
 import { parseSubtitle, writeSubtitle, detectFormat } from "~/utils/subtitle-parser";
 import type { Route } from "./+types/convert";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { type MetaFunction } from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free Subtitle Converter & Translator | SRT, VTT, ASS | Kleinbyte",
-      description:
-        "Convert and translate subtitles online. Side-by-side editing with support for SRT, VTT, and ASS formats. Copy, edit, and translate subtitle files easily.",
+      title: t("subtitle.convert.meta.title"),
+      description: t("subtitle.convert.meta.description"),
       url: "https://kleinbyte.com/subtitle-tools/convert",
       image: "https://kleinbyte.com/og-image-subtitle-convert.png",
     },
@@ -23,9 +26,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte Subtitle Converter",
+          name: t("subtitle.convert.meta.name"),
           url: "https://kleinbyte.com/subtitle-tools/convert",
-          description: "Convert and translate subtitle files with side-by-side editing",
+          description: t("subtitle.convert.meta.app_desc"),
           applicationCategory: "MultimediaApplication",
           operatingSystem: "Any",
           offers: {

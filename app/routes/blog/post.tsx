@@ -12,11 +12,16 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
     firstPathSegment === "es" ? "es" :
     firstPathSegment === "ar" ? "ar" : "en";
 
+  const messages = translations[locale] ?? translations.en;
+  function t(key: string) {
+    return messages[key] ?? key;
+  }
+
   // If no data (404), return default meta
   if (!data || typeof data !== 'object' || !('post' in data)) {
     return [
-      { title: "Blog Post Not Found - Kleinbyte" },
-      { name: "description", content: "The requested blog post could not be found" },
+      { title: t("blog.not_found.title") },
+      { name: "description", content: t("blog.not_found.description") },
     ];
   }
 

@@ -5,17 +5,20 @@ import { Download, Upload, Loader2, CheckCircle, AlertCircle } from "lucide-reac
 import type { SubtitleEntry, SubtitleFormat } from "~/utils/subtitle-parser";
 import { parseSubtitle, writeSubtitle, detectFormat } from "~/utils/subtitle-parser";
 import type { Route } from "./+types/edit";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/i18n/context";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { type MetaFunction } from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
+  const t = (key: string) => messages[key] ?? key;
+
   const meta = generateMeta(
     {
-      title: "Free Online Subtitle Editor | Edit SRT, VTT, ASS Files | Kleinbyte",
-      description:
-        "Edit subtitle files online with box-by-box pagination. Modify timing and text content for SRT, VTT, and ASS subtitle formats. Free and easy to use.",
+      title: t("subtitle.edit.meta.title"),
+      description: t("subtitle.edit.meta.description"),
       url: "https://kleinbyte.com/subtitle-tools/edit",
       image: "https://kleinbyte.com/og-image-subtitle-edit.png",
     },
@@ -23,9 +26,9 @@ export const meta: MetaFunction = () => {
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
-          name: "Kleinbyte Subtitle Editor",
+          name: t("subtitle.edit.meta.name"),
           url: "https://kleinbyte.com/subtitle-tools/edit",
-          description: "Edit subtitle files with pagination and format support",
+          description: t("subtitle.edit.meta.app_desc"),
           applicationCategory: "MultimediaApplication",
           operatingSystem: "Any",
           offers: {
