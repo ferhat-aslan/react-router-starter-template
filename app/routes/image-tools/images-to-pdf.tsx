@@ -4,7 +4,7 @@ import Dragging from "~/components/dragging";
 import { Download, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { apiClient } from "~/lib/api-client";
 import type { Route } from "./+types/images-to-pdf";
-import { useTranslation, translations, type Locale } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/utils/route-utils";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { course } from "@forge42/seo-tools/structured-data/course";

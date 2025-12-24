@@ -1,6 +1,6 @@
 import type { Route } from "./+types/post";
 import Layout from "~/components/layout";
-import { useTranslation, translations, type Locale } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/utils/route-utils";
 import { type MetaFunction } from "react-router";
 import { sanityClient, postBySlugQuery, type BlogPost } from "./sanity";
 import { PortableText } from '@portabletext/react';

@@ -2,7 +2,7 @@ import Layout from "~/components/layout";
 import { Link } from "react-router";
 import { FileText, RefreshCw, Merge, Edit3 } from "lucide-react";
 import type { Route } from "./+types/subtitle-tools";
-import { useTranslation, translations, type Locale } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/utils/route-utils";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { type MetaFunction } from "react-router";

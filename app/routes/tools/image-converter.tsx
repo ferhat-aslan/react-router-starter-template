@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Upload, Image as ImageIcon, Download, AlertCircle, CheckCircle, Loader2, RefreshCw } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/image-converter";
-import { useTranslation } from "~/i18n/context";
+import { useTranslation } from "~/utils/route-utils";
 
-import { translations, type Locale } from "~/i18n/context";
+import { translations, type Locale } from "~/utils/route-utils";
 
 export function meta({ location }: Route.MetaArgs) {
   const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";

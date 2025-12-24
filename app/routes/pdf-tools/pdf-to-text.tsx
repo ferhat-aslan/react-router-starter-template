@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, AlignLeft, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/pdf-to-text";
-import { useTranslation, translations, type Locale } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/utils/route-utils";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";

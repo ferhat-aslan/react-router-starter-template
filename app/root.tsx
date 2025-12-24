@@ -14,7 +14,7 @@ import "./app.css";
 import {generateCanonicalLinks} from "@forge42/seo-tools/canonical";
 
 import {renderToStaticMarkup} from "react-dom/server";
-const LANGUAGES = ["en", "de", "es", "ar"] as const;
+
 
 export const loader = async ({request}: Route.LoaderArgs) => {
   const cookieHeader = request.headers.get("Cookie");
@@ -55,12 +55,12 @@ export const links: Route.LinksFunction = () => [
   }, */
 ];
 
-import {type Locale} from "./i18n/context";
+import { SUPPORTED_LOCALES, type Locale } from "./utils/route-utils";
 
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
 
-  const localeParam = pathname.includes("/de") ? "de" : pathname.includes("/es") ? "es" : pathname.includes("/ar") ? "ar" : "en";
+  const localeParam = SUPPORTED_LOCALES.find(lang => pathname.startsWith(`/${lang}`)) || "en";
   const origin = "https://kleinbyte.com";
 
   const pathnameNoTrailingSlash = pathname.replace(/\/$/, "");
@@ -68,7 +68,7 @@ export function Layout({children}: {children: React.ReactNode}) {
   const segments = pathnameNoTrailingSlash.split("/").filter(Boolean);
   const first = segments[0];
 
-  const currentLang = LANGUAGES.includes(first as any) ? first : "en";
+  const currentLang: Locale = SUPPORTED_LOCALES.includes(first as any) ? (first as any) : "en";
     // build the base path WITHOUT language prefix
   // /de/pdf-tools → /pdf-tools
   const pathWithoutLang =
@@ -83,7 +83,7 @@ export function Layout({children}: {children: React.ReactNode}) {
       : `${origin}/${currentLang}${pathWithoutLang}`;
   
    // build hreflang URLs for all languages
-  const alternates = LANGUAGES.map((lang) => {
+  const alternates = SUPPORTED_LOCALES.map((lang) => {
     const href =
       lang === "en"
         ? `${origin}${pathWithoutLang}`

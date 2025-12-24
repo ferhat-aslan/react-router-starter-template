@@ -1,7 +1,7 @@
 import type { Route } from "./+types/search";
 import Layout from "~/components/layout";
 import { useSearchParams } from "react-router";
-import { useTranslation, translations, type Locale } from "~/i18n/context";
+import { useTranslation, translations, type Locale } from "~/utils/route-utils";
 import { type MetaFunction } from "react-router";
 
 import PDF from "/pdf.svg";

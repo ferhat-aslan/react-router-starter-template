@@ -3,7 +3,7 @@ import TermsAndConditions from '../components/TermsAndConditions';
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
-import { translations, type Locale } from "~/i18n/context";
+import { translations, type Locale } from "~/utils/route-utils";
 
 export const meta: MetaFunction = ({location}) => {
   const firstPathSegment = location.pathname.split("/")?.[1];

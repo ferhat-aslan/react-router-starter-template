@@ -8,19 +8,20 @@ import WORD from "/word.svg";
 import JPG from "/jpg.svg";
 import TXT from "/txt.svg";
 import FOLDER from "/folder.svg";
-import {useTranslation, translations, type Locale} from "../i18n/context";
+import {useTranslation, translations, type Locale} from "../utils/route-utils";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {type MetaFunction} from "react-router";
 
+import { SUPPORTED_LOCALES } from "../utils/route-utils";
+
 export const meta: MetaFunction = ({location}) => {
   const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = 
-    firstPathSegment === "de" ? "de" : 
-    firstPathSegment === "es" ? "es" : 
-    firstPathSegment === "ar" ? "ar" : "en";
+  const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment as any) 
+    ? (firstPathSegment as any) 
+    : "en";
   const messages = translations[locale] ?? translations.en;
 
   function t(key: string) {
@@ -213,7 +214,23 @@ export default function Home({loaderData}: Route.ComponentProps) {
       <div className="min-h-screen  transition-colors duration-300">
         {/* Hero Section - Shadcn Inspired */}
         <section className="relative pt-24 pb-32 overflow-hidden border-b border-gray-200 dark:border-neutral-700">
-        
+          <div
+            className="absolute inset-0 pointer-events-none opacity-15 dark:opacity-5"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, currentColor 1px, transparent 1px),
+                linear-gradient(to bottom, currentColor 1px, transparent 1px)
+              `,
+              backgroundSize: "50px 50px",
+              maskImage: `
+                radial-gradient(ellipse at center, black 10%, transparent 80%),
+                repeating-linear-gradient(to right, black 0 3px, transparent 3px 10px),
+                repeating-linear-gradient(to bottom, black 0 3px, transparent 3px 10px)
+              `,
+              WebkitMaskComposite: "source-in, source-over",
+              color: "inherit"
+            }}
+          />
           
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-6xl mx-auto text-center">
@@ -227,12 +244,12 @@ export default function Home({loaderData}: Route.ComponentProps) {
               </div>
               
               {/* Main Headline */}
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 leading-[1.1]">
+              <h1 className="text-5xl md:text-7xl lg:text-[3em]!   font-bold tracking-tight mb-8 leading-[1.1]">
                 <span className="text-gray-900 dark:text-white">
-                  Use Free Tools with {" "}
+                  One Web App for all your needs {" "}
                 </span>
                 <span className="relative inline-block">
-                  <span className="text-gray-900 dark:text-white">Kleinbyte</span>
+                 
                   <svg
                     className="absolute -bottom-2 left-0 w-full"
                     height="8"
@@ -249,8 +266,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
                     />
                   </svg>
                 </span>
-                <br />
-                <span className="text-gray-900 dark:text-white">at Warp Speed </span>
+                <br />at {" "}
+                <span className="text-gray-900 dark:text-white"
+                style={{borderBottom:"8px solid greenyellow"}}
+                >Warp Speed</span>
                 <span className="inline-block">⚡</span>
               </h1>
               
@@ -270,8 +289,11 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 {/* User Avatars */}
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <div
-                      key={i}
+                    <img
+                    key={i}
+                    loading="lazy"
+                    decoding="async"
+                      src={"https://i.pravatar.cc/150?img="+i+5}
                       className="w-10 h-10 rounded-full border-2 border-white dark:border-neutral-900 bg-gradient-to-br from-blue-400 to-purple-600"
                     />
                   ))}
@@ -305,7 +327,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
               </div>
 
               {/* Tool Icons */}
-              <div className="flex items-center justify-center gap-4 mb-12">
+              <div className="hidden items-center justify-center gap-4 mb-12">
                 {[
                   { icon: "📄", label: "PDF" },
                   { icon: "✏️", label: "Edit" },
@@ -326,7 +348,10 @@ export default function Home({loaderData}: Route.ComponentProps) {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                
+                <LocaleLink to="/all-tools" className="flex items-center gap-2 justify-center bg-soft! border rounded-3xl! py-2.5! px-3.5! text-luft! border-input! hover:scale-105 transition-all cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-drill-icon lucide-drill"><path d="M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z"/><path d="M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8"/><path d="M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3"/><path d="M18 6h4"/><path d="m5 10-2 8"/><path d="m7 18 2-8"/></svg>
+                  Show all tools
+                </LocaleLink>
                 
               </div>
             </div>
@@ -457,12 +482,12 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
                   {t("home.cta.subtitle")}
                 </p>
-                <a
-                  href="/pdf-tools"
+                <LocaleLink
+                  to="/pdf-tools"
                   className="inline-block px-12 py-5 bg-blue-600  font-bold rounded-full shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition-all duration-300 text-lg transform hover:-translate-y-1 active:scale-95"
                 >
                   {t("home.cta.button")}
-                </a>
+                </LocaleLink>
               </div>
             </div>
           </div>

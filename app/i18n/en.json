@@ -136,24 +136,14 @@
   "pdf.meta.description": "Free online PDF tools.",
   "pdf.merge.title": "Merge PDF",
   "pdf.merge.description": "Combine multiple PDF files into one.",
-  "pdf.merge.meta.title": "Merge PDF - Kleinbyte",
-  "pdf.merge.meta.description": "Merge PDF files online for free.",
   "pdf.split.title": "Split PDF",
   "pdf.split.description": "Split a PDF file into multiple files.",
-  "pdf.split.meta.title": "Split PDF - Kleinbyte",
-  "pdf.split.meta.description": "Split PDF files online for free.",
   "pdf.word.title": "Word to PDF",
   "pdf.word.description": "Convert Word documents to PDF.",
-  "pdf.word.meta.title": "Word to PDF - Kleinbyte",
-  "pdf.word.meta.description": "Convert Word to PDF online for free.",
   "pdf.images.title": "PDF to Images",
   "pdf.images.description": "Convert PDF pages to images.",
-  "pdf.images.meta.title": "PDF to Images - Kleinbyte",
-  "pdf.images.meta.description": "Convert PDF to images online for free.",
   "pdf.text.title": "PDF to Text",
   "pdf.text.description": "Extract text from PDF files.",
-  "pdf.text.meta.title": "PDF to Text - Kleinbyte",
-  "pdf.text.meta.description": "Extract text from PDF online for free.",
   "tools.video.category": "Video Tools",
   "tools.video.compressor.name": "Video Compressor",
   "tools.video.compressor.description": "Compress video files efficiently",
@@ -179,8 +169,6 @@
   "tools.subtitle.merge.description": "Merge two subtitle files with time offset controls",
   "subtitle.title": "Subtitle Tools",
   "subtitle.description": "Edit, convert, and merge subtitle files",
-  "subtitle.meta.title": "Subtitle Tools - Kleinbyte",
-  "subtitle.meta.description": "Free online subtitle tools for editing, converting, and merging SRT, VTT, and ASS files.",
 
   "faq.title": "Frequently Asked Questions",
 
@@ -437,7 +425,7 @@
   "image.pdf.meta.name": "Kleinbyte Images to PDF Converter",
   "image.pdf.meta.app_desc": "Convert multiple images to a single PDF document",
 
-  "pdf.text.meta.keywords": "pdf to text, extract text from pdf, pdf text extractor, convert pdf to text, free pdf to text converter",
+  "pdf.text.meta.keywords": "pdf to text, extract text from pdf, pdf text extractor, convert pdf to text, free pdf to text converter, extract plain text from pdf file to word converter online free, extract plain text from pdf file, ilovepdf alternative, smallpdf alternative",
   "pdf.split.meta.keywords": "split pdf, pdf splitter, extract pdf pages, remove pdf pages, split pdf by pages, free pdf splitter",
   "pdf.word.meta.keywords": "word to pdf, doc to pdf, docx to pdf, word converter, free word to pdf",
   "pdf.images.meta.keywords": "pdf to images, pdf to jpg, pdf to png, convert pdf to image, extract images from pdf",
@@ -458,6 +446,11 @@
   "icon.meta.keywords": "icon resizer, image resizer, resize icons, batch resize, free icon resizer",
   "formatter.meta.keywords": "code formatter, html formatter, css formatter, javascript formatter, python formatter, free code formatter",
   "blog.not_found.title": "Blog Post Not Found - Kleinbyte",
-  "blog.not_found.description": "The requested blog post could not be found"
+  "blog.not_found.description": "The requested blog post could not be found",
+  "all_tools.title": "All Tools Collection",
+  "all_tools.description": "Browse our complete collection of free online tools for PDF, Images, Video, Developers and more.",
+  "all_tools.meta.title": "All Free Online Tools - PDF, Image, Video, Developer | Kleinbyte",
+  "all_tools.meta.description": "Access our complete library of free online tools. Convert PDFs, edit images, compress videos, format code, and analyze SEO. No signup required.",
+  "all_tools.meta.keywords": "all tools, free online tools, pdf tools, image tools, video tools, developer tools, seo tools, document converter, ilovepdf, smallpdf"
 }
 

@@ -1,6 +1,50 @@
-import {ThemeSwitcher} from "./theme-switcher";
-import {LocaleLink} from "./locale-link";
-const Layout = ({children}: any) => {
+import { useLocation, useNavigate } from "react-router";
+import { ThemeSwitcher } from "./theme-switcher";
+import { LocaleLink } from "./locale-link";
+import { SUPPORTED_LOCALES, type Locale } from "../utils/route-utils";
+
+const LANG_NAMES: Record<Locale, string> = {
+  en: "English (US)",
+  de: "Deutsch",
+  es: "Español",
+  ar: "العربية",
+  tr: "Türkçe",
+  pt: "Português",
+  fr: "Français",
+  it: "Italiano",
+  ru: "Русский",
+};
+
+const Layout = ({ children }: any) => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const currentLocale = (pathname.split("/")[1] as Locale) || "en";
+  const locale = SUPPORTED_LOCALES.includes(currentLocale) ? currentLocale : "en";
+
+  const handleLanguageChange = (newLocale: string) => {
+    const segments = pathname.split("/").filter(Boolean);
+    const firstSegment = segments[0];
+
+    let newPath = pathname;
+    if (SUPPORTED_LOCALES.includes(firstSegment as any)) {
+      segments[0] = newLocale === "en" ? "" : newLocale;
+      newPath = "/" + segments.filter(Boolean).join("/");
+    } else {
+      if (newLocale !== "en") {
+        newPath = `/${newLocale}${pathname === "/" ? "" : pathname}`;
+      }
+    }
+    
+    // Simple logic to switch locale prefix
+    if (newLocale === "en") {
+        const pathWithoutPrefix = pathname.replace(/^\/(de|es|ar|tr|pt|fr|it|ru)(\/|$)/, "/");
+        navigate(pathWithoutPrefix);
+    } else {
+        const pathWithoutPrefix = pathname.replace(/^\/(de|es|ar|tr|pt|fr|it|ru)(\/|$)/, "/");
+        navigate(`/${newLocale}${pathWithoutPrefix === "/" ? "" : pathWithoutPrefix}`);
+    }
+  };
   return (
     <>
       {/* ========== HEADER ========== */}
@@ -56,7 +100,6 @@ const Layout = ({children}: any) => {
               <li>
                 <LocaleLink
                   className="header-link"
-                  activeClassName="active-link"
                   to="/pdf-tools"
                 >
                   Pdf Tools
@@ -65,7 +108,6 @@ const Layout = ({children}: any) => {
               <li>
                 <LocaleLink
                   className="header-link"
-                  activeClassName="active-link"
                   to="/docx-tools"
                 >
                   Docx Tool
@@ -74,7 +116,6 @@ const Layout = ({children}: any) => {
               <li>
                 <LocaleLink
                   className="header-link"
-                  activeClassName="active-link"
                   to="/image-tools"
                 >
                   Image Tools
@@ -83,7 +124,6 @@ const Layout = ({children}: any) => {
               <li>
                 <LocaleLink
                   className="header-link"
-                  activeClassName="active-link"
                   to="/favicon-maker"
                 >
                   Favicon Maker
@@ -92,7 +132,6 @@ const Layout = ({children}: any) => {
               <li>
                 <LocaleLink
                   className="header-link"
-                  activeClassName="active-link"
                   to="/icon-resizer"
                 >
                   Icon Resizer
@@ -178,55 +217,55 @@ const Layout = ({children}: any) => {
 
             <div className="mt-3 grid space-y-3 text-sm">
               <p>
-                <a
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/about-us"
                 >
                   About us
-                </a>
+                </LocaleLink>
               </p>
               <p>
-                <a
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/blog"
                 >
                   Blog
-                </a>
+                </LocaleLink>
               </p>
               <p>
-                <a
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/careers"
                 >
                   Careers
-                </a>{" "}
+                </LocaleLink>{" "}
                 <span className="inline text-blue-600 dark:text-blue-500">
                   — We're hiring
                 </span>
               </p>
               <p>
-                <a
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/customers"
                 >
                   Customers
-                </a>
+                </LocaleLink>
               </p>
               <p>
-                <a
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/newsroom"
                 >
                   Newsroom
-                </a>
+                </LocaleLink>
               </p>
               <p>
-                <a
+                <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  href="#"
+                  to="/sitemap"
                 >
                   Sitemap
-                </a>
+                </LocaleLink>
               </p>
             </div>
           </div>
@@ -348,48 +387,14 @@ const Layout = ({children}: any) => {
           <div className="sm:flex sm:justify-between sm:items-center">
             <div className="flex flex-wrap items-center gap-3">
               {/* Language Dropdown */}
-              <div className=" [--placement:top-left] relative inline-flex">
+              <div className="dropdown dropdown-top relative inline-flex group">
                 <button
                   type="button"
-                  className=" py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-                  aria-haspopup="menu"
-                  aria-expanded="false"
-                  aria-label="Dropdown"
+                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
                 >
+                  <span>{LANG_NAMES[locale]}</span>
                   <svg
-                    className="shrink-0 size-3 rounded-full"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="flag-icon-css-us1"
-                    viewBox="0 0 512 512"
-                  >
-                    <g fillRule="evenodd">
-                      <g strokeWidth="1pt">
-                        <path
-                          fill="#bd3d44"
-                          d="M0 0h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                          transform="scale(3.9385)"
-                        />
-                        <path
-                          fill="#fff"
-                          d="M0 10h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                          transform="scale(3.9385)"
-                        />
-                      </g>
-                      <path
-                        fill="#192f5d"
-                        d="M0 0h98.8v70H0z"
-                        transform="scale(3.9385)"
-                      />
-                      <path
-                        fill="#fff"
-                        d="M8.2 3l1 2.8H12L9.7 7.5l.9 2.7-2.4-1.7L6 10.2l.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7L74 8.5l-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 7.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 24.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 21.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 38.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 35.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 52.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 49.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 66.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 63.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9z"
-                        transform="scale(3.9385)"
-                      />
-                    </g>
-                  </svg>
-                  English (US)
-                  <svg
-                    className=" shrink-0 size-4 text-gray-500 dark:text-neutral-500"
+                    className="shrink-0 size-4 text-gray-500 dark:text-neutral-500"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -405,143 +410,19 @@ const Layout = ({children}: any) => {
                 </button>
 
                 <div
-                  className=" w-40 transition-[opacity,margin] duration  opacity-0 hidden z-10 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
-                  role="menu"
-                  aria-orientation="vertical"
+                  className="absolute bottom-full mb-2 hidden group-hover:block z-50 bg-white shadow-xl rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 w-48 border border-gray-100"
                 >
-                  <a
-                    className="flex items-center gap-x-2 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                    href="#"
-                  >
-                    <svg
-                      className="shrink-0 size-3.5 rounded-full"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-us"
-                      viewBox="0 0 512 512"
+                  {SUPPORTED_LOCALES.map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => handleLanguageChange(lang)}
+                      className={`flex w-full items-center gap-x-2 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300 ${
+                        locale === lang ? "bg-gray-100 dark:bg-neutral-700" : ""
+                      }`}
                     >
-                      <g fillRule="evenodd">
-                        <g strokeWidth="1pt">
-                          <path
-                            fill="#bd3d44"
-                            d="M0 0h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                            transform="scale(3.9385)"
-                          />
-                          <path
-                            fill="#fff"
-                            d="M0 10h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                            transform="scale(3.9385)"
-                          />
-                        </g>
-                        <path
-                          fill="#192f5d"
-                          d="M0 0h98.8v70H0z"
-                          transform="scale(3.9385)"
-                        />
-                        <path
-                          fill="#fff"
-                          d="M8.2 3l1 2.8H12L9.7 7.5l.9 2.7-2.4-1.7L6 10.2l.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7L74 8.5l-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 7.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 24.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 21.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 38.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 35.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 52.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 49.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 66.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 63.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9z"
-                          transform="scale(3.9385)"
-                        />
-                      </g>
-                    </svg>
-                    English (US)
-                  </a>
-                  <a
-                    className="flex items-center gap-x-2 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                    href="#"
-                  >
-                    <svg
-                      className="shrink-0 size-3 rounded-full"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-de"
-                      viewBox="0 0 512 512"
-                    >
-                      <path fill="#ffce00" d="M0 341.3h512V512H0z" />
-                      <path d="M0 0h512v170.7H0z" />
-                      <path fill="#d00" d="M0 170.7h512v170.6H0z" />
-                    </svg>
-                    Deutsch
-                  </a>
-                  <a
-                    className="flex items-center gap-x-2 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                    href="#"
-                  >
-                    <svg
-                      className="shrink-0 size-3 rounded-full"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-dk"
-                      viewBox="0 0 512 512"
-                    >
-                      <path fill="#c8102e" d="M0 0h512.1v512H0z" />
-                      <path fill="#fff" d="M144 0h73.1v512H144z" />
-                      <path fill="#fff" d="M0 219.4h512.1v73.2H0z" />
-                    </svg>
-                    Dansk
-                  </a>
-                  <a
-                    className="flex items-center gap-x-2 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                    href="#"
-                  >
-                    <svg
-                      className="shrink-0 size-3 rounded-full"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-it"
-                      viewBox="0 0 512 512"
-                    >
-                      <g fillRule="evenodd" strokeWidth="1pt">
-                        <path fill="#fff" d="M0 0h512v512H0z" />
-                        <path fill="#009246" d="M0 0h170.7v512H0z" />
-                        <path fill="#ce2b37" d="M341.3 0H512v512H341.3z" />
-                      </g>
-                    </svg>
-                    Italiano
-                  </a>
-                  <a
-                    className="flex items-center gap-x-2 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                    href="#"
-                  >
-                    <svg
-                      className="shrink-0 size-3 rounded-full"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-cn"
-                      viewBox="0 0 512 512"
-                    >
-                      <defs>
-                        <path
-                          id="a"
-                          fill="#ffde00"
-                          d="M1-.3L-.7.8 0-1 .6.8-1-.3z"
-                        />
-                      </defs>
-                      <path fill="#de2910" d="M0 0h512v512H0z" />
-                      <use
-                        width="30"
-                        height="20"
-                        transform="matrix(76.8 0 0 76.8 128 128)"
-                      />
-                      <use
-                        width="30"
-                        height="20"
-                        transform="rotate(-121 142.6 -47) scale(25.5827)"
-                      />
-                      <use
-                        width="30"
-                        height="20"
-                        transform="rotate(-98.1 198 -82) scale(25.6)"
-                      />
-                      <use
-                        width="30"
-                        height="20"
-                        transform="rotate(-74 272.4 -114) scale(25.6137)"
-                      />
-                      <use
-                        width="30"
-                        height="20"
-                        transform="matrix(16 -19.968 19.968 16 256 230.4)"
-                      />
-                    </svg>
-                    中文 (繁體)
-                  </a>
+                      {LANG_NAMES[lang]}
+                    </button>
+                  ))}
                 </div>
               </div>
               {/* End Language Dropdown */}

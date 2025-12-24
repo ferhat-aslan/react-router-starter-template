@@ -1,8 +1,10 @@
 import { type RouteConfig, index, prefix, route } from "@react-router/dev/routes";
+import { generateLocalizedRoutes } from "./utils/route-utils";
 
 const baseRoutes: RouteConfig = [
   index("routes/home.tsx"),
   route("search", "routes/search.tsx"),
+  route("all-tools", "routes/all-tools.tsx"),
   route("about", "routes/about.tsx"),
   route("amazon", "routes/amazon.tsx"),
   route("robots.txt", "routes/robots[.]txt.ts"),
@@ -43,10 +45,4 @@ const baseRoutes: RouteConfig = [
   ]),
 ];
 
-// 👇 generate localized routes without duplicate IDs
-const localizedRoutesDE = prefix("de", baseRoutes.map((r, i) => ({ ...r, id: `${r.id ?? i}-de-localized` })));
-const localizedRoutesES = prefix("es", baseRoutes.map((r, i) => ({ ...r, id: `${r.id ?? i}-es-localized` })));
-const localizedRoutesAR = prefix("ar", baseRoutes.map((r, i) => ({ ...r, id: `${r.id ?? i}-ar-localized` })));
-
-
-export default [...baseRoutes, ...localizedRoutesDE, ...localizedRoutesES, ...localizedRoutesAR] satisfies RouteConfig;
+export default [...baseRoutes, ...generateLocalizedRoutes(baseRoutes)] satisfies RouteConfig;

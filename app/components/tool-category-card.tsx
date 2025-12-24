@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { LocaleLink } from "./locale-link";
 
 interface ToolCategoryCardProps {
   title: string;
@@ -19,7 +19,7 @@ export function ToolCategoryCard({
 }: ToolCategoryCardProps) {
   return (
     <div className="relative isolate h-full w-full">
-      <Link to={link} className="block h-full w-full">
+      <LocaleLink to={link} className="block h-full w-full">
         <figure
           className="relative flex h-full w-full flex-col justify-between border border-border p-4 sm:p-6 text-sm hover:border-foreground/20 transition-all duration-200 group cursor-pointer bg-white dark:bg-white/5 border-gray-200 dark:border-white/10"
           style={{
@@ -72,7 +72,7 @@ export function ToolCategoryCard({
             </div>
           </div>
         </figure>
-      </Link>
+      </LocaleLink>
     </div>
   );
 }
