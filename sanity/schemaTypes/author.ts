@@ -38,6 +38,27 @@ export default defineType({
                 },
             ],
         }),
+        defineField({
+            name: 'role',
+            title: 'Role / Job Title',
+            type: 'string',
+            description: 'e.g. Content Writer, CEO, etc.',
+        }),
+        defineField({
+            name: 'twitter',
+            title: 'Twitter URL',
+            type: 'url',
+        }),
+        defineField({
+            name: 'linkedin',
+            title: 'LinkedIn URL',
+            type: 'url',
+        }),
+        defineField({
+            name: 'website',
+            title: 'Personal Website',
+            type: 'url',
+        }),
     ],
     preview: {
         select: {

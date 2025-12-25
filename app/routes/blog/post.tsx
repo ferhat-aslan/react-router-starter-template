@@ -26,22 +26,27 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   }
 
   const post = data.post as BlogPost;
-  const title = `${post.title} - Kleinbyte Blog`;
-  const description = post.excerpt || `Read ${post.title} on Kleinbyte blog`;
+  const title = post.seoTitle || `${post.title} - Kleinbyte Blog`;
+  const description = post.seoDescription || post.excerpt || `Read ${post.title} on Kleinbyte blog`;
+  const canonical = `https://kleinbyte.com${locale === "en" ? "" : `/${locale}`}/blog/${post.slug.current}`;
 
   return [
     { title },
     { name: "description", content: description },
+    { name: "keywords", content: post.keywords?.join(", ") || "" },
+    { name: "author", content: post.author.name },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "article" },
-    { property: "og:image", content: post.coverImage || "https://kleinbyte.com/og-image-blog.png" },
+    { property: "og:url", content: canonical },
+    { property: "og:image", content: post.ogImage || post.coverImage || "https://kleinbyte.com/og-image-blog.png" },
     { property: "article:published_time", content: post.publishedAt },
-    { property: "article:author", content: post.author },
+    { property: "article:author", content: post.author.name },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: post.coverImage || "https://kleinbyte.com/og-image-blog.png" },
+    { name: "twitter:image", content: post.ogImage || post.coverImage || "https://kleinbyte.com/og-image-blog.png" },
+    { tagName: "link", rel: "canonical", href: canonical },
   ];
 };
 
@@ -69,8 +74,39 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
     });
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.seoDescription || post.excerpt,
+    "image": post.coverImage,
+    "datePublished": post.publishedAt,
+    "author": {
+      "@type": "Person",
+      "name": post.author.name,
+      "url": post.author.website,
+      "jobTitle": post.author.role
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Kleinbyte",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://kleinbyte.com/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://kleinbyte.com${locale === "en" ? "" : `/${locale}`}/blog/${post.slug.current}`
+    }
+  };
+
   return (
     <Layout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className="min-h-screen bg-white dark:bg-neutral-950 text-gray-900 dark:text-white pt-32 pb-20">
         <div className="container mx-auto px-6">
           <article className="max-w-3xl mx-auto">
@@ -88,7 +124,13 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
                 <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
                 <span>•</span>
-                <span>{t("blog.by")} {post.author}</span>
+                <span>{t("blog.by")} {post.author.name}</span>
+                {post.author.role && (
+                  <>
+                    <span>•</span>
+                    <span>{post.author.role}</span>
+                  </>
+                )}
               </div>
               <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
                 {post.title}

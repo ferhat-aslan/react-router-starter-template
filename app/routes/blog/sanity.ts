@@ -24,6 +24,7 @@ export const allPostsQuery = `*[_type == "blogPost" && !(_id in path("drafts.**"
   slug,
   excerpt,
   publishedAt,
+  language,
   "author": author->name,
   "coverImage": coverImage.asset->url
 }`;
@@ -36,7 +37,19 @@ export const postBySlugQuery = (slug: string) => `*[_type == "blogPost" && slug.
   excerpt,
   content,
   publishedAt,
-  "author": author->name,
+  language,
+  seoTitle,
+  seoDescription,
+  "ogImage": ogImage.asset->url,
+  keywords,
+  "author": author->{
+    name,
+    role,
+    twitter,
+    linkedin,
+    website,
+    "image": image.asset->url
+  },
   "coverImage": coverImage.asset->url
 }`;
 
@@ -50,6 +63,18 @@ export interface BlogPost {
   excerpt: string;
   content?: any; // Portable text content
   publishedAt: string;
-  author: string;
+  language: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: string;
+  keywords?: string[];
+  author: {
+    name: string;
+    role?: string;
+    twitter?: string;
+    linkedin?: string;
+    website?: string;
+    image?: string;
+  };
   coverImage?: string;
 }
