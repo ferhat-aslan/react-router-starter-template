@@ -110,18 +110,19 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
       <div className="min-h-screen bg-white dark:bg-neutral-950 text-gray-900 dark:text-white pt-32 pb-20">
         <div className="container mx-auto px-6">
           <article className="max-w-3xl mx-auto">
-            <header className="mb-10">
+            <header className="mb-12">
               {post.coverImage && (
                 <div className="w-full aspect-video bg-gray-100 dark:bg-white/5 rounded-2xl overflow-hidden mb-8">
                   <img 
                     src={post.coverImage} 
                     alt={post.title}
                     className="w-full h-full object-cover"
+                    loading="eager"
                   />
                 </div>
               )}
               
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
                 <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
                 <span>•</span>
                 <span>{t("blog.by")} {post.author.name}</span>
@@ -132,18 +133,12 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
                   </>
                 )}
               </div>
-              <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
                 {post.title}
               </h1>
             </header>
 
-            <div className="prose prose-lg dark:prose-invert max-w-none
-              prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
-              prose-p:text-gray-600 dark:prose-p:text-gray-300
-              prose-a:text-blue-600 dark:prose-a:text-blue-400
-              prose-strong:text-gray-900 dark:prose-strong:text-white
-              prose-ul:list-disc prose-ul:pl-6
-              prose-li:text-gray-600 dark:prose-li:text-gray-300">
+            <div className="prose prose-sm lg:prose-lg max-w-none">
               {post.content ? (
                 <PortableText value={post.content} />
               ) : (

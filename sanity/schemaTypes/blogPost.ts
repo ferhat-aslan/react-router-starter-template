@@ -44,6 +44,7 @@ export default defineType({
                 {
                     type: 'block',
                 },
+                { type: 'table' }, // Add the table type here
                 {
                     type: 'image',
                     options: {
