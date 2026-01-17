@@ -81,12 +81,12 @@ export default function Search() {
         {
           name: t("tools.documents.text.name"),
           description: t("tools.documents.text.description"),
-          link: "#",
+          link: "/text-tools",
         },
         {
           name: t("tools.documents.spreadsheet.name"),
           description: t("tools.documents.spreadsheet.description"),
-          link: "#",
+          link: "/spreadsheet-tools",
         },
       ],
     },
@@ -102,17 +102,17 @@ export default function Search() {
         {
           name: t("tools.images.compressor.name"),
           description: t("tools.images.compressor.description"),
-          link: "#",
+          link: "#", // No dedicated route yet
         },
         {
           name: t("tools.images.editor.name"),
           description: t("tools.images.editor.description"),
-          link: "#",
+          link: "/image-tools", // General image tools
         },
         {
           name: t("tools.images.resizer.name"),
           description: t("tools.images.resizer.description"),
-          link: "#",
+          link: "/icon-resizer", // Best match
         },
       ],
     },
@@ -134,22 +134,22 @@ export default function Search() {
         {
           name: t("tools.developer.seo.name"),
           description: t("tools.developer.seo.description"),
-          link: "#",
+          link: "/seo-tools",
         },
         {
           name: t("tools.developer.code_formatter.name"),
           description: t("tools.developer.code_formatter.description"),
-          link: "#",
+          link: "/code-formatter",
         },
         {
           name: t("tools.developer.json.name"),
           description: t("tools.developer.json.description"),
-          link: "#",
+          link: "/json-tools",
         },
         {
           name: t("tools.developer.api.name"),
           description: t("tools.developer.api.description"),
-          link: "#",
+          link: "/api-tools",
         },
       ],
     },

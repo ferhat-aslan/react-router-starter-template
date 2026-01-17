@@ -9,6 +9,7 @@ const baseRoutes: RouteConfig = [
   route("amazon", "routes/amazon.tsx"),
   route("robots.txt", "routes/robots[.]txt.ts"),
   route("sitemap.xml", "routes/sitemap[.]xml.ts"),
+  route("llms.txt", "routes/llms[.]txt.ts"),
   route("docx-tools", "routes/docx-tools.tsx"),
   route("latex-tools", "routes/latex-tools.tsx"),
   route("text-tools", "routes/text-tools.tsx"),

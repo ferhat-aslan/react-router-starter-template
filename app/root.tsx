@@ -16,31 +16,7 @@ import {generateCanonicalLinks} from "@forge42/seo-tools/canonical";
 import {renderToStaticMarkup} from "react-dom/server";
 
 
-export const loader = async ({request}: Route.LoaderArgs) => {
-  const cookieHeader = request.headers.get("Cookie");
-  let userId = null;
 
-  if (cookieHeader) {
-    const cookies = Object.fromEntries(
-      cookieHeader.split("; ").map((c) => c.split("="))
-    );
-    userId = cookies["user-id"];
-  }
-
-  if (!userId) {
-    userId = crypto.randomUUID();
-    return Response.json(
-      {userId},
-      {
-        headers: {
-          "Set-Cookie": `user-id=${userId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`, // 1 year
-        },
-      }
-    );
-  }
-
-  return {userId};
-};
 
 export const links: Route.LinksFunction = () => [
   /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
