@@ -3,15 +3,11 @@ import PrivacyPolicy from '../components/PrivacyPolicy';
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
-import { translations, type Locale } from "~/utils/route-utils";
+import { type Locale } from "~/utils/route-utils";
 
-export const meta: MetaFunction = ({location}) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = 
-    firstPathSegment === "de" ? "de" : 
-    firstPathSegment === "es" ? "es" : 
-    firstPathSegment === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
 
   function t(key: string) {
     return messages[key] ?? key;

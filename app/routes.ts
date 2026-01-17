@@ -1,5 +1,6 @@
 import { type RouteConfig, index, prefix, route } from "@react-router/dev/routes";
 import { generateLocalizedRoutes } from "./utils/route-utils";
+import { SUPPORTED_LOCALES } from "./i18n/config";
 
 const baseRoutes: RouteConfig = [
   index("routes/home.tsx"),

@@ -5,15 +5,12 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
-import {translations, type Locale} from "../utils/route-utils";
+import {type Locale} from "../utils/route-utils";
 import {useLocation} from "react-router";
 
-export const meta: MetaFunction = ({location}) => {
-  const locale: Locale = 
-    location.pathname.split("/")?.[1] === "de" ? "de" : 
-    location.pathname.split("/")?.[1] === "es" ? "es" : 
-    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
 
   function t(key: string) {
     return messages[key];

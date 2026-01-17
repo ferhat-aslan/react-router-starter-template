@@ -4,15 +4,15 @@ import Dragging from "~/components/dragging";
 import { Download, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { apiClient } from "~/lib/api-client";
 import type { Route } from "./+types/images-to-pdf";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
+import { useTranslation, type Locale } from "~/utils/route-utils";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { course } from "@forge42/seo-tools/structured-data/course";
 import { type MetaFunction } from "react-router";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
   const t = (key: string) => messages[key] ?? key;
 
   const meta = generateMeta(

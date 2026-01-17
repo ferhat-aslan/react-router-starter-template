@@ -11,8 +11,9 @@
   --color-input: #0000001c;
   
   /* Add custom font family if needed, otherwise inherit from Tailwind defaults */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* Add custom font family if needed, otherwise inherit from Tailwind defaults */
+  /* --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
 }
 
 /* Adds pointer cursor to buttons */

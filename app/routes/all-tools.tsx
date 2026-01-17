@@ -2,7 +2,7 @@
 import type {Route} from "./+types/all-tools";
 import Layout from "~/components/layout";
 import {ToolCategoryCard} from "~/components/tool-category-card";
-import {useTranslation, translations, type Locale} from "../utils/route-utils";
+import {useTranslation, type Locale} from "../utils/route-utils";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {type MetaFunction} from "react-router";
@@ -13,12 +13,10 @@ import JPG from "/jpg.svg";
 import TXT from "/txt.svg";
 import FOLDER from "/folder.svg";
 
-export const meta: MetaFunction = ({location}) => {
-  const locale: Locale = 
-    location.pathname.split("/")?.[1] === "de" ? "de" : 
-    location.pathname.split("/")?.[1] === "es" ? "es" : 
-    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
+  const locale = (rootMatch?.data as any)?.locale || "en";
 
   function t(key: string) {
     return messages[key] ?? key;

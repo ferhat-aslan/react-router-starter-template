@@ -10,7 +10,7 @@ import WORD from "/word.svg";
 import JPG from "/jpg.svg";
 import TXT from "/txt.svg";
 import FOLDER from "/folder.svg";
-import {useTranslation, translations, type Locale} from "../utils/route-utils";
+import {useTranslation, type Locale} from "../utils/route-utils";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {course} from "@forge42/seo-tools/structured-data/course";
@@ -19,12 +19,9 @@ import {type MetaFunction} from "react-router";
 
 import { SUPPORTED_LOCALES } from "../utils/route-utils";
 
-export const meta: MetaFunction = ({location}) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment as any) 
-    ? (firstPathSegment as any) 
-    : "en";
-  const messages = translations[locale] ?? translations.en;
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
 
   function t(key: string) {
     return messages[key] ?? key;

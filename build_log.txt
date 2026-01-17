@@ -1,0 +1,172 @@
+
+> build
+> react-router build
+
+Using Vite Environment API (experimental)
+[36mvite v6.4.1 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 1889 modules transformed.
+[31m✗[39m Build failed in 4.35s
+[31mapp/routes/all-tools.tsx (5:24): "translations" is not exported by "app/utils/route-utils.ts", imported by "app/routes/all-tools.tsx".[39m
+file: [36mC:/Users/user1/Documents/Projelerim/tinker/app/routes/all-tools.tsx:5:24[39m
+[33m
+3: import Layout from "~/components/layout";
+4: import {ToolCategoryCard} from "~/components/tool-category-card";
+5: import {useTranslation, translations, type Locale} from "../utils/route-utils";
+                           ^
+6: import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+7: import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+[39m
+    at getRollupError (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at error (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
+    at Module.error (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:16939:16)
+    at Module.traceVariable (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:17391:29)
+    at ModuleScope.findVariable (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:15061:39)
+    at ReturnValueScope.findVariable (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:5642:38)
+    at FunctionBodyScope.findVariable (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:5642:38)
+    at Identifier.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:5413:40)
+    at MemberExpression.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2804:23)
+    at MemberExpression.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:7364:19)
+    at LogicalExpression.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2804:23)
+    at VariableDeclarator.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2804:23)
+    at VariableDeclaration.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2800:28)
+    at BlockStatement.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2800:28)
+    at ArrowFunctionExpression.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2804:23)
+    at VariableDeclarator.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2804:23)
+    at VariableDeclaration.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2800:28)
+    at ExportNamedDeclaration.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:12632:27)
+    at Program.bind (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:2800:28)
+    at Module.bindReferences (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:16918:18)
+    at Graph.sortModules (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:22721:20)
+    at Graph.build (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:22619:14)
+    at file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:23310:13
+    at catchUnfinishedHookActions (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:22780:16)
+    at rollupInternal (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/rollup/dist/es/shared/node-entry.js:23305:5)
+    at buildEnvironment (file:///C:/Users/user1/Documents/Projelerim/tinker/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:46235:14)
+    at Object.buildApp (C:\Users\user1\Documents\Projelerim\tinker\node_modules\@react-router\dev\dist\vite.js:3103:17)
+    at viteAppBuild (C:\Users\user1\Documents\Projelerim\tinker\node_modules\@react-router\dev\dist\cli\index.js:1824:3)
+    at build (C:\Users\user1\Documents\Projelerim\tinker\node_modules\@react-router\dev\dist\cli\index.js:1765:10)
+    at build2 (C:\Users\user1\Documents\Projelerim\tinker\node_modules\@react-router\dev\dist\cli\index.js:2100:5)
+    at run2 (C:\Users\user1\Documents\Projelerim\tinker\node_modules\@react-router\dev\dist\cli\index.js:2381:7) {
+  binding: 'translations',
+  code: 'MISSING_EXPORT',
+  exporter: 'C:/Users/user1/Documents/Projelerim/tinker/app/utils/route-utils.ts',
+  id: 'C:/Users/user1/Documents/Projelerim/tinker/app/routes/all-tools.tsx',
+  url: 'https://rollupjs.org/troubleshooting/#error-name-is-not-exported-by-module',
+  pos: 270,
+  loc: {
+    column: 24,
+    file: 'C:/Users/user1/Documents/Projelerim/tinker/app/routes/all-tools.tsx',
+    line: 5
+  },
+  frame: '3: import Layout from "~/components/layout";\n' +
+    '4: import {ToolCategoryCard} from "~/components/tool-category-card";\n' +
+    '5: import {useTranslation, translations, type Locale} from "../utils/route-utils";\n' +
+    '                           ^\n' +
+    '6: import {generateMeta} from "@forge42/seo-tools/remix/metadata";\n' +
+    '7: import {webApp} from "@forge42/seo-tools/structured-data/web-app";',
+  watchFiles: [
+    'C:/Users/user1/Documents/Projelerim/tinker/app/root.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@react-router/dev/dist/config/defaults/entry.client.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/home.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/all-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/search.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/amazon.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/robots[.]txt.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/about.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/sitemap[.]xml.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/docx-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/code-formatter.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/text-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/json-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/llms[.]txt.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/api-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/favicon-maker.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/icon-resizer.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/terms-and-conditions.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/tools/video-compressor.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/tools/image-converter.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/spreadsheet-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/blog/post.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/latex-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/subtitle-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/subtitle-tools/convert.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/blog/blog.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/subtitle-tools/edit.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/subtitle-tools/merge.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/pdf-tools/merge-pdf.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/pdf-tools/word-to-pdf.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/pdf-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/pdf-tools/pdf-to-images.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/pdf-tools/pdf-to-text.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/image-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/image-tools/images-to-pdf.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/pdf-tools/split-pdf.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/privacy-policy.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/routes/seo-tools.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react/jsx-runtime.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react/index.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-router/dist/development/dom-export.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-dom/client.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react/cjs/react-jsx-runtime.production.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react/cjs/react.production.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-dom/index.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-dom/cjs/react-dom-client.production.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-router/dist/development/chunk-QMGIS6GS.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/scheduler/index.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-dom/cjs/react-dom.production.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/scheduler/cjs/scheduler.production.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-router/node_modules/cookie/dist/index.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/set-cookie-parser/lib/set-cookie.js',
+    'C:\\Users\\user1\\Documents\\Projelerim\\tinker\\package.json',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/utils/route-utils.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/TermsAndConditions.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/PrivacyPolicy.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/layout.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/tool-category-card.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/locale-link.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/ui/hero-background.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/utils/r2-upload.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/utils/subtitle-parser.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/subtitle-editor.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/lib/api-client.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/dragging.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/select-files-input.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/hooks/use-file-merge.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/free.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/welcome/welcome.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/app.css',
+    'C:\\Users\\user1\\Documents\\Projelerim\\tinker\\node_modules\\tailwindcss\\index.css',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/context/i18n-context.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/i18n/config.ts',
+    'C:/Users/user1/Documents/Projelerim/tinker/app/components/theme-switcher.tsx',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-router/dist/development/index.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@forge42/seo-tools/dist/structured-data/web-app.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@forge42/seo-tools/dist/remix/metadata.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@forge42/seo-tools/dist/structured-data/course.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@portabletext/react/dist/index.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/lucide-react.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@forge42/seo-tools/dist/structured-data/article.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/react-dom/server.browser.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@forge42/seo-tools/dist/canonical.mjs',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/@portabletext/toolkit/dist/index.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/index.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/fingerprint-pattern.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/alarm-clock-plus.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/arrow-down-wide-narrow.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/arrow-down-z-a.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/arrow-up-a-z.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/arrow-down-a-z.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/alarm-clock-minus.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/arrow-up-z-a.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/arrow-up-narrow-wide.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/badge-check.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/badge-question-mark.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/axis-3d.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/between-horizontal-end.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/between-horizontal-start.js',
+    'C:/Users/user1/Documents/Projelerim/tinker/node_modules/lucide-react/dist/esm/icons/captions.js',
+    ... 1916 more items
+  ],
+  [Symbol(augmented)]: true
+}

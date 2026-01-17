@@ -1,18 +1,15 @@
 import type { Route } from "./+types/post";
 import Layout from "~/components/layout";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
+import { useTranslation, type Locale } from "~/utils/route-utils";
 import { type MetaFunction } from "react-router";
 import { sanityClient, postBySlugQuery, type BlogPost } from "./sanity";
 import { PortableText } from '@portabletext/react';
 
-export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale =
-    firstPathSegment === "de" ? "de" :
-    firstPathSegment === "es" ? "es" :
-    firstPathSegment === "ar" ? "ar" : "en";
+export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
+  const locale = (rootMatch?.data as any)?.locale || "en";
 
-  const messages = translations[locale] ?? translations.en;
   function t(key: string) {
     return messages[key] ?? key;
   }

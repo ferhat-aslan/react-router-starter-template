@@ -2,15 +2,15 @@ import { useState } from "react";
 import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Scissors, Trash2 } from "lucide-react";
 import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/split-pdf";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
+import { useTranslation, type Locale } from "~/utils/route-utils";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
   const t = (key: string) => messages[key] ?? key;
 
   const meta = generateMeta(

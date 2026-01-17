@@ -10,12 +10,12 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {apiClient} from "~/lib/api-client";
-import {useTranslation, translations, type Locale} from "~/utils/route-utils";
+import {useTranslation, type Locale} from "~/utils/route-utils";
 import { useFileMerge } from "~/hooks/use-file-merge";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
   const t = (key: string) => messages[key] ?? key;
 
   const meta = generateMeta(
@@ -66,17 +66,25 @@ export default function Home() {
   const draggingRef = useRef(null);
   const { mergeFiles, loading } = useFileMerge();
 
+  useEffect(() => {
+    if (files) {
+      setOrderedFiles(Array.from(files));
+    }
+  }, [files]);
+
   return (
     <Layout>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6 justify-start items-center">
         
-        {/* ... Dragging component ... */}
-
-        <Dragging
-          list={files ? Array.from(files) : []}
-          onChange={setOrderedFiles}
-          ref={draggingRef}
-        />
+        {!files || files.length === 0 ? (
+          <SelectFilesInput onChange={setFiles} />
+        ) : (
+          <Dragging
+            list={orderedFiles}
+            onChange={setOrderedFiles}
+            ref={draggingRef}
+          />
+        )}
 
         <span className="flex justify-start w-full items-center font-medium text-xl">
           3. Merge PDFs

@@ -9,8 +9,10 @@ import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
 import { useTranslation } from "~/utils/route-utils";
 
-export const meta: MetaFunction = ({location}) => {
-  const { t } = useTranslation();
+export const meta: MetaFunction = ({ matches }) => {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
+  const t = (key: string) => messages[key] ?? key;
   const meta = generateMeta(
     {
       title: t("amazon.meta.title"),

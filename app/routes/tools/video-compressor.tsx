@@ -6,11 +6,11 @@ import { uploadToR2, getDownloadUrl } from "~/utils/r2-upload";
 import type { Route } from "./+types/video-compressor";
 import { useTranslation } from "~/utils/route-utils";
 
-import { translations, type Locale } from "~/utils/route-utils";
+import { type Locale } from "~/utils/route-utils";
 
-export function meta({ location }: Route.MetaArgs) {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
+export function meta({ matches }: Route.MetaArgs) {
+  const rootMatch = matches.find((m) => m.id === "root");
+  const messages = (rootMatch?.data as any)?.messages || {};
   const t = (key: string) => messages[key] ?? key;
 
   return [
