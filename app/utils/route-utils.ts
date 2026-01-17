@@ -1,12 +1,31 @@
 import { type RouteConfig, prefix } from "@react-router/dev/routes";
-import { type Locale, SUPPORTED_LOCALES } from "../i18n/config";
-import { useI18n } from "../context/i18n-context";
+import { useLocation } from "react-router";
+import en from "../i18n/en.json";
+import de from "../i18n/de.json";
+import es from "../i18n/es.json";
+import ar from "../i18n/ar.json";
+import tr from "../i18n/tr.json";
+import pt from "../i18n/pt.json";
+import fr from "../i18n/fr.json";
+import it from "../i18n/it.json";
+import ru from "../i18n/ru.json";
 
-export { type Locale, SUPPORTED_LOCALES };
+export type Locale = "en" | "de" | "es" | "ar" | "tr" | "pt" | "fr" | "it" | "ru";
 
-// Re-export hook that consumes the Context provided by root.tsx
+export const SUPPORTED_LOCALES: Locale[] = ["en", "de", "es", "ar", "tr", "pt", "fr", "it", "ru"];
+
+type Messages = Record<string, string>;
+export const translations: Record<Locale, Messages> = { en, de, es, ar, tr, pt, fr, it, ru };
+
 export function useTranslation() {
-    const { locale, messages } = useI18n();
+    const location = useLocation();
+    const firstPathSegment = location.pathname.split("/")?.[1] as Locale;
+
+    const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment)
+        ? firstPathSegment
+        : "en";
+
+    const messages = translations[locale] ?? translations.en;
 
     function t(key: string) {
         return messages[key] ?? key;

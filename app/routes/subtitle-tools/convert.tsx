@@ -5,14 +5,14 @@ import { Download, Upload, Copy, Languages, ArrowRight } from "lucide-react";
 import type { SubtitleEntry, SubtitleFormat } from "~/utils/subtitle-parser";
 import { parseSubtitle, writeSubtitle, detectFormat } from "~/utils/subtitle-parser";
 import type { Route } from "./+types/convert";
-import { useTranslation, type Locale } from "~/utils/route-utils";
+import { useTranslation, translations, type Locale } from "~/utils/route-utils";
 import { generateMeta } from "@forge42/seo-tools/remix/metadata";
 import { webApp } from "@forge42/seo-tools/structured-data/web-app";
 import { type MetaFunction } from "react-router";
 
-export const meta: MetaFunction = ({ matches }) => {
-  const rootMatch = matches.find((m) => m.id === "root");
-  const messages = (rootMatch?.data as any)?.messages || {};
+export const meta: MetaFunction = ({ location }) => {
+  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
+  const messages = translations[locale] ?? translations.en;
   const t = (key: string) => messages[key] ?? key;
 
   const meta = generateMeta(

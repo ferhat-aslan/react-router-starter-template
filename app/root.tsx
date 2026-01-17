@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useParams,
 } from "react-router";
 import {useLocation} from "react-router";
@@ -20,60 +19,48 @@ import {renderToStaticMarkup} from "react-dom/server";
 
 
 export const links: Route.LinksFunction = () => [
-
+  /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
+  {
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  }, */
 ];
 
-import { SUPPORTED_LOCALES, type Locale } from "./i18n/config";
-import { I18nProvider } from "./context/i18n-context";
+import { SUPPORTED_LOCALES, type Locale } from "./utils/route-utils";
+
 import { useEffect } from "react";
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
-  const url = new URL(request.url);
-  const firstSegment = url.pathname.split("/")[1] as Locale;
-  
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) 
-    ? firstSegment 
-    : "en";
-
-  // Dynamic import for translations - this ensures only the needed file is loaded
-  let messages = {};
-  try {
-    const module = await import(`./i18n/${locale}.json`);
-    messages = module.default;
-  } catch (error) {
-    console.error(`Failed to load translations for ${locale}`, error);
-    // Fallback to English if needed
-    const enModule = await import(`./i18n/en.json`);
-    messages = enModule.default;
-  }
-
-  return { locale, messages };
-};
-
 export function Layout({children}: {children: React.ReactNode}) {
-  const { locale, messages } = useLoaderData<typeof loader>();
-  const localeParam = locale; // Use the one determined by loader
+  const {pathname} = useLocation();
+
+  const localeParam = SUPPORTED_LOCALES.find(lang => pathname.startsWith(`/${lang}`)) || "en";
   const origin = "https://kleinbyte.com";
 
-  // Re-deriving path logic for canonical/alternates to keep it client-safe or reuse loader data?
-  // We can keep the existing client-side logic for path manipulation since it's light.
-  
-  const {pathname} = useLocation();
   const pathnameNoTrailingSlash = pathname.replace(/\/$/, "");
+ // detect language from URL
   const segments = pathnameNoTrailingSlash.split("/").filter(Boolean);
-  
-  // Logic to build Clean path without Lang
+  const first = segments[0];
+
+  const currentLang: Locale = SUPPORTED_LOCALES.includes(first as any) ? (first as any) : "en";
+    // build the base path WITHOUT language prefix
+  // /de/pdf-tools → /pdf-tools
   const pathWithoutLang =
-    locale === "en"
+    currentLang === "en"
       ? pathnameNoTrailingSlash
       : "/" + segments.slice(1).join("/");
 
-  // ... (Canonical logic remains same)
+  // canonical URL (language-aware)
   const canonical =
-    locale === "en"
+    currentLang === "en"
       ? `${origin}${pathWithoutLang}`
-      : `${origin}/${locale}${pathWithoutLang}`;
+      : `${origin}/${currentLang}${pathWithoutLang}`;
   
+   // build hreflang URLs for all languages
   const alternates = SUPPORTED_LOCALES.map((lang) => {
     const href =
       lang === "en"
@@ -81,12 +68,17 @@ export function Layout({children}: {children: React.ReactNode}) {
         : `${origin}/${lang}${pathWithoutLang}`;
 
     return {
+   
       rel: "alternate",
       hrefLang: lang,
       href,
     };
   });
+
+  
+    // x-default → English (your default)
    const xDefault = {
+    
       rel: "alternate",
       hrefLang: "x-default",
       href: `${origin}${pathWithoutLang}`,
@@ -107,6 +99,7 @@ export function Layout({children}: {children: React.ReactNode}) {
           <link {...xDefault} />
         )}
       
+      
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
@@ -123,9 +116,7 @@ export function Layout({children}: {children: React.ReactNode}) {
         <ThemeScript />
       </head>
       <body suppressHydrationWarning>
-        <I18nProvider locale={locale} messages={messages}>
-          {children}
-        </I18nProvider>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
