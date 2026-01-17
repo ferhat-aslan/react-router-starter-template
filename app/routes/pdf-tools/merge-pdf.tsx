@@ -11,6 +11,7 @@ import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {apiClient} from "~/lib/api-client";
 import {useTranslation, translations, type Locale} from "~/utils/route-utils";
+import { useFileMerge } from "~/hooks/use-file-merge";
 
 export const meta: MetaFunction = ({ location }) => {
   const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
@@ -57,20 +58,19 @@ export const meta: MetaFunction = ({ location }) => {
   );
   return meta;
 };
+
 export default function Home() {
   const { t } = useTranslation();
   const [files, setFiles] = useState<FileList | null>(null);
   const [orderedFiles, setOrderedFiles] = useState<File[]>([]);
   const draggingRef = useRef(null);
-  const [loading, setLoading] = useState(false);
+  const { mergeFiles, loading } = useFileMerge();
 
   return (
     <Layout>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6 justify-start items-center">
         
-        
-        
-        
+        {/* ... Dragging component ... */}
 
         <Dragging
           list={files ? Array.from(files) : []}
@@ -82,39 +82,23 @@ export default function Home() {
           3. Merge PDFs
         </span>
         <button
-          className="mt-4 px-4 py-2 disabled:opacity-40 disabled:pointer-events-none bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          disabled={!files?.length || files.length < 2}
-          onClick={() => {
-            if (!files) return;
-            setLoading(true);
-            const form = new FormData();
-            orderedFiles.forEach((file) => {
-              form.append("files", file);
-            });
-
-            //return application/pdf  http://localhost:8000/merge-pdf
-            apiClient
-              .request("/merge-pdf", {method: "POST", body: form})
-              .then((response) => response.blob())
-              .then((data) => {
-                const url = URL.createObjectURL(data);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "merged.pdf";
-                document.body.appendChild(a);
-                a.setAttribute("target", "_blank");
-                a.setAttribute("download", "merged.pdf");
-                a.click();
-                a.remove();
-                setLoading(false);
-              })
-              .catch((error) => {
-                console.error("Error merging PDFs:", error);
-                setLoading(false);
-              });
-          }}
+          className="mt-4 px-6 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+          disabled={!files?.length || files.length < 2 || loading}
+          aria-busy={loading}
+          aria-disabled={!files?.length || files.length < 2 || loading}
+          onClick={() => mergeFiles(orderedFiles)}
         >
-          Merge PDFs
+          {loading ? (
+            <>
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Merging...
+            </>
+          ) : (
+            "Merge PDFs"
+          )}
         </button>
         <Free />
 

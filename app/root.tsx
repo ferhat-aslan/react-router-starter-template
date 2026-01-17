@@ -57,6 +57,8 @@ export const links: Route.LinksFunction = () => [
 
 import { SUPPORTED_LOCALES, type Locale } from "./utils/route-utils";
 
+import { useEffect } from "react";
+
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
 
@@ -107,7 +109,7 @@ export function Layout({children}: {children: React.ReactNode}) {
     };
   
   return (
-    <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"}>
+    <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -135,46 +137,63 @@ export function Layout({children}: {children: React.ReactNode}) {
     gtag('config', 'G-HRC6G6L65K');`,
           }}
         ></script>
+        <ThemeScript />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <ScrollRestoration />
         <Scripts />
       </body>
-      <script
-        async={true}
-        dangerouslySetInnerHTML={{
-          __html: `
-    const button = document.querySelector('#menu-button');
-const menu = document.querySelector('#menu');
-
-
-button.addEventListener('click', () => {
-  menu.classList.toggle('hidden');});
-
-  const storedTheme = localStorage.getItem('theme');
-  const prefersDark =
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-  if (storedTheme) {
-    document.documentElement.classList.add(storedTheme);
-  } else if (prefersDark) {
-    document.documentElement.classList.add('dark');
-  }
-window.addEventListener('scroll', function() {
-    if (window.scrollY > 0) {
-        document.body.classList.add('scrolled');
-    } else {
-        document.body.classList.remove('scrolled');
-    }
-});
-
-`,
-        }}
-      />
     </html>
   );
+}
+
+export function ThemeScript() {
+  useEffect(() => {
+    // Theme initialization
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (storedTheme) {
+      document.documentElement.classList.add(storedTheme);
+    } else if (prefersDark) {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Menu logic
+    const button = document.querySelector('#menu-button');
+    const menu = document.querySelector('#menu');
+    
+    if (button && menu) {
+      const toggleMenu = () => menu.classList.toggle('hidden');
+      button.addEventListener('click', toggleMenu);
+      return () => button.removeEventListener('click', toggleMenu);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Optimized scroll listener
+    let ticking = false;
+    
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 0) {
+            document.body.classList.add('scrolled');
+          } else {
+            document.body.classList.remove('scrolled');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return null;
 }
 
 export default function App() {

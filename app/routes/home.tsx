@@ -2,6 +2,8 @@ import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
 import {LocaleLink} from "~/components/locale-link";
 import { ToolCategoryCard } from "~/components/tool-category-card";
+import { Suspense, lazy } from "react";
+const HeroBackground = lazy(() => import("~/components/ui/hero-background").then(module => ({ default: module.HeroBackground })));
 
 import PDF from "/pdf.svg";
 import WORD from "/word.svg";
@@ -214,23 +216,9 @@ export default function Home({loaderData}: Route.ComponentProps) {
       <div className="min-h-screen  transition-colors duration-300">
         {/* Hero Section - Shadcn Inspired */}
         <section className="relative pt-24 pb-32 overflow-hidden border-b border-gray-200 dark:border-neutral-700">
-          <div
-            className="absolute inset-0 pointer-events-none opacity-15 dark:opacity-5"
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, currentColor 1px, transparent 1px),
-                linear-gradient(to bottom, currentColor 1px, transparent 1px)
-              `,
-              backgroundSize: "50px 50px",
-              maskImage: `
-                radial-gradient(ellipse at center, black 10%, transparent 80%),
-                repeating-linear-gradient(to right, black 0 3px, transparent 3px 10px),
-                repeating-linear-gradient(to bottom, black 0 3px, transparent 3px 10px)
-              `,
-              WebkitMaskComposite: "source-in, source-over",
-              color: "inherit"
-            }}
-          />
+          <Suspense fallback={<div className="absolute inset-0 bg-white dark:bg-neutral-900" />}>
+            <HeroBackground />
+          </Suspense>
           
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-6xl mx-auto text-center">

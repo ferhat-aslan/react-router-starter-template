@@ -6,12 +6,13 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --color-soft: #f6f6f7;
+  --color-luft: #3c3c43;
+  --color-input: #0000001c;
+  
+  /* Add custom font family if needed, otherwise inherit from Tailwind defaults */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --color-soft: #f6f6f7;
-  --color-luft:#3c3c43;
-  --color-input:#0000001c;
-
 }
 
 /* Adds pointer cursor to buttons */
@@ -26,9 +27,10 @@
 /* Defaults hover styles on all devices */
 @custom-variant hover (&:hover);
 
-* {
-  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-  scroll-behavior: smooth !important;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 html,
@@ -41,7 +43,7 @@ body {
 }
 
 .header-link {
-  @apply p-2 py-1 flex items-center text-base  text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-hidden active:text-base focus:text-sm focus:bg-gray-100  dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700;
+  @apply p-2 py-1 flex items-center text-base text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 active:text-base focus:text-sm focus:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus-visible:ring-neutral-500;
 }
 
 .active-link {

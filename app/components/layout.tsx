@@ -519,9 +519,7 @@ const Layout = ({ children }: any) => {
       </footer>
       {/* ========== END FOOTER ========== */}
 
-      <span className="fixed left-0 top-15 bg-gradient-to-r from-green-500 to-green-300 px-3 py-1 text-white">Free</span>
-      <span className="fixed left-0 top-23 bg-gradient-to-r from-violet-500 to-violet-300 px-3 py-1 text-white">No signup</span>
-      <span className="fixed left-0 top-31 bg-gradient-to-r from-blue-500 to-blue-300 px-3 py-1 text-white">Enterprise</span>
+
     </>
   );
 };

@@ -32,16 +32,22 @@ export default defineConfig({
 		rollupOptions: {
 			output: {
 				manualChunks: {
-					sanity: ["@sanity/client", "@sanity/image-url"],
-					portabletext: ["@portabletext/react"],
+					// Core React
+					vendor: ["react", "react-dom", "react-router"],
+					// Sanity / CMS
+					sanity: ["@sanity/client", "@sanity/image-url", "@portabletext/react"],
+					// Icons (often heavy)
+					icons: ["lucide-react"],
+					// OG Image Generation (very heavy, definitely split)
 					og: ["satori", "@resvg/resvg-wasm"],
+					// Utils
+					utils: ["isbot"]
 				}
 			}
 		}
 	},
 
 	optimizeDeps: {
-		// ❗ include serbest, ama exclude yasak
 		include: ["react", "react-dom", "react-router"]
 	}
 });
