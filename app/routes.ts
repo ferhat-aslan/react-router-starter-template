@@ -12,7 +12,12 @@ const baseRoutes: RouteConfig = [
   route("llms.txt", "routes/llms[.]txt.ts"),
   route("docx-tools", "routes/docx-tools.tsx"),
   route("latex-tools", "routes/latex-tools.tsx"),
-  route("text-tools", "routes/text-tools.tsx"),
+  ...prefix("text-tools", [
+    index("routes/text-tools.tsx"),
+    route("chatgpt-editor", "routes/text-tools/chatgpt-editor.tsx"),
+    route("gemini-editor", "routes/text-tools/gemini-editor.tsx"),
+    route("editor", "routes/text-tools/editor.tsx"),
+  ]),
   route("spreadsheet-tools", "routes/spreadsheet-tools.tsx"),
   route("seo-tools", "routes/seo-tools.tsx"),
   route("code-formatter", "routes/code-formatter.tsx"),

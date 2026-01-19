@@ -49,7 +49,7 @@ const Layout = ({ children }: any) => {
     <>
       {/* ========== HEADER ========== */}
 
-      <header className="sticky top-0 z-50">
+      <header className="sticky top-0 z-50 no-print">
         <nav
           className="
           flex flex-wrap
@@ -149,9 +149,9 @@ const Layout = ({ children }: any) => {
         {children}
       </main>
       {/* ========== FOOTER ========== */}
-      <hr className="border-gray-200 dark:border-neutral-700" />
+      <hr className="border-gray-200 dark:border-neutral-700 no-print" />
 
-      <footer className="mt-auto w-full max-w-340 py-10 px-4 sm:px-6 lg:px-8 mx-auto">
+      <footer className="mt-auto w-full max-w-340 py-10 px-4 sm:px-6 lg:px-8 mx-auto no-print">
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-10">
           <div className="col-span-full hidden lg:col-span-1 lg:block">

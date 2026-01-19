@@ -33,8 +33,6 @@ export const links: Route.LinksFunction = () => [
 
 import { SUPPORTED_LOCALES, type Locale } from "./utils/route-utils";
 
-import { useEffect } from "react";
-
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
 
@@ -125,51 +123,50 @@ export function Layout({children}: {children: React.ReactNode}) {
 }
 
 export function ThemeScript() {
-  useEffect(() => {
-    // Theme initialization
-    const storedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const scriptContent = `
+    (function() {
+      // Theme initialization
+      try {
+        const storedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (storedTheme) {
+          document.documentElement.classList.add(storedTheme);
+        } else if (prefersDark) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
 
-    if (storedTheme) {
-      document.documentElement.classList.add(storedTheme);
-    } else if (prefersDark) {
-      document.documentElement.classList.add('dark');
-    }
+      // Menu & Scroll logic (runs after DOM is ready)
+      document.addEventListener('DOMContentLoaded', () => {
+        // Menu logic
+        const button = document.querySelector('#menu-button');
+        const menu = document.querySelector('#menu');
+        if (button && menu) {
+          button.addEventListener('click', () => menu.classList.toggle('hidden'));
+        }
 
-    // Menu logic
-    const button = document.querySelector('#menu-button');
-    const menu = document.querySelector('#menu');
-    
-    if (button && menu) {
-      const toggleMenu = () => menu.classList.toggle('hidden');
-      button.addEventListener('click', toggleMenu);
-      return () => button.removeEventListener('click', toggleMenu);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Optimized scroll listener
-    let ticking = false;
-    
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (window.scrollY > 0) {
-            document.body.classList.add('scrolled');
-          } else {
-            document.body.classList.remove('scrolled');
+        // Optimized scroll listener
+        let ticking = false;
+        const onScroll = () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              if (window.scrollY > 0) {
+                document.body.classList.add('scrolled');
+              } else {
+                document.body.classList.remove('scrolled');
+              }
+              ticking = false;
+            });
+            ticking = true;
           }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); // Initial check
+      });
+    })();
+  `;
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  return null;
+  return <script dangerouslySetInnerHTML={{ __html: scriptContent }} />;
 }
 
 export default function App() {

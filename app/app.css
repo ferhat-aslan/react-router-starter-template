@@ -645,3 +645,24 @@ textarea {
 .dark .prose-invert :where(tbody tr):not(:where([class~="not-prose"] *)) {
   border-bottom-color: #4b5563;
 }
+
+/* Print Utilities */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .main {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}

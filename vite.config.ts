@@ -41,13 +41,37 @@ export default defineConfig({
 					// OG Image Generation (very heavy, definitely split)
 					og: ["satori", "@resvg/resvg-wasm"],
 					// Utils
-					utils: ["isbot"]
+					utils: ["isbot", "jspdf", "html-to-image"]
 				}
 			}
 		}
 	},
 
 	optimizeDeps: {
-		include: ["react", "react-dom", "react-router"]
+		include: [
+			"react",
+			"react-dom",
+			"react-router",
+			"marked",
+			"dompurify",
+			"react-dom/server",
+			"@forge42/seo-tools/canonical",
+			"@tiptap/react",
+			"@tiptap/starter-kit",
+			"@tiptap/extension-placeholder",
+			"@tiptap/extension-link",
+			"@tiptap/extension-character-count",
+			"@tiptap/extension-text-align",
+			"@tiptap/extension-underline",
+			"@tiptap/extension-image",
+			"@tiptap/extension-typography",
+			"@tiptap/extension-highlight",
+			"@tiptap/extension-task-list",
+			"@tiptap/extension-task-item",
+			"@tiptap/extension-color",
+			"@tiptap/extension-text-style",
+			"jspdf",
+			"html-to-image"
+		]
 	}
 });

@@ -67,6 +67,12 @@ export default function TextTools() {
   const { t } = useTranslation();
   const textTools = [
     {
+      name: t("tools.text.chatgpt.name"),
+      description: t("tools.text.chatgpt.description"),
+      link: "/text-tools/chatgpt-editor",
+      icon: TXT
+    },
+    {
       name: "Text Formatter",
       description: "Format and beautify your text with different styles",
       link: "#",
