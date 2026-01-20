@@ -1,7 +1,8 @@
-import { useLocation, useNavigate } from "react-router";
-import { ThemeSwitcher } from "./theme-switcher";
-import { LocaleLink } from "./locale-link";
-import { SUPPORTED_LOCALES, type Locale } from "../utils/route-utils";
+import {useLocation, useNavigate} from "react-router";
+import {LocaleLink} from "./locale-link";
+
+import {SUPPORTED_LOCALES, type Locale} from "../utils/route-utils";
+import {MegaMenu} from "./navigation/MegaMenu";
 
 const LANG_NAMES: Record<Locale, string> = {
   en: "English (US)",
@@ -15,12 +16,14 @@ const LANG_NAMES: Record<Locale, string> = {
   ru: "Русский",
 };
 
-const Layout = ({ children }: any) => {
-  const { pathname } = useLocation();
+const Layout = ({children}: any) => {
+  const {pathname} = useLocation();
   const navigate = useNavigate();
 
   const currentLocale = (pathname.split("/")[1] as Locale) || "en";
-  const locale = SUPPORTED_LOCALES.includes(currentLocale) ? currentLocale : "en";
+  const locale = SUPPORTED_LOCALES.includes(currentLocale)
+    ? currentLocale
+    : "en";
 
   const handleLanguageChange = (newLocale: string) => {
     const segments = pathname.split("/").filter(Boolean);
@@ -35,117 +38,31 @@ const Layout = ({ children }: any) => {
         newPath = `/${newLocale}${pathname === "/" ? "" : pathname}`;
       }
     }
-    
+
     // Simple logic to switch locale prefix
     if (newLocale === "en") {
-        const pathWithoutPrefix = pathname.replace(/^\/(de|es|ar|tr|pt|fr|it|ru)(\/|$)/, "/");
-        navigate(pathWithoutPrefix);
+      const pathWithoutPrefix = pathname.replace(
+        /^\/(de|es|ar|tr|pt|fr|it|ru)(\/|$)/,
+        "/",
+      );
+      navigate(pathWithoutPrefix);
     } else {
-        const pathWithoutPrefix = pathname.replace(/^\/(de|es|ar|tr|pt|fr|it|ru)(\/|$)/, "/");
-        navigate(`/${newLocale}${pathWithoutPrefix === "/" ? "" : pathWithoutPrefix}`);
+      const pathWithoutPrefix = pathname.replace(
+        /^\/(de|es|ar|tr|pt|fr|it|ru)(\/|$)/,
+        "/",
+      );
+      navigate(
+        `/${newLocale}${pathWithoutPrefix === "/" ? "" : pathWithoutPrefix}`,
+      );
     }
   };
   return (
     <>
       {/* ========== HEADER ========== */}
+      <MegaMenu />
 
-      <header className="sticky top-0 z-50 no-print">
-        <nav
-          className="
-          flex flex-wrap
-          items-center
-          justify-between
-          w-full
-          py-4
-          md:py-0
-          px-4
-          text-lg text-gray-700
-           container mx-auto  border border-gray-200 dark:border-neutral-700 h-13
-        "
-        >
-          <div>
-            <LocaleLink to="/" className="font-bold dark:text-white  ">
-              Klein⁘Byte
-            </LocaleLink>
-          </div>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            id="menu-button"
-            className="h-6 w-6 cursor-pointer md:hidden block"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-
-          <div
-            className="hidden w-full md:flex md:items-center md:w-auto gap-x-3"
-            id="menu"
-          >
-            <ul
-              className="
-              pt-4
-              text-base text-gray-700
-              md:flex
-              md:justify-between 
-              md:pt-0 gap-x-3"
-            >
-              <li>
-                <LocaleLink
-                  className="header-link"
-                  to="/pdf-tools"
-                >
-                  Pdf Tools
-                </LocaleLink>
-              </li>
-              <li>
-                <LocaleLink
-                  className="header-link"
-                  to="/docx-tools"
-                >
-                  Docx Tool
-                </LocaleLink>
-              </li>
-              <li>
-                <LocaleLink
-                  className="header-link"
-                  to="/image-tools"
-                >
-                  Image Tools
-                </LocaleLink>
-              </li>
-              <li>
-                <LocaleLink
-                  className="header-link"
-                  to="/favicon-maker"
-                >
-                  Favicon Maker
-                </LocaleLink>
-              </li>
-              <li>
-                <LocaleLink
-                  className="header-link"
-                  to="/icon-resizer"
-                >
-                  Icon Resizer
-                </LocaleLink>
-              </li>
-            </ul>
-          </div>
-          <ThemeSwitcher />
-        </nav>
-      </header>
-
-      {/* ========== END HEADER ========== */}
-
-      <main className="main container mx-auto border-l border-r border-gray-200 dark:border-neutral-700">
+      {/* ========== MAIN CONTENT ========== */}
+      <main className="flex-grow w-full max-w-340 py-10 px-4 sm:px-6 lg:px-8 mx-auto border-l border-r border-gray-200 dark:border-neutral-700">
         {children}
       </main>
       {/* ========== FOOTER ========== */}
@@ -409,9 +326,7 @@ const Layout = ({ children }: any) => {
                   </svg>
                 </button>
 
-                <div
-                  className="absolute bottom-full mb-2 hidden group-hover:block z-50 bg-white shadow-xl rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 w-48 border border-gray-100"
-                >
+                <div className="absolute bottom-full mb-2 hidden group-hover:block z-50 bg-white shadow-xl rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 w-48 border border-gray-100">
                   {SUPPORTED_LOCALES.map((lang) => (
                     <button
                       key={lang}
@@ -518,8 +433,6 @@ const Layout = ({ children }: any) => {
         </div>
       </footer>
       {/* ========== END FOOTER ========== */}
-
-
     </>
   );
 };
