@@ -27,8 +27,8 @@ const baseRoutes: RouteConfig = [
   route("icon-resizer", "routes/icon-resizer.tsx"),
   route("privacy-policy", "routes/privacy-policy.tsx"),
   route("terms-and-conditions", "routes/terms-and-conditions.tsx"),
-  route("tools/video-compressor", "routes/tools/video-compressor.tsx"),
-  route("tools/image-converter", "routes/tools/image-converter.tsx"),
+
+
   route("blog", "routes/blog/blog.tsx"),
   route("blog/:slug", "routes/blog/post.tsx"),
   ...prefix("subtitle-tools", [
@@ -44,6 +44,15 @@ const baseRoutes: RouteConfig = [
     route("word-to-pdf", "routes/pdf-tools/word-to-pdf.tsx"),
     route("pdf-to-images", "routes/pdf-tools/pdf-to-images.tsx"),
     route("pdf-to-text", "routes/pdf-tools/pdf-to-text.tsx"),
+    route("compress-pdf", "routes/pdf-tools/compress-pdf.tsx"),
+  ]),
+  ...prefix("tools", [
+    index("routes/tools.tsx"),
+    route("image-converter", "routes/tools/image-converter.tsx"),
+    route("file-converter", "routes/tools/file-converter.tsx"),
+    route("qr-generator", "routes/tools/qr-generator.tsx"),
+    route("bg-remover", "routes/tools/bg-remover.tsx"),
+    route("video-compressor", "routes/tools/video-compressor.tsx"),
   ]),
   ...prefix("image-tools", [
     index("routes/image-tools.tsx"),
