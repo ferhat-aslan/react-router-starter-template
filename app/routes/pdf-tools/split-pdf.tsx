@@ -90,8 +90,9 @@ export default function SplitPdf() {
     try {
       // Dynamically import pdfjs to avoid SSR issues
       const pdfjs = await import("pdfjs-dist");
-      const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry?url");
-      pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker.default;
+      
+      // Use CDN worker to avoid build issues with ?url imports
+      pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
       const arrayBuffer = await selectedFile.arrayBuffer();
       const loadingTask = pdfjs.getDocument(arrayBuffer);
