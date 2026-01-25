@@ -8,16 +8,41 @@ import { useTranslation } from "~/utils/route-utils";
 
 import { translations, type Locale } from "~/utils/route-utils";
 
+import { generateMeta } from "@forge42/seo-tools/remix/metadata";
+import { webApp } from "@forge42/seo-tools/structured-data/web-app";
+
 export function meta({ location }: Route.MetaArgs) {
   const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
   const messages = translations[locale] ?? translations.en;
   const t = (key: string) => messages[key] ?? key;
 
-  return [
-    { title: t("video.meta.title") },
-    { name: "description", content: t("video.meta.description") },
-    { name: "keywords", content: t("video.meta.keywords") },
-  ];
+  return generateMeta(
+    {
+      title: t("video.meta.title"),
+      description: t("video.meta.description"),
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: "https://kleinbyte.com/og-image-video-compressor.png",
+    },
+    [
+      {
+        "script:ld+json": webApp({
+          "@type": "SoftwareApplication",
+          name: t("tools.video.compressor.name"),
+          url: `https://kleinbyte.com${location.pathname}`,
+          description: t("tools.video.compressor.description"),
+          applicationCategory: "MultimediaApplication",
+          operatingSystem: "Any",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        }),
+      },
+      { name: "keywords", content: t("video.meta.keywords") },
+      { name: "author", content: "Kleinbyte" },
+    ]
+  );
 }
 
 export default function VideoCompressor() {

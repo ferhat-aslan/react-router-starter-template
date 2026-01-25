@@ -69,7 +69,7 @@ export default function CompressPdf() {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
       if (selectedFile.type !== "application/pdf") {
-        setError("Please upload a PDF file.");
+        setError(t("pdf.compress.error.invalid_type"));
         return;
       }
       setFile(selectedFile);
@@ -125,12 +125,12 @@ export default function CompressPdf() {
 
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
-        if (!context) throw new Error("Could not get canvas context");
+        if (!context) throw new Error(t("pdf.compress.error.canvas"));
         
         canvas.width = pageViewport.width;
         canvas.height = pageViewport.height;
 
-        await page.render({ canvasContext: context, viewport: pageViewport }).promise;
+        await page.render({ canvasContext: context, viewport: pageViewport, canvas }).promise;
         const imgData = canvas.toDataURL("image/jpeg", quality);
 
         if (i > 1) {
@@ -153,7 +153,7 @@ export default function CompressPdf() {
       setStatus("success");
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "An unexpected error occurred during compression.");
+      setError(err.message || t("pdf.compress.error.generic"));
       setStatus("error");
     }
   };
@@ -299,7 +299,7 @@ export default function CompressPdf() {
                         <p className="text-lg font-semibold">
                           {t("pdf.compress.progress").replace("{current}", currentStep.toString()).replace("{total}", totalSteps.toString())}
                         </p>
-                        <p className="text-sm text-slate-500 mt-1">Please keep this window open</p>
+                        <p className="text-sm text-slate-500 mt-1">{t("pdf.compress.status.keep_open")}</p>
                       </div>
                     </div>
                     <div className="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
@@ -348,7 +348,7 @@ export default function CompressPdf() {
                         onClick={() => { setFile(null); resetState(); }}
                         className="h-14 px-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl font-semibold transition-all"
                       >
-                        Compress Another
+                        {t("pdf.compress.btn.compress_another")}
                       </button>
                     </div>
                   </div>
@@ -359,14 +359,14 @@ export default function CompressPdf() {
                   <div className="p-6 bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-100 dark:border-red-900/50 text-center space-y-4">
                     <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
                     <div>
-                      <p className="font-bold text-red-600 dark:text-red-400">Compression Failed</p>
+                      <p className="font-bold text-red-600 dark:text-red-400">{t("pdf.compress.status.failed")}</p>
                       <p className="text-sm text-red-500 mt-1">{error}</p>
                     </div>
                     <button
                       onClick={resetState}
                       className="px-6 py-2 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700"
                     >
-                      Try Again
+                      {t("pdf.compress.btn.try_again")}
                     </button>
                   </div>
                 )}
@@ -383,49 +383,49 @@ export default function CompressPdf() {
             <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-6">
               <Shield className="w-7 h-7 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold mb-3">100% Private</h3>
+            <h3 className="text-xl font-bold mb-3">{t("pdf.compress.benefits.private.title")}</h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-              Your files never leave your device. All compression happens locally in your browser, ensuring maximum security and privacy.
+              {t("pdf.compress.benefits.private.desc")}
             </p>
           </div>
           <div className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mb-6">
               <Zap className="w-7 h-7 text-purple-600 dark:text-purple-400" />
             </div>
-            <h3 className="text-xl font-bold mb-3">Lightning Fast</h3>
+            <h3 className="text-xl font-bold mb-3">{t("pdf.compress.benefits.fast.title")}</h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-              Optimized algorithms process your PDF in seconds. No uploading wait times, no queues - just instant results.
+              {t("pdf.compress.benefits.fast.desc")}
             </p>
           </div>
           <div className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center mb-6">
               <Sparkles className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <h3 className="text-xl font-bold mb-3">High Quality</h3>
+            <h3 className="text-xl font-bold mb-3">{t("pdf.compress.benefits.quality.title")}</h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-              Smart image optimization maintains clarity while shrinking file size. Perfect for email attachments and storage efficiency.
+              {t("pdf.compress.benefits.quality.desc")}
             </p>
           </div>
         </section>
 
         {/* How It Works */}
         <section className="space-y-12 py-12 border-t border-slate-200 dark:border-slate-800">
-          <h2 className="text-3xl font-bold text-center">How to Compress PDF Files</h2>
+          <h2 className="text-3xl font-bold text-center">{t("pdf.compress.how_to.title")}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
             <div className="space-y-4">
               <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">1</div>
-              <h3 className="text-lg font-bold">Select PDF</h3>
-              <p className="text-slate-600 dark:text-slate-400">Click the upload zone or drag your PDF file directly into your browser.</p>
+              <h3 className="text-lg font-bold">{t("pdf.compress.how_to.step1.title")}</h3>
+              <p className="text-slate-600 dark:text-slate-400">{t("pdf.compress.how_to.step1.desc")}</p>
             </div>
             <div className="space-y-4">
               <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">2</div>
-              <h3 className="text-lg font-bold">Choose Quality</h3>
-              <p className="text-slate-600 dark:text-slate-400">Pick your desired compression level and image quality settings.</p>
+              <h3 className="text-lg font-bold">{t("pdf.compress.how_to.step2.title")}</h3>
+              <p className="text-slate-600 dark:text-slate-400">{t("pdf.compress.how_to.step2.desc")}</p>
             </div>
             <div className="space-y-4">
               <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">3</div>
-              <h3 className="text-lg font-bold">Download</h3>
-              <p className="text-slate-600 dark:text-slate-400">Hit Compress and download your optimized PDF in just a few seconds.</p>
+              <h3 className="text-lg font-bold">{t("pdf.compress.how_to.step3.title")}</h3>
+              <p className="text-slate-600 dark:text-slate-400">{t("pdf.compress.how_to.step3.desc")}</p>
             </div>
           </div>
         </section>

@@ -15,9 +15,6 @@ import {generateCanonicalLinks} from "@forge42/seo-tools/canonical";
 
 import {renderToStaticMarkup} from "react-dom/server";
 
-
-
-
 export const links: Route.LinksFunction = () => [
   /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
   {
@@ -31,21 +28,24 @@ export const links: Route.LinksFunction = () => [
   }, */
 ];
 
-import { SUPPORTED_LOCALES, type Locale } from "./utils/route-utils";
+import {SUPPORTED_LOCALES, type Locale} from "./utils/route-utils";
 
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
 
-  const localeParam = SUPPORTED_LOCALES.find(lang => pathname.startsWith(`/${lang}`)) || "en";
+  const localeParam =
+    SUPPORTED_LOCALES.find((lang) => pathname.startsWith(`/${lang}`)) || "en";
   const origin = "https://kleinbyte.com";
 
   const pathnameNoTrailingSlash = pathname.replace(/\/$/, "");
- // detect language from URL
+  // detect language from URL
   const segments = pathnameNoTrailingSlash.split("/").filter(Boolean);
   const first = segments[0];
 
-  const currentLang: Locale = SUPPORTED_LOCALES.includes(first as any) ? (first as any) : "en";
-    // build the base path WITHOUT language prefix
+  const currentLang: Locale = SUPPORTED_LOCALES.includes(first as any)
+    ? (first as any)
+    : "en";
+  // build the base path WITHOUT language prefix
   // /de/pdf-tools → /pdf-tools
   const pathWithoutLang =
     currentLang === "en"
@@ -57,8 +57,8 @@ export function Layout({children}: {children: React.ReactNode}) {
     currentLang === "en"
       ? `${origin}${pathWithoutLang}`
       : `${origin}/${currentLang}${pathWithoutLang}`;
-  
-   // build hreflang URLs for all languages
+
+  // build hreflang URLs for all languages
   const alternates = SUPPORTED_LOCALES.map((lang) => {
     const href =
       lang === "en"
@@ -66,24 +66,25 @@ export function Layout({children}: {children: React.ReactNode}) {
         : `${origin}/${lang}${pathWithoutLang}`;
 
     return {
-   
       rel: "alternate",
       hrefLang: lang,
       href,
     };
   });
 
-  
-    // x-default → English (your default)
-   const xDefault = {
-    
-      rel: "alternate",
-      hrefLang: "x-default",
-      href: `${origin}${pathWithoutLang}`,
-    };
-  
+  // x-default → English (your default)
+  const xDefault = {
+    rel: "alternate",
+    hrefLang: "x-default",
+    href: `${origin}${pathWithoutLang}`,
+  };
+
   return (
-    <html lang={localeParam} dir={localeParam === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
+    <html
+      lang={localeParam}
+      dir={localeParam === "ar" ? "rtl" : "ltr"}
+      suppressHydrationWarning
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -93,11 +94,8 @@ export function Layout({children}: {children: React.ReactNode}) {
         {alternates.map((alt) => (
           <link key={alt.href} {...alt} />
         ))}
-        {xDefault && (
-          <link {...xDefault} />
-        )}
-      
-      
+        {xDefault && <link {...xDefault} />}
+
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
@@ -166,7 +164,7 @@ export function ThemeScript() {
     })();
   `;
 
-  return <script dangerouslySetInnerHTML={{ __html: scriptContent }} />;
+  return <script dangerouslySetInnerHTML={{__html: scriptContent}} />;
 }
 
 export default function App() {

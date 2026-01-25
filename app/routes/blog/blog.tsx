@@ -4,6 +4,8 @@ import { useTranslation, translations, type Locale } from "~/utils/route-utils";
 import { type MetaFunction } from "react-router";
 import { sanityClient, allPostsQuery, type BlogPost } from "./sanity";
 
+import { generateMeta } from "@forge42/seo-tools/remix/metadata";
+
 export const meta: MetaFunction = ({ location }) => {
   const firstPathSegment = location.pathname.split("/")?.[1];
   const locale: Locale =
@@ -16,10 +18,17 @@ export const meta: MetaFunction = ({ location }) => {
     return messages[key] ?? key;
   }
 
-  return [
-    { title: t("blog.meta.title") },
-    { name: "description", content: t("blog.meta.description") },
-  ];
+  return generateMeta(
+    {
+      title: t("blog.meta.title"),
+      description: t("blog.meta.description"),
+      url: `https://kleinbyte.com${location.pathname}`,
+    },
+    [
+      { name: "keywords", content: t("blog.meta.keywords") },
+      { name: "author", content: "Kleinbyte" },
+    ]
+  );
 };
 
 export const loader = async () => {

@@ -219,7 +219,7 @@ export default function SplitPdf() {
               <p className="text-2xl font-bold text-slate-900 dark:text-white">
                 {t("pdf.split.dropzone")}
               </p>
-              <p className="text-sm text-slate-400 font-medium">PDF files only • Max 50MB</p>
+              <p className="text-sm text-slate-400 font-medium">{t("pdf.split.dropzone.subtitle")}</p>
             </div>
             <input 
               ref={fileInputRef}
@@ -240,9 +240,9 @@ export default function SplitPdf() {
                   </span>
                   <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
                   <div className="flex items-center gap-2">
-                     <button onClick={selectAll} className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title="Select All"><CheckSquare className="w-4 h-4" /></button>
-                     <button onClick={clearAll} className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title="Clear All"><Square className="w-4 h-4" /></button>
-                     <button onClick={invertSelection} className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title="Invert Selection"><RefreshCw className="w-4 h-4" /></button>
+                     <button onClick={selectAll} className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title={t("pdf.split.toolbar.select_all")}><CheckSquare className="w-4 h-4" /></button>
+                     <button onClick={clearAll} className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title={t("pdf.split.toolbar.clear_all")}><Square className="w-4 h-4" /></button>
+                     <button onClick={invertSelection} className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title={t("pdf.split.toolbar.invert")}><RefreshCw className="w-4 h-4" /></button>
                   </div>
                </div>
                <div className="flex items-center gap-3">
@@ -251,7 +251,7 @@ export default function SplitPdf() {
                     className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-red-500 transition-colors"
                   >
                     <X className="w-4 h-4" />
-                    Reset
+                    {t("pdf.split.toolbar.reset")}
                   </button>
                </div>
             </div>
@@ -260,7 +260,7 @@ export default function SplitPdf() {
             {isGeneratingThumbs ? (
               <div className="py-24 text-center space-y-4">
                 <RefreshCw className="w-12 h-12 text-orange-500 animate-spin mx-auto" />
-                <p className="text-lg font-medium text-slate-500 italic">Pre-rendering pages for selection...</p>
+                <p className="text-lg font-medium text-slate-500 italic">{t("pdf.split.loading")}</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
@@ -274,7 +274,7 @@ export default function SplitPdf() {
                         : "border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                     }`}
                   >
-                    <img src={thumb.url} alt={`Page ${thumb.number}`} className="w-full h-full object-cover" />
+                    <img src={thumb.url} alt={t("pdf.split.page_alt").replace("{number}", thumb.number.toString())} className="w-full h-full object-cover" />
                     
                     {/* Page Badge */}
                     <div className={`absolute bottom-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -307,7 +307,7 @@ export default function SplitPdf() {
                     {isProcessing ? (
                       <>
                         <RefreshCw className="w-6 h-6 animate-spin" />
-                        Splitting...
+                        {t("pdf.split.status.splitting")}
                       </>
                     ) : (
                       <>
@@ -324,7 +324,7 @@ export default function SplitPdf() {
                        </div>
                        <div className="flex-1">
                           <p className="font-bold text-green-700 dark:text-green-400 leading-tight">{t("pdf.split.success")}</p>
-                          <p className="text-sm text-green-600/70 dark:text-green-400/70 font-medium">Extracted {selectedPages.size} pages</p>
+                          <p className="text-sm text-green-600/70 dark:text-green-400/70 font-medium">{t("pdf.split.success_detail").replace("{number}", selectedPages.size.toString())}</p>
                        </div>
                     </div>
                     <button
@@ -332,13 +332,13 @@ export default function SplitPdf() {
                       className="w-full h-16 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 rounded-2xl font-bold text-lg shadow-xl shadow-slate-500/10 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
                     >
                       <Download className="w-6 h-6" />
-                      Download Split PDF
+                      {t("pdf.split.download")}
                     </button>
                     <button 
                       onClick={() => setResultBlob(null)}
                       className="w-full text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors"
                     >
-                      Refine Selection
+                      {t("pdf.split.refine")}
                     </button>
                   </div>
                )}
@@ -352,27 +352,27 @@ export default function SplitPdf() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 border-t border-slate-200 dark:border-slate-800">
           <div className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md">
             <div className="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center mb-6 text-orange-600 font-bold text-2xl">Visual</div>
-            <h3 className="text-xl font-bold mb-3 italic tracking-tight">Visual Selection</h3>
+            <h3 className="text-xl font-bold mb-3 italic tracking-tight">{t("pdf.split.benefits.visual.title")}</h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
-              Don't guess by page numbers. Preview every page of your PDF and click to select exactly what you need to extract or split.
+              {t("pdf.split.benefits.visual.desc")}
             </p>
           </div>
           <div className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md">
             <div className="w-14 h-14 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center mb-6">
               <Download className="w-7 h-7 text-amber-600" />
             </div>
-            <h3 className="text-xl font-bold mb-3 italic tracking-tight">Fast Extraction</h3>
+            <h3 className="text-xl font-bold mb-3 italic tracking-tight">{t("pdf.split.benefits.fast.title")}</h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
-              Split large PDFs in seconds. Our client-side engine handles page extraction locally, preserving original text and vector quality.
+              {t("pdf.split.benefits.fast.desc")}
             </p>
           </div>
           <div className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md">
             <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-6">
               <LayoutGrid className="w-7 h-7 text-blue-600" />
             </div>
-            <h3 className="text-xl font-bold mb-3 italic tracking-tight">Privacy First</h3>
+            <h3 className="text-xl font-bold mb-3 italic tracking-tight">{t("pdf.split.benefits.privacy.title")}</h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
-              Your documents never leave your browser. All page rendering and splitting logic happens entirely on your machine.
+              {t("pdf.split.benefits.privacy.desc")}
             </p>
           </div>
         </section>

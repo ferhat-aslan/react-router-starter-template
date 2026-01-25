@@ -30,7 +30,7 @@ export const meta: MetaFunction = ({location}) => {
     {
       title: t("pdf.meta.title"),
       description: t("pdf.meta.description"),
-      url: "https://kleinbyte.com/pdf-tools",
+      url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}pdf-tools`,
       image: "https://kleinbyte.com/og-image-pdf-tools.png",
     },
     [
@@ -38,7 +38,7 @@ export const meta: MetaFunction = ({location}) => {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("pdf.title"),
-          url: "https://kleinbyte.com/pdf-tools",
+          url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}pdf-tools`,
           description: t("pdf.description"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
@@ -62,7 +62,7 @@ export const meta: MetaFunction = ({location}) => {
       { name: "twitter:title", content: t("pdf.meta.title") },
       { name: "twitter:description", content: t("pdf.meta.description") },
       { name: "twitter:image", content: "https://kleinbyte.com/og-image-pdf-tools.png" },
-      { name: "keywords", content: "pdf tools, merge pdf, split pdf, pdf converter, word to pdf, pdf to text, pdf to images, free pdf tools" },
+      { name: "keywords", content: t("pdf.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );

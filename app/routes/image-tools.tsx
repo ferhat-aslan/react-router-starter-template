@@ -24,7 +24,7 @@ export const meta: MetaFunction = ({location}) => {
     {
       title: t("image.meta.title"),
       description: t("image.meta.description"),
-      url: "https://kleinbyte.com/image-tools",
+      url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}image-tools`,
       image: "https://kleinbyte.com/og-image-image-tools.png",
     },
     [
@@ -32,7 +32,7 @@ export const meta: MetaFunction = ({location}) => {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("image.title"),
-          url: "https://kleinbyte.com/image-tools",
+          url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}image-tools`,
           description: t("image.description"),
           applicationCategory: "GraphicsApplication",
           operatingSystem: "Any",
@@ -56,7 +56,7 @@ export const meta: MetaFunction = ({location}) => {
       { name: "twitter:title", content: t("image.meta.title") },
       { name: "twitter:description", content: t("image.meta.description") },
       { name: "twitter:image", content: "https://kleinbyte.com/og-image-image-tools.png" },
-      { name: "keywords", content: "image tools, image converter, image compressor, image editor, image resizer, free image tools, online image tools" },
+      { name: "keywords", content: t("image.meta.keywords") },
       { name: "author", content: "Kleinbyte" },
     ]
   );

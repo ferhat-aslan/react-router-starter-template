@@ -47,22 +47,24 @@ const MENU_ITEMS: MenuItem[] = [
     type: "text" as const,
     submenu: [
       {
-        titleKey: "nav.text_tools",
-        items: [
-          {labelKey: "nav.text_tools", href: "/text-tools"},
-          {labelKey: "nav.chatgpt_editor", href: "/text-tools/chatgpt-editor"},
-          {labelKey: "nav.gemini_editor", href: "/text-tools/gemini-editor"},
-        ],
-      },
-      {
         titleKey: "nav.pdf_tools",
         items: [
           {labelKey: "nav.pdf_tools", href: "/pdf-tools"},
           {labelKey: "nav.merge_pdf", href: "/pdf-tools/merge-pdf"},
           {labelKey: "nav.split_pdf", href: "/pdf-tools/split-pdf"},
+          {labelKey: "nav.compress_pdf", href: "/pdf-tools/compress-pdf"},
           {labelKey: "nav.word_to_pdf", href: "/pdf-tools/word-to-pdf"},
           {labelKey: "nav.pdf_to_images", href: "/pdf-tools/pdf-to-images"},
           {labelKey: "nav.pdf_to_text", href: "/pdf-tools/pdf-to-text"},
+        ],
+      },
+      {
+        titleKey: "tools.documents.category",
+        items: [
+          {labelKey: "nav.docx_tools", href: "/docx-tools"},
+          {labelKey: "nav.latex_tools", href: "/latex-tools"},
+          {labelKey: "nav.spreadsheet_tools", href: "/spreadsheet-tools"},
+          {labelKey: "nav.file_converter", href: "/tools/file-converter"},
         ],
       },
       {
@@ -71,15 +73,32 @@ const MENU_ITEMS: MenuItem[] = [
           {labelKey: "nav.image_tools", href: "/image-tools"},
           {labelKey: "nav.images_to_pdf", href: "/image-tools/images-to-pdf"},
           {labelKey: "nav.image_converter", href: "/tools/image-converter"},
+          {labelKey: "nav.bg_remover", href: "/tools/bg-remover"},
+          {labelKey: "nav.video_compressor", href: "/tools/video-compressor"},
+          {labelKey: "nav.icon_resizer", href: "/icon-resizer"},
+          {labelKey: "nav.favicon_maker", href: "/favicon-maker"},
         ],
       },
       {
-        titleKey: "nav.more_tools",
+        titleKey: "nav.text_tools",
         items: [
+          {labelKey: "nav.text_tools", href: "/text-tools"},
+          {labelKey: "nav.chatgpt_editor", href: "/text-tools/chatgpt-editor"},
+          {labelKey: "nav.gemini_editor", href: "/text-tools/gemini-editor"},
+          {labelKey: "nav.pro_editor", href: "/text-tools/editor"},
+          {labelKey: "nav.subtitle_tools", href: "/subtitle-tools"},
+        ],
+      },
+      {
+        titleKey: "nav.developer_tools",
+        items: [
+          {labelKey: "nav.seo_tools", href: "/seo-tools"},
+          {labelKey: "nav.api_tools", href: "/api-tools"},
           {labelKey: "nav.json_tools", href: "/json-tools"},
           {labelKey: "nav.code_formatter", href: "/code-formatter"},
-          {labelKey: "nav.subtitle_tools", href: "/subtitle-tools"},
-          {labelKey: "nav.spreadsheet_tools", href: "/spreadsheet-tools"},
+          {labelKey: "nav.qr_generator", href: "/tools/qr-generator"},
+          {labelKey: "nav.amazon_tools", href: "/amazon"},
+          {labelKey: "nav.all_tools", href: "/all-tools"},
         ],
       },
     ],

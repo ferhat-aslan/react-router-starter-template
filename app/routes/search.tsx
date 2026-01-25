@@ -9,6 +9,8 @@ import WORD from "/word.svg";
 import JPG from "/jpg.svg";
 import FOLDER from "/folder.svg";
 
+import { generateMeta } from "@forge42/seo-tools/remix/metadata";
+
 export const meta: MetaFunction = ({ location }) => {
   const firstPathSegment = location.pathname.split("/")?.[1];
   const locale: Locale =
@@ -21,10 +23,17 @@ export const meta: MetaFunction = ({ location }) => {
     return messages[key] ?? key;
   }
 
-  return [
-    { title: t("search.meta.title") },
-    { name: "description", content: t("search.meta.description") },
-  ];
+  return generateMeta(
+    {
+      title: t("search.meta.title"),
+      description: t("search.meta.description"),
+      url: `https://kleinbyte.com${location.pathname}`,
+    },
+    [
+      { name: "keywords", content: t("search.meta.keywords") },
+      { name: "author", content: "Kleinbyte" },
+    ]
+  );
 };
 
 export default function Search() {

@@ -24,7 +24,7 @@ export const meta: MetaFunction = ({location}) => {
     {
       title: t("text.meta.title"),
       description: t("text.meta.description"),
-      url: "https://kleinbyte.com/text-tools",
+      url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}text-tools`,
       image: "https://kleinbyte.com/og-image-text-tools.png",
     },
     [
@@ -32,7 +32,7 @@ export const meta: MetaFunction = ({location}) => {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("text.title"),
-          url: "https://kleinbyte.com/text-tools",
+          url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}text-tools`,
           description: t("text.description"),
           applicationCategory: "TextApplication",
           operatingSystem: "Any",

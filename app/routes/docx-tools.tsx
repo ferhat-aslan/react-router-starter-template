@@ -25,7 +25,7 @@ export const meta: MetaFunction = ({location}) => {
     {
       title: t("docx.meta.title"),
       description: t("docx.meta.description"),
-      url: "https://kleinbyte.com/docx-tools",
+      url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}docx-tools`,
       image: "https://kleinbyte.com/og-image-docx-tools.png",
     },
     [
@@ -33,7 +33,7 @@ export const meta: MetaFunction = ({location}) => {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("docx.title"),
-          url: "https://kleinbyte.com/docx-tools",
+          url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}docx-tools`,
           description: t("docx.description"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
