@@ -658,7 +658,7 @@
   "nav.file_converter": "محول الملفات",
   "nav.qr_generator": "مولد أكواد QR",
   "nav.bg_remover": "مزيل الخلفية",
-  "nav.image_tools": "أدوات الصور",
+
   "nav.images_to_pdf": "الصور إلى PDF",
   "nav.image_converter": "محول الصور",
   "nav.json_tools": "أدوات JSON",
@@ -670,6 +670,9 @@
   "nav.latex_tools": "أدوات LaTeX",
   "nav.seo_tools": "أدوات تحسين محركات البحث",
   "nav.api_tools": "أدوات API",
+  "nav.pdftools": " أدوات PDF",
+  "nav.document": " أدوات Document",
+  "nav.image_tools": "أدوات الصور",
   "nav.video_compressor": "ضاغط الفيديو",
   "nav.amazon_tools": "أدوات أمازون",
   "nav.favicon_maker": "صانع الأيقونات المفضلة",

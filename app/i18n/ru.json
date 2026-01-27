@@ -618,6 +618,8 @@
   "nav.about": "О нас",
   "nav.search": "Поиск",
   "nav.text_tools": "Инструменты Текста",
+  "nav.pdftools": "Инструменты PDF",
+  "nav.document": "Инструменты Документов",
   "nav.chatgpt_editor": "Редактор ChatGPT",
   "nav.gemini_editor": "Редактор Gemini",
   "nav.pdf_tools": "Инструменты PDF",

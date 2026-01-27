@@ -41,9 +41,8 @@ const LANG_NAMES: Record<Locale, string> = {
 };
 
 const MENU_ITEMS: MenuItem[] = [
-  {labelKey: "nav.home", href: "/"},
   {
-    labelKey: "nav.tools",
+    labelKey: "nav.pdftools",
     type: "text" as const,
     submenu: [
       {
@@ -58,6 +57,12 @@ const MENU_ITEMS: MenuItem[] = [
           {labelKey: "nav.pdf_to_text", href: "/pdf-tools/pdf-to-text"},
         ],
       },
+    ],
+  },
+  {
+    labelKey: "nav.document",
+    type: "text",
+    submenu: [
       {
         titleKey: "tools.documents.category",
         items: [
@@ -67,18 +72,12 @@ const MENU_ITEMS: MenuItem[] = [
           {labelKey: "nav.file_converter", href: "/tools/file-converter"},
         ],
       },
-      {
-        titleKey: "nav.image_tools",
-        items: [
-          {labelKey: "nav.image_tools", href: "/image-tools"},
-          {labelKey: "nav.images_to_pdf", href: "/image-tools/images-to-pdf"},
-          {labelKey: "nav.image_converter", href: "/tools/image-converter"},
-          {labelKey: "nav.bg_remover", href: "/tools/bg-remover"},
-          {labelKey: "nav.video_compressor", href: "/tools/video-compressor"},
-          {labelKey: "nav.icon_resizer", href: "/icon-resizer"},
-          {labelKey: "nav.favicon_maker", href: "/favicon-maker"},
-        ],
-      },
+    ],
+  },
+  {
+    labelKey: "nav.text_tools",
+    type: "text",
+    submenu: [
       {
         titleKey: "nav.text_tools",
         items: [
@@ -89,6 +88,12 @@ const MENU_ITEMS: MenuItem[] = [
           {labelKey: "nav.subtitle_tools", href: "/subtitle-tools"},
         ],
       },
+    ],
+  },
+  {
+    labelKey: "nav.tools",
+    type: "text" as const,
+    submenu: [
       {
         titleKey: "nav.developer_tools",
         items: [
@@ -103,8 +108,25 @@ const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
-  {labelKey: "nav.blog", href: "/blog"},
-  {labelKey: "nav.about", href: "/about"},
+  {
+    labelKey: "nav.image_tools",
+    type: "text",
+    submenu: [
+      {
+        titleKey: "nav.image_tools",
+        items: [
+          {labelKey: "nav.image_tools", href: "/image-tools"},
+          {labelKey: "nav.images_to_pdf", href: "/image-tools/images-to-pdf"},
+          {labelKey: "nav.image_converter", href: "/tools/image-converter"},
+          {labelKey: "nav.bg_remover", href: "/tools/bg-remover"},
+          {labelKey: "nav.video_compressor", href: "/tools/video-compressor"},
+          {labelKey: "nav.icon_resizer", href: "/icon-resizer"},
+          {labelKey: "nav.favicon_maker", href: "/favicon-maker"},
+        ],
+      },
+    ],
+  },
+
   {labelKey: "nav.search", href: "/search"},
 ];
 

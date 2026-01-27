@@ -662,7 +662,7 @@
   "nav.file_converter": "Dateikonverter",
   "nav.qr_generator": "QR-Code-Generator",
   "nav.bg_remover": "Hintergrundentferner",
-  "nav.image_tools": "Bild-Tools",
+
   "nav.images_to_pdf": "Bilder zu PDF",
   "nav.image_converter": "Bild-Konverter",
   "nav.json_tools": "JSON-Tools",
@@ -674,6 +674,9 @@
   "nav.latex_tools": "LaTeX-Tools",
   "nav.seo_tools": "SEO-Tools",
   "nav.api_tools": "API-Tools",
+  "nav.image_tools": "Bild-Tools",
+  "nav.pdftools": " PDF-Tools",
+  "nav.document": " Dokumenten-Tools",
   "nav.video_compressor": "Videokompressor",
   "nav.amazon_tools": "Amazon-Tools",
   "nav.favicon_maker": "Favicon-Generator",

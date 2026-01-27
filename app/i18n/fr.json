@@ -648,6 +648,10 @@
   "nav.about": "À propos",
   "nav.search": "Rechercher",
   "nav.text_tools": "Outils Texte",
+
+  "nav.pdftools": "Outils PDF",
+  "nav.document": "Outils Document",
+
   "nav.chatgpt_editor": "Éditeur ChatGPT",
   "nav.gemini_editor": "Éditeur Gemini",
   "nav.pdf_tools": "Outils PDF",

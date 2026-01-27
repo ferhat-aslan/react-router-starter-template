@@ -652,6 +652,9 @@
   "nav.blog": "Blog",
   "nav.about": "About",
   "nav.search": "Search",
+
+  "nav.pdftools": "PDF Tools",
+  "nav.document": "Document Tools",
   "nav.text_tools": "Text Tools",
   "nav.chatgpt_editor": "ChatGPT Editor",
   "nav.gemini_editor": "Gemini Editor",

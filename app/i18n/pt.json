@@ -619,6 +619,8 @@
   "nav.about": "Sobre",
   "nav.search": "Pesquisar",
   "nav.text_tools": "Ferramentas de Texto",
+  "nav.pdftools": "Ferramentas PDF",
+  "nav.document": "Ferramentas de Documento",
   "nav.chatgpt_editor": "Editor ChatGPT",
   "nav.gemini_editor": "Editor Gemini",
   "nav.pdf_tools": "Ferramentas PDF",
