@@ -9,7 +9,7 @@
   --color-soft: #f6f6f7;
   --color-luft: #3c3c43;
   --color-input: #0000001c;
-  
+
   /* Add custom font family if needed, otherwise inherit from Tailwind defaults */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -22,7 +22,6 @@
     cursor: pointer;
   }
 }
-
 
 /* Defaults hover styles on all devices */
 @custom-variant hover (&:hover);
@@ -58,10 +57,6 @@ body {
   @apply w-full p-6 border  border-gray-200 bg-white dark:bg-neutral-800 dark:border-neutral-700 rounded-2xl duration-200 hover:shadow-lg transition aspect-square cursor-pointer;
 }
 
-
-
-
-
 .bg-background {
   @apply bg-white dark:bg-neutral-800;
 }
@@ -80,7 +75,6 @@ body {
 }
 
 .scrolled header {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
 }
 
@@ -452,7 +446,7 @@ textarea {
   background-color: #fee2e2;
   padding: 0.2em 0.4em;
   border-radius: 0.3rem;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
 }
 
 .prose :where(pre):not(:where([class~="not-prose"] *)) {

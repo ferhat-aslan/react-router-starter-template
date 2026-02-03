@@ -5,15 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useParams,
 } from "react-router";
 import {useLocation} from "react-router";
 
 import type {Route} from "./+types/root";
-import "./app.css";
-import {generateCanonicalLinks} from "@forge42/seo-tools/canonical";
-
-import {renderToStaticMarkup} from "react-dom/server";
+import appcss from "./app.css?inline";
 
 export const links: Route.LinksFunction = () => [
   /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
@@ -101,6 +97,7 @@ export function Layout({children}: {children: React.ReactNode}) {
           src="https://www.googletagmanager.com/gtag/js?id=G-HRC6G6L65K"
         ></script>
         <script
+          async
           dangerouslySetInnerHTML={{
             __html: `  window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -109,6 +106,7 @@ export function Layout({children}: {children: React.ReactNode}) {
     gtag('config', 'G-HRC6G6L65K');`,
           }}
         ></script>
+        <style dangerouslySetInnerHTML={{__html: `${appcss}`}} />
         <ThemeScript />
       </head>
       <body suppressHydrationWarning>

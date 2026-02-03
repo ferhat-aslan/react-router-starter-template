@@ -9,6 +9,15 @@ import {
   type Locale,
 } from "~/utils/route-utils";
 import Layout from "~/components/layout";
+// Add a debounce utility function
+const debounce = (func: (...args: any[]) => void, delay: number) => {
+  let timeout: any;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
+  };
+};
+
 import {
   FileText,
   Copy,
@@ -479,7 +488,7 @@ const StickyToolbar = ({editor, t}: {editor: any; t: any}) => {
             <div className="w-px h-6 bg-gray-200 dark:bg-slate-800 mx-2" />
 
             <button
-              ref={emojiContainerRef}
+              ref={emojiContainerRef as any}
               onMouseDown={(e) => {
                 e.preventDefault();
                 setShowEmojis(!showEmojis);
@@ -620,12 +629,24 @@ export default function MessagesEditor({
   badge,
   placeholder,
   filename,
-  faqPrefix,
+  faqPrefix, // e.g., "chatgpt.faq" or "gemini.faq"
 }: MessagesEditorProps) {
   const {t} = useTranslation();
   const [copied, setCopied] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [characterCount, setCharacterCount] = useState(0);
+
+  // Define LOCAL_STORAGE_KEY
+  const LOCAL_STORAGE_KEY = `tiptap-editor-content-${filename}`;
+
+  // Debounced save function
+  const saveContent = useRef(
+    debounce((html: string) => {
+      if (typeof window !== "undefined") {
+        localStorage.setItem(LOCAL_STORAGE_KEY, html);
+      }
+    }, 500) // Debounce by 500ms
+  ).current;
 
   const editor = useEditor({
     extensions: [
@@ -650,11 +671,11 @@ export default function MessagesEditor({
       }),
       CharacterCount,
     ],
-    content: "",
+    content: "", // Start empty, load from localStorage in useEffect
     onUpdate: ({editor}) => {
-      // Force re-render to update stats
       setWordCount(editor.storage.characterCount.words());
       setCharacterCount(editor.storage.characterCount.characters());
+      saveContent(editor.getHTML()); // Save content on update
     },
     immediatelyRender: false,
     editorProps: {
@@ -664,6 +685,17 @@ export default function MessagesEditor({
       },
     },
   });
+
+  // Effect to load content from localStorage
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+    const savedContent = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedContent && editor.isEmpty) {
+      editor.commands.setContent(savedContent);
+    }
+  }, [editor, LOCAL_STORAGE_KEY]);
 
   const handleCopy = () => {
     if (!editor) return;
@@ -676,6 +708,10 @@ export default function MessagesEditor({
   const handleClear = () => {
     if (editor && confirm("Delete everything?")) {
       editor.commands.clearContent();
+      // Also clear from local storage when content is cleared
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+      }
     }
   };
 

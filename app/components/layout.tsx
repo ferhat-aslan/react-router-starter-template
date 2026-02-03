@@ -86,9 +86,9 @@ const Layout = ({children}: any) => {
           {/* End Col */}
 
           <div>
-            <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+            <h1 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
               Product
-            </h4>
+            </h1>
 
             <div className="mt-3 grid space-y-3 text-sm">
               <p>
@@ -128,9 +128,9 @@ const Layout = ({children}: any) => {
           {/* End Col */}
 
           <div>
-            <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+            <h1 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
               Company
-            </h4>
+            </h1>
 
             <div className="mt-3 grid space-y-3 text-sm">
               <p>
@@ -189,9 +189,9 @@ const Layout = ({children}: any) => {
           {/* End Col */}
 
           <div>
-            <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+            <h1 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
               Resources
-            </h4>
+            </h1>
 
             <div className="mt-3 grid space-y-3 text-sm">
               <p>
@@ -239,9 +239,9 @@ const Layout = ({children}: any) => {
           {/* End Col */}
 
           <div>
-            <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+            <h1 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
               Developers
-            </h4>
+            </h1>
 
             <div className="mt-3 grid space-y-3 text-sm">
               <p>
@@ -273,9 +273,9 @@ const Layout = ({children}: any) => {
               </p>
             </div>
 
-            <h4 className="mt-7 text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+            <h1 className="mt-7 text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
               Industries
-            </h4>
+            </h1>
 
             <div className="mt-3 grid space-y-3 text-sm">
               <p>
@@ -383,6 +383,7 @@ const Layout = ({children}: any) => {
                 <a
                   className="inline-block text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   href="#"
+                  aria-label="social"
                 >
                   <svg
                     className="shrink-0 size-4"
@@ -398,6 +399,7 @@ const Layout = ({children}: any) => {
                 <a
                   className="inline-block text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   href="#"
+                  aria-label="social-1"
                 >
                   <svg
                     className="shrink-0 size-4"
@@ -413,6 +415,7 @@ const Layout = ({children}: any) => {
                 <a
                   className="inline-block text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   href="#"
+                  aria-label="social-2"
                 >
                   <svg
                     className="shrink-0 size-4"

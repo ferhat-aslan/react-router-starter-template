@@ -1,9 +1,13 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
 import {LocaleLink} from "~/components/locale-link";
-import { ToolCategoryCard } from "~/components/tool-category-card";
-import { Suspense, lazy } from "react";
-const HeroBackground = lazy(() => import("~/components/ui/hero-background").then(module => ({ default: module.HeroBackground })));
+import {ToolCategoryCard} from "~/components/tool-category-card";
+import {Suspense, lazy} from "react";
+const HeroBackground = lazy(() =>
+  import("~/components/ui/hero-background").then((module) => ({
+    default: module.HeroBackground,
+  })),
+);
 
 import PDF from "/pdf.svg";
 import WORD from "/word.svg";
@@ -17,12 +21,12 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {type MetaFunction} from "react-router";
 
-import { SUPPORTED_LOCALES } from "../utils/route-utils";
+import {SUPPORTED_LOCALES} from "../utils/route-utils";
 
 export const meta: MetaFunction = ({location}) => {
   const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment as any) 
-    ? (firstPathSegment as any) 
+  const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment as any)
+    ? (firstPathSegment as any)
     : "en";
   const messages = translations[locale] ?? translations.en;
 
@@ -58,15 +62,22 @@ export const meta: MetaFunction = ({location}) => {
           description: t("home.meta.lt.course.description"),
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: t("home.meta.title") },
-      { name: "twitter:description", content: t("home.meta.description") },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-all-tools.png" },
-      { name: "keywords", content: "free online tools, pdf tools, document converter, image tools, developer tools, no signup required" },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "twitter:card", content: "summary_large_image"},
+      {name: "twitter:title", content: t("home.meta.title")},
+      {name: "twitter:description", content: t("home.meta.description")},
+      {
+        name: "twitter:image",
+        content: "https://kleinbyte.com/og-image-all-tools.png",
+      },
+      {
+        name: "keywords",
+        content:
+          "free online tools, pdf tools, document converter, image tools, developer tools, no signup required",
+      },
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
   return meta;
 };
@@ -76,7 +87,7 @@ export function loader({context}: Route.LoaderArgs) {
 }
 
 export default function Home({loaderData}: Route.ComponentProps) {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   const tools = [
     {
@@ -216,10 +227,14 @@ export default function Home({loaderData}: Route.ComponentProps) {
       <div className="min-h-screen  transition-colors duration-300">
         {/* Hero Section - Shadcn Inspired */}
         <section className="relative pt-24 pb-32 overflow-hidden border-b border-gray-200 dark:border-neutral-700">
-          <Suspense fallback={<div className="absolute inset-0 bg-white dark:bg-neutral-900" />}>
+          <Suspense
+            fallback={
+              <div className="absolute inset-0 bg-white dark:bg-neutral-900" />
+            }
+          >
             <HeroBackground />
           </Suspense>
-          
+
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-6xl mx-auto text-center">
               {/* Badge */}
@@ -230,14 +245,13 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 </span>
                 <span className="ml-2">🚀</span>
               </div>
-              
+
               {/* Main Headline */}
               <h1 className="text-5xl md:text-7xl lg:text-[3em]!   font-bold tracking-tight mb-8 leading-[1.1]">
                 <span className="text-gray-900 dark:text-white">
-                  One Web App for all your needs {" "}
+                  One Web App for all your needs{" "}
                 </span>
                 <span className="relative inline-block">
-                 
                   <svg
                     className="absolute -bottom-2 left-0 w-full"
                     height="8"
@@ -254,13 +268,17 @@ export default function Home({loaderData}: Route.ComponentProps) {
                     />
                   </svg>
                 </span>
-                <br />at {" "}
-                <span className="text-gray-900 dark:text-white"
-                style={{borderBottom:"8px solid greenyellow"}}
-                >Warp Speed</span>
+                <br />
+                at{" "}
+                <span
+                  className="text-gray-900 dark:text-white"
+                  style={{borderBottom: "8px solid greenyellow"}}
+                >
+                  Warp Speed
+                </span>
                 <span className="inline-block">⚡</span>
               </h1>
-              
+
               {/* Subtitle */}
               <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto leading-relaxed">
                 Transform your workflow with our collection of{" "}
@@ -270,59 +288,75 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 for PDF, documents, images, and more. No signup required 🚀.
               </p>
 
-            
-
               {/* Social Proof */}
               <div className="flex items-center justify-center gap-6 mb-10">
                 {/* User Avatars */}
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <img
-                    key={i}
-                    loading="lazy"
-                    decoding="async"
-                      src={"https://i.pravatar.cc/150?img="+i+5}
+                      key={i}
+                      alt={"User Avatar " + i}
+                      loading="lazy"
+                      width={40}
+                      height={40}
+                      decoding="async"
+                      src={"https://i.pravatar.cc/150?img=" + i + 5}
                       className="w-10 h-10 rounded-full border-2 border-white dark:border-neutral-900 bg-gradient-to-br from-blue-400 to-purple-600"
                     />
                   ))}
                 </div>
-                
+
                 {/* Rating */}
                 <div className="flex items-center gap-2">
                   <div className="flex">
                     {[1, 2, 3, 4].map((i) => (
-                      <svg key={i} className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
+                      <svg
+                        key={i}
+                        className="w-5 h-5 text-amber-400 fill-current"
+                        viewBox="0 0 20 20"
+                      >
                         <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                       </svg>
                     ))}
-                    <svg className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
+                    <svg
+                      className="w-5 h-5 text-amber-400 fill-current"
+                      viewBox="0 0 20 20"
+                    >
                       <defs>
                         <linearGradient id="half-star">
                           <stop offset="50%" stopColor="currentColor" />
                           <stop offset="50%" stopColor="#d1d5db" />
                         </linearGradient>
                       </defs>
-                      <path fill="url(#half-star)" d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      <path
+                        fill="url(#half-star)"
+                        d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+                      />
                     </svg>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">4.5</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                    4.5
+                  </span>
                 </div>
 
                 {/* Loved by */}
                 <span className="text-sm text-gray-600 dark:text-gray-400">
-                  Loved by <span className="font-semibold text-gray-900 dark:text-white">great customers</span>
+                  Loved by{" "}
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    great customers
+                  </span>
                 </span>
               </div>
 
               {/* Tool Icons */}
               <div className="hidden items-center justify-center gap-4 mb-12">
                 {[
-                  { icon: "📄", label: "PDF" },
-                  { icon: "✏️", label: "Edit" },
-                  { icon: "🔄", label: "Convert" },
-                  { icon: "🎨", label: "Design" },
-                  { icon: "💾", label: "Save" },
-                  { icon: "⚙️", label: "Tools" },
+                  {icon: "📄", label: "PDF"},
+                  {icon: "✏️", label: "Edit"},
+                  {icon: "🔄", label: "Convert"},
+                  {icon: "🎨", label: "Design"},
+                  {icon: "💾", label: "Save"},
+                  {icon: "⚙️", label: "Tools"},
                 ].map((tool, i) => (
                   <div
                     key={i}
@@ -336,11 +370,31 @@ export default function Home({loaderData}: Route.ComponentProps) {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <LocaleLink to="/all-tools" className="flex items-center gap-2 justify-center bg-soft! border rounded-3xl! py-2.5! px-3.5! text-luft! border-input! hover:scale-105 transition-all cursor-pointer">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-drill-icon lucide-drill"><path d="M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z"/><path d="M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8"/><path d="M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3"/><path d="M18 6h4"/><path d="m5 10-2 8"/><path d="m7 18 2-8"/></svg>
+                <LocaleLink
+                  to="/all-tools"
+                  className="flex items-center gap-2 justify-center bg-soft! border rounded-3xl! py-2.5! px-3.5! text-luft! border-input! hover:scale-105 transition-all cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-drill-icon lucide-drill"
+                  >
+                    <path d="M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z" />
+                    <path d="M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8" />
+                    <path d="M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3" />
+                    <path d="M18 6h4" />
+                    <path d="m5 10-2 8" />
+                    <path d="m7 18 2-8" />
+                  </svg>
                   Show all tools
                 </LocaleLink>
-                
               </div>
             </div>
           </div>
@@ -362,51 +416,87 @@ export default function Home({loaderData}: Route.ComponentProps) {
               {[
                 {
                   icon: (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   ),
                   title: t("home.features.document.title"),
                   desc: t("home.features.document.description"),
                   color: "text-blue-600 dark:text-blue-400",
                   bg: "bg-blue-50 dark:bg-blue-500/10",
-                  border: "hover:border-blue-500/50"
+                  border: "hover:border-blue-500/50",
                 },
                 {
                   icon: (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
                   ),
                   title: t("home.features.image.title"),
                   desc: t("home.features.image.description"),
                   color: "text-green-600 dark:text-green-400",
                   bg: "bg-green-50 dark:bg-green-500/10",
-                  border: "hover:border-green-500/50"
+                  border: "hover:border-green-500/50",
                 },
                 {
                   icon: (
                     <>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </>
                   ),
                   title: t("home.features.developer.title"),
                   desc: t("home.features.developer.description"),
                   color: "text-purple-600 dark:text-purple-400",
                   bg: "bg-purple-50 dark:bg-purple-500/10",
-                  border: "hover:border-purple-500/50"
+                  border: "hover:border-purple-500/50",
                 },
                 {
                   icon: (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    />
                   ),
                   title: t("home.features.ecommerce.title"),
                   desc: t("home.features.ecommerce.description"),
                   color: "text-amber-600 dark:text-amber-400",
                   bg: "bg-amber-50 dark:bg-amber-500/10",
-                  border: "hover:border-amber-500/50"
-                }
+                  border: "hover:border-amber-500/50",
+                },
               ].map((feature, index) => (
-                <div key={index} className={`group p-8 rounded-3xl border border-gray-200 dark:border-white/5 bg-white dark:bg-white/5 ${feature.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none`}>
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${feature.bg} ${feature.color}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div
+                  key={index}
+                  className={`group p-8 rounded-3xl border border-gray-200 dark:border-white/5 bg-white dark:bg-white/5 ${feature.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none`}
+                >
+                  <div
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${feature.bg} ${feature.color}`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-7 w-7"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
                       {feature.icon}
                     </svg>
                   </div>
@@ -439,13 +529,22 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 <div
                   key={index}
                   className="animate-slide-in-up h-full"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  style={{animationDelay: `${index * 100}ms`}}
                 >
                   <ToolCategoryCard
                     title={category.category}
-                    description={t(`home.tools.${category.id}.description`) || `${category.tools.length} tools available`}
+                    description={
+                      t(`home.tools.${category.id}.description`) ||
+                      `${category.tools.length} tools available`
+                    }
                     count={category.tools.length}
-                    icon={<img src={category.icon} alt={category.category} className="w-6 h-6 dark:invert" />}
+                    icon={
+                      <img
+                        src={category.icon}
+                        alt={category.category}
+                        className="w-6 h-6 dark:invert"
+                      />
+                    }
                     link={category.link || category.tools[0]?.link || "#"}
                     badge="Available"
                   />
@@ -462,7 +561,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
             <div className="relative rounded-[2.5rem] overflow-hidden px-6 py-24 text-center border border-gray-200 dark:border-white/5 bg-white dark:bg-white/5 shadow-2xl dark:shadow-none">
               <div className="absolute inset-0 opacity-10 dark:opacity-20 bg-[url('/grid.svg')]"></div>
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full  to-transparent pointer-events-none"></div>
-              
+
               <div className="relative z-10 max-w-3xl mx-auto">
                 <h2 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-8">
                   {t("home.cta.title")}
@@ -472,7 +571,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
                 </p>
                 <LocaleLink
                   to="/pdf-tools"
-                  className="inline-block px-12 py-5 bg-blue-600  font-bold rounded-full shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition-all duration-300 text-lg transform hover:-translate-y-1 active:scale-95"
+                  className="inline-block px-12 py-5 bg-black text-white  font-bold rounded-full shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition-all duration-300 text-lg transform hover:-translate-y-1 active:scale-95"
                 >
                   {t("home.cta.button")}
                 </LocaleLink>

@@ -6,7 +6,7 @@ import {
   SUPPORTED_LOCALES,
   type Locale,
 } from "../../utils/route-utils";
-import "./megamenu.css";
+import megaMenu from "./megamenu.css?inline";
 
 interface MenuItem {
   labelKey: string;
@@ -150,6 +150,9 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
       localStorage.getItem("theme") === "dark" ||
       document.documentElement.classList.contains("dark");
     setIsDarkMode(isDark);
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    }
   }, []);
 
   // Close menu when clicking outside
@@ -166,7 +169,7 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
     }
   }, [isMenuOpen]);
 
-  // Close menu on window resize
+  // Close menu on window resize and handle body scroll
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -175,9 +178,18 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
       }
     };
 
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -217,21 +229,39 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
 
   const handleMenuItemClick = (item: MenuItem) => {
     if (item.submenu && window?.innerWidth < 768) {
-      setActiveSubmenu(item?.labelKey);
+      if (activeSubmenu === item.labelKey) {
+        setActiveSubmenu(null);
+      } else {
+        setActiveSubmenu(item.labelKey);
+      }
     } else if (item.href) {
       setIsMenuOpen(false);
     }
   };
 
-  const handleBackClick = () => {
-    setActiveSubmenu(null);
-  };
+  const closeIconSvg = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
 
   return (
-    <header className="header">
-      <nav className="navbar container">
+    <header className="header h-12! max-h-12 ">
+      <style>{megaMenu}</style>
+      <nav className="navbar h-full gap-2 container max-w-7xl bg-zinc-900 rounded-sm px-1 !shadow-none">
         {/* Left Section */}
-        <section className="navbar__left">
+        <section className="navbar__left bg-white min-h-9.5 m-0 py-0 px-3 rounded-xs">
           <LocaleLink to="/" className="brand">
             {brandLogo ? (
               brandLogo
@@ -256,24 +286,27 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
             onClick={() => setIsMenuOpen(false)}
           ></div>
           <div className={`menu ${isMenuOpen ? "is-active" : ""}`}>
-            <div className={`menu__header ${activeSubmenu ? "is-active" : ""}`}>
-              <span className="menu__arrow" onClick={handleBackClick}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </span>
-              <span className="menu__title">{activeSubmenu}</span>
+            <div className="mobile-menu__header">
+              <LocaleLink
+                to="/"
+                className="brand"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {brandLogo ? (
+                  brandLogo
+                ) : (
+                  <span className="brand-text">Klein⁘Byte</span>
+                )}
+              </LocaleLink>
+              <button
+                className="mobile-menu__close"
+                onClick={toggleMenu}
+                aria-label="toggle-theme"
+              >
+                {closeIconSvg}
+              </button>
             </div>
+
             <ul className="menu__inner">
               {MENU_ITEMS.map((item) => (
                 <li
@@ -281,13 +314,18 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
                   className={`menu__item ${
                     item.submenu ? "menu__dropdown" : ""
                   }`}
-                  onClick={() => handleMenuItemClick(item)}
                 >
                   {item.submenu ? (
                     <>
                       <a
-                        onClick={(e) => e.preventDefault()}
-                        className="menu__link"
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleMenuItemClick(item);
+                        }}
+                        className={`menu__link ${
+                          activeSubmenu === item.labelKey ? "active" : ""
+                        }`}
                       >
                         {t(item.labelKey)}
                         <svg
@@ -307,17 +345,91 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
                       <Submenu
                         items={item.submenu}
                         type={item.type || "normal"}
-                        isActive={activeSubmenu === t(item.labelKey)}
+                        isActive={activeSubmenu === item.labelKey}
                       />
                     </>
                   ) : (
-                    <LocaleLink to={item.href || "/"} className="menu__link">
+                    <LocaleLink
+                      to={item.href || "/"}
+                      className="menu__link"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       {t(item.labelKey)}
                     </LocaleLink>
                   )}
                 </li>
               ))}
             </ul>
+
+            <div className="mobile-menu__footer">
+              <div className="language-dropdown">
+                <button className="language-btn rounded-xs h-9.5">
+                  <span className="language-label">{LANG_NAMES[locale]}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+                <div className="language-menu">
+                  {SUPPORTED_LOCALES.map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => handleLanguageChange(lang)}
+                      className={`language-item ${
+                        locale === lang ? "active" : ""
+                      }`}
+                    >
+                      {LANG_NAMES[lang]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button
+                className="switch bg-orange-500 rounded-full"
+                onClick={toggleDarkMode}
+              >
+                <span className="switch__light">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="5" />
+                    <path d="M12 1v6m0 6v6M4.22 4.24 4.24m5.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24" />
+                  </svg>
+                </span>
+                <span className="switch__dark">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                  </svg>
+                </span>
+              </button>
+            </div>
           </div>
         </section>
 
@@ -325,7 +437,7 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
         <section className="navbar__right">
           {/* Language Selector */}
           <div className="language-dropdown">
-            <button className="language-btn">
+            <button className="language-btn rounded-xs h-9.5">
               <span className="language-label">{LANG_NAMES[locale]}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -355,7 +467,10 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
           </div>
 
           {/* Theme Switcher */}
-          <button className="switch" onClick={toggleDarkMode}>
+          <button
+            className="switch bg-orange-500 rounded-full"
+            onClick={toggleDarkMode}
+          >
             <span className="switch__light">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -369,7 +484,7 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
                 strokeLinejoin="round"
               >
                 <circle cx="12" cy="12" r="5" />
-                <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24" />
+                <path d="M12 1v6m0 6v6M4.22 4.24 4.24m5.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24" />
               </svg>
             </span>
             <span className="switch__dark">
@@ -403,14 +518,23 @@ interface SubmenuProps {
 const Submenu = ({items, type, isActive}: SubmenuProps) => {
   const {t} = useTranslation();
   return (
-    <div className={`submenu megamenu__${type} ${isActive ? "is-active" : ""}`}>
+    <div
+      className={`submenu p-1 megamenu__${type} ${isActive ? "is-active" : ""}`}
+    >
       {items.map((category) => (
-        <div key={category.titleKey} className="submenu__inner">
-          <h4 className="submenu__title">{t(category.titleKey)}</h4>
-          <ul className="submenu__list">
+        <div
+          key={category.titleKey}
+          className="submenu__inner w-full flex flex-col justify-start items-start text-left p-0 m-0"
+        >
+          <h4 className="submenu__title bg-violet-500 w-full h-16 rounded-xs text-white flex items-center px-3 !m-0 !py-0">
+            {t(category.titleKey)}
+          </h4>
+          <ul className="submenu__list !text-left flex flex-col justify-start items-start bg-[#3c3c3c] gap-1 w-full gap-y-1">
             {category.items.map((item) => (
-              <li key={item.labelKey}>
-                <LocaleLink to={item.href}>{t(item.labelKey)}</LocaleLink>
+              <li key={item.labelKey} className="text-left w-full">
+                <LocaleLink to={item.href} className={"text-left w-full"}>
+                  {t(item.labelKey)}
+                </LocaleLink>
               </li>
             ))}
           </ul>
