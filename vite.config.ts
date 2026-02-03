@@ -41,12 +41,17 @@ export default defineConfig({
 					// OG Image Generation (very heavy, definitely split)
 					og: ["satori", "@resvg/resvg-wasm"],
 					// Utils
-					utils: ["isbot", "jspdf", "html-to-image"]
-				}
-			}
-		}
-	},
 
+
+				}
+
+			},
+
+
+
+		},
+		reportCompressedSize: true,
+	},
 	optimizeDeps: {
 		include: [
 			"react",
@@ -70,8 +75,11 @@ export default defineConfig({
 			"@tiptap/extension-task-item",
 			"@tiptap/extension-color",
 			"@tiptap/extension-text-style",
-			"jspdf",
-			"html-to-image"
-		]
+
+		],
+		exclude: ["@sanity/client", "@sanity/image-url", 'jspdf',
+			'html-to-image',
+			'lodash',
+			'isbot',],
 	}
 });

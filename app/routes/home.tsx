@@ -9,11 +9,11 @@ const HeroBackground = lazy(() =>
   })),
 );
 
-import PDF from "/pdf.svg";
-import WORD from "/word.svg";
-import JPG from "/jpg.svg";
+import PDF from "/pdf.svg?url";
+import WORD from "/word.svg?url";
+import JPG from "/jpg.svg?url";
 import TXT from "/txt.svg";
-import FOLDER from "/folder.svg";
+import FOLDER from "/folder.svg?url";
 import {useTranslation, translations, type Locale} from "../utils/route-utils";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
@@ -543,6 +543,9 @@ export default function Home({loaderData}: Route.ComponentProps) {
                         src={category.icon}
                         alt={category.category}
                         className="w-6 h-6 dark:invert"
+                        loading="lazy"
+                        width={24}
+                        height={24}
                       />
                     }
                     link={category.link || category.tools[0]?.link || "#"}
