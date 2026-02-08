@@ -1,17 +1,22 @@
-import type { Route } from "./+types/blog";
+import type {Route} from "./+types/blog";
 import Layout from "~/components/layout";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
-import { type MetaFunction } from "react-router";
-import { sanityClient, allPostsQuery, type BlogPost } from "./sanity";
+import {useTranslation, translations, type Locale} from "~/utils/route-utils";
+import {type MetaFunction} from "react-router";
+import {sanityClient, allPostsQuery, type BlogPost} from "./sanity";
+import {createImageUrlBuilder, type SanityImageSource} from "@sanity/image-url";
 
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = ({ location }) => {
+export const meta: MetaFunction = ({location}) => {
   const firstPathSegment = location.pathname.split("/")?.[1];
   const locale: Locale =
-    firstPathSegment === "de" ? "de" :
-    firstPathSegment === "es" ? "es" :
-    firstPathSegment === "ar" ? "ar" : "en";
+    firstPathSegment === "de"
+      ? "de"
+      : firstPathSegment === "es"
+      ? "es"
+      : firstPathSegment === "ar"
+      ? "ar"
+      : "en";
   const messages = translations[locale] ?? translations.en;
 
   function t(key: string) {
@@ -25,32 +30,39 @@ export const meta: MetaFunction = ({ location }) => {
       url: `https://kleinbyte.com${location.pathname}`,
     },
     [
-      { name: "keywords", content: t("blog.meta.keywords") },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {name: "keywords", content: t("blog.meta.keywords")},
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
 };
 
 export const loader = async () => {
   try {
     const posts = await sanityClient.fetch<BlogPost[]>(allPostsQuery);
-    return { posts };
+    return {posts};
   } catch (error) {
-    console.error('Error fetching blog posts:', error);
-    return { posts: [] };
+    console.error("Error fetching blog posts:", error);
+    return {posts: []};
   }
 };
 
-export default function Blog({ loaderData }: Route.ComponentProps) {
-  const { posts } = loaderData;
-  const { t, locale } = useTranslation();
+// Create an image URL builder using the client
+const builder = createImageUrlBuilder(sanityClient);
+// Export a function that can be used to get image URLs
+export function urlFor(source: SanityImageSource) {
+  return builder.image(source);
+}
+
+export default function Blog({loaderData}: Route.ComponentProps) {
+  const {posts} = loaderData;
+  const {t, locale} = useTranslation();
 
   // Helper to format date based on locale
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -71,46 +83,75 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                 No blog posts available yet.
               </p>
             ) : (
-              <div className="grid gap-12">
-                {posts.map((post) => (
-                  <article 
-                    key={post._id} 
-                    className="flex flex-col md:flex-row gap-8 items-start border-b border-gray-200 dark:border-white/10 pb-12 last:border-0"
+              <div className="flex flex-col lg:grid grid-cols-[2fr_1fr] gap-12">
+                {posts.map((post: any) => (
+                  <article
+                    key={post._id}
+                    className="flex flex-col gap-4 items-start border-b border-gray-200 dark:border-white/10 pb-12 last:border-0"
                   >
                     {post.coverImage && (
-                      <div className="w-full md:w-1/3 aspect-video bg-gray-100 dark:bg-white/5 rounded-2xl overflow-hidden">
-                        <img 
-                          src={post.coverImage} 
-                          alt={post.title}
-                          className="w-full h-full object-cover"
+                      <div className="w-full aspect-video bg-gray-100 dark:bg-white/5  overflow-hidden">
+                        <img
+                          src={urlFor(post.coverImage).width(800).url()}
+                          srcSet={[
+                            `${urlFor(post.coverImage).width(400).url()} 400w`,
+                            `${urlFor(post.coverImage).width(800).url()} 800w`,
+                            `${urlFor(post.coverImage)
+                              .width(1200)
+                              .url()} 1200w`,
+                          ].join(", ")}
+                          sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
+                          alt={post.title || ""}
                         />
                       </div>
                     )}
-                    
+
                     <div className="flex-1">
                       <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-3">
-                        <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
+                        <time dateTime={post.publishedAt}>
+                          {formatDate(post.publishedAt)}
+                        </time>
                         <span>•</span>
-                        <span>{post.author}</span>
+                        <span>{post?.author}</span>
                       </div>
-                      
+
                       <h2 className="text-2xl font-bold mb-3 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                        <a href={locale === "en" ? `/blog/${post.slug.current}` : `/${locale}/blog/${post.slug.current}`}>
+                        <a
+                          href={
+                            locale === "en"
+                              ? `/blog/${post.slug.current}`
+                              : `/${locale}/blog/${post.slug.current}`
+                          }
+                        >
                           {post.title}
                         </a>
                       </h2>
-                      
+
                       <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
                         {post.excerpt}
                       </p>
-                      
-                      <a 
-                        href={locale === "en" ? `/blog/${post.slug.current}` : `/${locale}/blog/${post.slug.current}`}
+
+                      <a
+                        href={
+                          locale === "en"
+                            ? `/blog/${post.slug.current}`
+                            : `/${locale}/blog/${post.slug.current}`
+                        }
                         className="inline-flex items-center font-medium text-blue-600 dark:text-blue-400 hover:underline"
                       >
                         {t("blog.read_more")}
-                        <svg className="w-4 h-4 ml-1 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        <svg
+                          className="w-4 h-4 ml-1 rtl:rotate-180"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
                         </svg>
                       </a>
                     </div>
