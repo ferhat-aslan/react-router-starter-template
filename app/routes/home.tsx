@@ -14,7 +14,12 @@ import WORD from "/word.svg?url";
 import JPG from "/jpg.svg?url";
 import TXT from "/txt.svg";
 import FOLDER from "/folder.svg?url";
-import {useTranslation, translations, type Locale} from "../utils/route-utils";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "../utils/route-utils";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {course} from "@forge42/seo-tools/structured-data/course";
@@ -23,16 +28,37 @@ import {type MetaFunction} from "react-router";
 
 import {SUPPORTED_LOCALES} from "../utils/route-utils";
 
-export const meta: MetaFunction = ({location}) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment as any)
-    ? (firstPathSegment as any)
-    : "en";
-  const messages = translations[locale] ?? translations.en;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-  function t(key: string) {
-    return messages[key] ?? key;
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
@@ -82,12 +108,8 @@ export const meta: MetaFunction = ({location}) => {
   return meta;
 };
 
-export function loader({context}: Route.LoaderArgs) {
-  return {message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE};
-}
-
 export default function Home({loaderData}: Route.ComponentProps) {
-  const {t} = useTranslation();
+  const t = (key: string) => loaderData.messages[key] || key;
 
   const tools = [
     {
@@ -223,7 +245,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
   ];
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <div className="min-h-screen  transition-colors duration-300">
         {/* Hero Section - Shadcn Inspired */}
         <section className="relative pt-24 pb-32 overflow-hidden border-b border-gray-200 dark:border-neutral-700">

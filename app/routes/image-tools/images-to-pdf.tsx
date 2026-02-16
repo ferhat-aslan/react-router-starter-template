@@ -1,19 +1,50 @@
-import { useState, useRef } from "react";
+import {useState, useRef} from "react";
 import Layout from "~/components/layout";
 import Dragging from "~/components/dragging";
-import { Download, Loader2, CheckCircle, AlertCircle } from "lucide-react";
-import { apiClient } from "~/lib/api-client";
-import type { Route } from "./+types/images-to-pdf";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
-import { webApp } from "@forge42/seo-tools/structured-data/web-app";
-import { course } from "@forge42/seo-tools/structured-data/course";
-import { type MetaFunction } from "react-router";
+import {Download, Loader2, CheckCircle, AlertCircle} from "lucide-react";
+import {apiClient} from "~/lib/api-client";
+import type {Route} from "./+types/images-to-pdf";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
-  const t = (key: string) => messages[key] ?? key;
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
@@ -46,21 +77,24 @@ export const meta: MetaFunction = ({ location }) => {
             "Step-by-step guide on converting multiple images into a single PDF file",
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: t("image.pdf.meta.title") },
-      { name: "twitter:description", content: t("image.pdf.meta.description") },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-images-to-pdf.png" },
-      { name: "keywords", content: t("image.pdf.meta.keywords") },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "twitter:card", content: "summary_large_image"},
+      {name: "twitter:title", content: t("image.pdf.meta.title")},
+      {name: "twitter:description", content: t("image.pdf.meta.description")},
+      {
+        name: "twitter:image",
+        content: "https://kleinbyte.com/og-image-images-to-pdf.png",
+      },
+      {name: "keywords", content: t("image.pdf.meta.keywords")},
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
   return meta;
 };
 
-export default function ImagesToPdf() {
-  const { t } = useTranslation();
+export default function ImagesToPdf({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
   const [files, setFiles] = useState<FileList | null>(null);
   const [orderedFiles, setOrderedFiles] = useState<File[]>([]);
   const draggingRef = useRef(null);
@@ -99,7 +133,7 @@ export default function ImagesToPdf() {
 
   const handleDownload = () => {
     if (!downloadUrl) return;
-    
+
     const a = document.createElement("a");
     a.href = downloadUrl;
     a.download = "converted-images.pdf";
@@ -117,7 +151,7 @@ export default function ImagesToPdf() {
   };
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -125,8 +159,8 @@ export default function ImagesToPdf() {
             Images to PDF Converter
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Convert multiple images (JPG, PNG, GIF, WEBP) into a single PDF document. 
-            Drag and drop to reorder images before conversion.
+            Convert multiple images (JPG, PNG, GIF, WEBP) into a single PDF
+            document. Drag and drop to reorder images before conversion.
           </p>
         </div>
 
@@ -161,7 +195,8 @@ export default function ImagesToPdf() {
                 ) : (
                   <>
                     <Download className="w-5 h-5" />
-                    Convert to PDF ({orderedFiles.length} {orderedFiles.length === 1 ? 'image' : 'images'})
+                    Convert to PDF ({orderedFiles.length}{" "}
+                    {orderedFiles.length === 1 ? "image" : "images"})
                   </>
                 )}
               </button>
@@ -201,7 +236,8 @@ export default function ImagesToPdf() {
                     PDF Created Successfully!
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Your images have been converted to PDF. Click below to download.
+                    Your images have been converted to PDF. Click below to
+                    download.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button
@@ -261,24 +297,44 @@ export default function ImagesToPdf() {
             </h2>
             <div className="space-y-4 max-w-3xl mx-auto">
               <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q1")}</summary>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a1")}</p>
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                  {t("image.pdf.faq.q1")}
+                </summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">
+                  {t("image.pdf.faq.a1")}
+                </p>
               </details>
               <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q2")}</summary>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a2")}</p>
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                  {t("image.pdf.faq.q2")}
+                </summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">
+                  {t("image.pdf.faq.a2")}
+                </p>
               </details>
               <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q3")}</summary>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a3")}</p>
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                  {t("image.pdf.faq.q3")}
+                </summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">
+                  {t("image.pdf.faq.a3")}
+                </p>
               </details>
               <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q4")}</summary>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a4")}</p>
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                  {t("image.pdf.faq.q4")}
+                </summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">
+                  {t("image.pdf.faq.a4")}
+                </p>
               </details>
               <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("image.pdf.faq.q5")}</summary>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">{t("image.pdf.faq.a5")}</p>
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                  {t("image.pdf.faq.q5")}
+                </summary>
+                <p className="mt-3 text-gray-600 dark:text-gray-400">
+                  {t("image.pdf.faq.a5")}
+                </p>
               </details>
             </div>
           </div>

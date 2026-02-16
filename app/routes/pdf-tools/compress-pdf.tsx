@@ -1,17 +1,61 @@
-import { useState, useEffect } from "react";
-import { Upload, FileText, Download, AlertCircle, CheckCircle, Loader2, Zap, Shield, Sparkles, Trash2, Settings } from "lucide-react";
+import {useState, useEffect} from "react";
+import {
+  Upload,
+  FileText,
+  Download,
+  AlertCircle,
+  CheckCircle,
+  Loader2,
+  Zap,
+  Shield,
+  Sparkles,
+  Trash2,
+  Settings,
+} from "lucide-react";
 import Layout from "~/components/layout";
 import Free from "~/components/free";
-import { useTranslation, type Locale, translations } from "~/utils/route-utils";
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
-import { webApp } from "@forge42/seo-tools/structured-data/web-app";
-import { course } from "@forge42/seo-tools/structured-data/course";
-import { type MetaFunction } from "react-router";
+import {
+  useTranslation,
+  type Locale,
+  translations,
+  getTranslationData,
+} from "~/utils/route-utils";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {course} from "@forge42/seo-tools/structured-data/course";
+import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
-  const t = (key: string) => messages[key] ?? key;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   return generateMeta(
     {
@@ -40,29 +84,37 @@ export const meta: MetaFunction = ({ location }) => {
         "script:ld+json": course({
           "@type": "HowTo",
           name: "How to Compress PDF Online",
-          description: "Step-by-step guide on reducing PDF file size while maintaining quality",
+          description:
+            "Step-by-step guide on reducing PDF file size while maintaining quality",
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "keywords", content: t("pdf.compress.meta.keywords") },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "twitter:card", content: "summary_large_image"},
+      {name: "keywords", content: t("pdf.compress.meta.keywords")},
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
 };
 
-export default function CompressPdf() {
-  const { t } = useTranslation();
+export default function CompressPdf({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<"idle" | "compressing" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "compressing" | "success" | "error"
+  >("idle");
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [compressionLevel, setCompressionLevel] = useState<"low" | "medium" | "high">("medium");
+  const [compressionLevel, setCompressionLevel] = useState<
+    "low" | "medium" | "high"
+  >("medium");
   const [imageQuality, setImageQuality] = useState(70);
-  const [results, setResults] = useState<{ originalSize: number; compressedSize: number } | null>(null);
+  const [results, setResults] = useState<{
+    originalSize: number;
+    compressedSize: number;
+  } | null>(null);
   const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +144,7 @@ export default function CompressPdf() {
     setProgress(0);
     setError(null);
 
-    const scaleMap = { low: 1.5, medium: 1.2, high: 0.9 };
+    const scaleMap = {low: 1.5, medium: 1.2, high: 0.9};
     const scale = scaleMap[compressionLevel];
     const quality = imageQuality / 100;
 
@@ -101,46 +153,53 @@ export default function CompressPdf() {
       const pdfjs = await import("pdfjs-dist");
       pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-      const { jsPDF } = await import("jspdf");
+      const {jsPDF} = await import("jspdf");
 
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+      const pdf = await pdfjs.getDocument({data: arrayBuffer}).promise;
       const numPages = pdf.numPages;
       setTotalSteps(numPages);
 
       const firstPage = await pdf.getPage(1);
-      const viewport = firstPage.getViewport({ scale: 1 });
+      const viewport = firstPage.getViewport({scale: 1});
       const isLandscape = viewport.width > viewport.height;
 
       const newPdf = new jsPDF({
         orientation: isLandscape ? "landscape" : "portrait",
         unit: "pt",
-        format: [viewport.width, viewport.height]
+        format: [viewport.width, viewport.height],
       });
 
       for (let i = 1; i <= numPages; i++) {
         setCurrentStep(i);
         const page = await pdf.getPage(i);
-        const pageViewport = page.getViewport({ scale });
+        const pageViewport = page.getViewport({scale});
 
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
         if (!context) throw new Error(t("pdf.compress.error.canvas"));
-        
+
         canvas.width = pageViewport.width;
         canvas.height = pageViewport.height;
 
-        await page.render({ canvasContext: context, viewport: pageViewport, canvas }).promise;
+        await page.render({
+          canvasContext: context,
+          viewport: pageViewport,
+          canvas,
+        }).promise;
         const imgData = canvas.toDataURL("image/jpeg", quality);
 
         if (i > 1) {
-          const pv = page.getViewport({ scale: 1 });
-          newPdf.addPage([pv.width, pv.height], pv.width > pv.height ? "landscape" : "portrait");
+          const pv = page.getViewport({scale: 1});
+          newPdf.addPage(
+            [pv.width, pv.height],
+            pv.width > pv.height ? "landscape" : "portrait",
+          );
         }
 
-        const pv = page.getViewport({ scale: 1 });
+        const pv = page.getViewport({scale: 1});
         newPdf.addImage(imgData, "JPEG", 0, 0, pv.width, pv.height);
-        
+
         setProgress(Math.round((i / numPages) * 100));
       }
 
@@ -175,11 +234,14 @@ export default function CompressPdf() {
   };
 
   const savedPercent = results
-    ? Math.max(0, Math.round((1 - results.compressedSize / results.originalSize) * 100))
+    ? Math.max(
+        0,
+        Math.round((1 - results.compressedSize / results.originalSize) * 100),
+      )
     : 0;
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -238,7 +300,10 @@ export default function CompressPdf() {
                     </div>
                   </div>
                   <button
-                    onClick={() => { setFile(null); resetState(); }}
+                    onClick={() => {
+                      setFile(null);
+                      resetState();
+                    }}
                     className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-slate-400 hover:text-red-600 rounded-lg transition-colors"
                   >
                     <Trash2 className="w-5 h-5" />
@@ -256,25 +321,37 @@ export default function CompressPdf() {
                         </label>
                         <select
                           value={compressionLevel}
-                          onChange={(e) => setCompressionLevel(e.target.value as any)}
+                          onChange={(e) =>
+                            setCompressionLevel(e.target.value as any)
+                          }
                           className="w-full h-12 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
                         >
-                          <option value="low">{t("pdf.compress.options.low")}</option>
-                          <option value="medium">{t("pdf.compress.options.medium")}</option>
-                          <option value="high">{t("pdf.compress.options.high")}</option>
+                          <option value="low">
+                            {t("pdf.compress.options.low")}
+                          </option>
+                          <option value="medium">
+                            {t("pdf.compress.options.medium")}
+                          </option>
+                          <option value="high">
+                            {t("pdf.compress.options.high")}
+                          </option>
                         </select>
                       </div>
                       <div className="space-y-3">
                         <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider flex justify-between">
                           <span>{t("pdf.compress.options.quality")}</span>
-                          <span className="text-indigo-600 dark:text-indigo-400">{imageQuality}%</span>
+                          <span className="text-indigo-600 dark:text-indigo-400">
+                            {imageQuality}%
+                          </span>
                         </label>
                         <input
                           type="range"
                           min="30"
                           max="100"
                           value={imageQuality}
-                          onChange={(e) => setImageQuality(parseInt(e.target.value))}
+                          onChange={(e) =>
+                            setImageQuality(parseInt(e.target.value))
+                          }
                           className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                         />
                       </div>
@@ -297,15 +374,19 @@ export default function CompressPdf() {
                       <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
                       <div className="text-center">
                         <p className="text-lg font-semibold">
-                          {t("pdf.compress.progress").replace("{current}", currentStep.toString()).replace("{total}", totalSteps.toString())}
+                          {t("pdf.compress.progress")
+                            .replace("{current}", currentStep.toString())
+                            .replace("{total}", totalSteps.toString())}
                         </p>
-                        <p className="text-sm text-slate-500 mt-1">{t("pdf.compress.status.keep_open")}</p>
+                        <p className="text-sm text-slate-500 mt-1">
+                          {t("pdf.compress.status.keep_open")}
+                        </p>
                       </div>
                     </div>
                     <div className="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
                       <div
                         className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300"
-                        style={{ width: `${progress}%` }}
+                        style={{width: `${progress}%`}}
                       ></div>
                     </div>
                   </div>
@@ -315,24 +396,38 @@ export default function CompressPdf() {
                 {status === "success" && results && (
                   <div className="animate-in zoom-in-95 duration-500 space-y-8">
                     <div className="text-center space-y-2">
-                       <div className="inline-flex p-3 bg-green-100 dark:bg-green-900/30 rounded-full mb-2">
-                          <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
-                       </div>
-                       <h3 className="text-2xl font-bold">{t("pdf.compress.success")}</h3>
+                      <div className="inline-flex p-3 bg-green-100 dark:bg-green-900/30 rounded-full mb-2">
+                        <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+                      </div>
+                      <h3 className="text-2xl font-bold">
+                        {t("pdf.compress.success")}
+                      </h3>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                       <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl text-center border border-slate-200 dark:border-slate-700">
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">{t("pdf.compress.stats.original")}</p>
-                        <p className="text-2xl font-bold">{formatSize(results.originalSize)}</p>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
+                          {t("pdf.compress.stats.original")}
+                        </p>
+                        <p className="text-2xl font-bold">
+                          {formatSize(results.originalSize)}
+                        </p>
                       </div>
                       <div className="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl text-center border border-indigo-100 dark:border-indigo-900/50">
-                        <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">{t("pdf.compress.stats.compressed")}</p>
-                        <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{formatSize(results.compressedSize)}</p>
+                        <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">
+                          {t("pdf.compress.stats.compressed")}
+                        </p>
+                        <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                          {formatSize(results.compressedSize)}
+                        </p>
                       </div>
                       <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-2xl text-center border border-green-100 dark:border-green-900/50">
-                        <p className="text-xs font-bold text-green-400 uppercase tracking-widest mb-1">{t("pdf.compress.stats.saved")}</p>
-                        <p className="text-2xl font-bold text-green-600 dark:text-green-400">{savedPercent}%</p>
+                        <p className="text-xs font-bold text-green-400 uppercase tracking-widest mb-1">
+                          {t("pdf.compress.stats.saved")}
+                        </p>
+                        <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                          {savedPercent}%
+                        </p>
                       </div>
                     </div>
 
@@ -345,7 +440,10 @@ export default function CompressPdf() {
                         {t("pdf.compress.download")}
                       </button>
                       <button
-                        onClick={() => { setFile(null); resetState(); }}
+                        onClick={() => {
+                          setFile(null);
+                          resetState();
+                        }}
                         className="h-14 px-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl font-semibold transition-all"
                       >
                         {t("pdf.compress.btn.compress_another")}
@@ -359,7 +457,9 @@ export default function CompressPdf() {
                   <div className="p-6 bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-100 dark:border-red-900/50 text-center space-y-4">
                     <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
                     <div>
-                      <p className="font-bold text-red-600 dark:text-red-400">{t("pdf.compress.status.failed")}</p>
+                      <p className="font-bold text-red-600 dark:text-red-400">
+                        {t("pdf.compress.status.failed")}
+                      </p>
                       <p className="text-sm text-red-500 mt-1">{error}</p>
                     </div>
                     <button
@@ -383,7 +483,9 @@ export default function CompressPdf() {
             <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-6">
               <Shield className="w-7 h-7 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold mb-3">{t("pdf.compress.benefits.private.title")}</h3>
+            <h3 className="text-xl font-bold mb-3">
+              {t("pdf.compress.benefits.private.title")}
+            </h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
               {t("pdf.compress.benefits.private.desc")}
             </p>
@@ -392,7 +494,9 @@ export default function CompressPdf() {
             <div className="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mb-6">
               <Zap className="w-7 h-7 text-purple-600 dark:text-purple-400" />
             </div>
-            <h3 className="text-xl font-bold mb-3">{t("pdf.compress.benefits.fast.title")}</h3>
+            <h3 className="text-xl font-bold mb-3">
+              {t("pdf.compress.benefits.fast.title")}
+            </h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
               {t("pdf.compress.benefits.fast.desc")}
             </p>
@@ -401,7 +505,9 @@ export default function CompressPdf() {
             <div className="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center mb-6">
               <Sparkles className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <h3 className="text-xl font-bold mb-3">{t("pdf.compress.benefits.quality.title")}</h3>
+            <h3 className="text-xl font-bold mb-3">
+              {t("pdf.compress.benefits.quality.title")}
+            </h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
               {t("pdf.compress.benefits.quality.desc")}
             </p>
@@ -410,35 +516,62 @@ export default function CompressPdf() {
 
         {/* How It Works */}
         <section className="space-y-12 py-12 border-t border-slate-200 dark:border-slate-800">
-          <h2 className="text-3xl font-bold text-center">{t("pdf.compress.how_to.title")}</h2>
+          <h2 className="text-3xl font-bold text-center">
+            {t("pdf.compress.how_to.title")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">1</div>
-              <h3 className="text-lg font-bold">{t("pdf.compress.how_to.step1.title")}</h3>
-              <p className="text-slate-600 dark:text-slate-400">{t("pdf.compress.how_to.step1.desc")}</p>
+              <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">
+                1
+              </div>
+              <h3 className="text-lg font-bold">
+                {t("pdf.compress.how_to.step1.title")}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400">
+                {t("pdf.compress.how_to.step1.desc")}
+              </p>
             </div>
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">2</div>
-              <h3 className="text-lg font-bold">{t("pdf.compress.how_to.step2.title")}</h3>
-              <p className="text-slate-600 dark:text-slate-400">{t("pdf.compress.how_to.step2.desc")}</p>
+              <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">
+                2
+              </div>
+              <h3 className="text-lg font-bold">
+                {t("pdf.compress.how_to.step2.title")}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400">
+                {t("pdf.compress.how_to.step2.desc")}
+              </p>
             </div>
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">3</div>
-              <h3 className="text-lg font-bold">{t("pdf.compress.how_to.step3.title")}</h3>
-              <p className="text-slate-600 dark:text-slate-400">{t("pdf.compress.how_to.step3.desc")}</p>
+              <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto text-xl font-black">
+                3
+              </div>
+              <h3 className="text-lg font-bold">
+                {t("pdf.compress.how_to.step3.title")}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400">
+                {t("pdf.compress.how_to.step3.desc")}
+              </p>
             </div>
           </div>
         </section>
 
         {/* FAQ Section */}
         <section className="max-w-3xl mx-auto py-12 border-t border-slate-200 dark:border-slate-800">
-          <h2 className="text-3xl font-bold text-center mb-12">{t("faq.title")}</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">
+            {t("faq.title")}
+          </h2>
           <div className="space-y-4">
             {[1, 2, 3, 4, 5].map((i) => (
-              <details key={i} className="group p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none transition-all hover:border-indigo-500/50">
+              <details
+                key={i}
+                className="group p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none transition-all hover:border-indigo-500/50"
+              >
                 <summary className="font-bold text-lg text-slate-900 dark:text-white cursor-pointer list-none flex justify-between items-center">
                   {t(`pdf.compress.faq.q${i}`)}
-                  <span className="text-slate-400 group-open:rotate-180 transition-transform">↓</span>
+                  <span className="text-slate-400 group-open:rotate-180 transition-transform">
+                    ↓
+                  </span>
                 </summary>
                 <p className="mt-4 text-slate-600 dark:text-slate-400 leading-relaxed">
                   {t(`pdf.compress.faq.a${i}`)}

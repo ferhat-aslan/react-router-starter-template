@@ -1,19 +1,55 @@
-import { useState, useRef } from "react";
+import {useState, useRef} from "react";
 import Layout from "~/components/layout";
 import SubtitleEditor from "~/components/subtitle-editor";
-import { Download, Upload, Copy, Languages, ArrowRight } from "lucide-react";
-import type { SubtitleEntry, SubtitleFormat } from "~/utils/subtitle-parser";
-import { parseSubtitle, writeSubtitle, detectFormat } from "~/utils/subtitle-parser";
-import type { Route } from "./+types/convert";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
-import { webApp } from "@forge42/seo-tools/structured-data/web-app";
-import { type MetaFunction } from "react-router";
+import {Download, Upload, Copy, Languages, ArrowRight} from "lucide-react";
+import type {SubtitleEntry, SubtitleFormat} from "~/utils/subtitle-parser";
+import {
+  parseSubtitle,
+  writeSubtitle,
+  detectFormat,
+} from "~/utils/subtitle-parser";
+import type {Route} from "./+types/convert";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
-  const t = (key: string) => messages[key] ?? key;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
@@ -38,18 +74,18 @@ export const meta: MetaFunction = ({ location }) => {
           },
         }),
       },
-    ]
+    ],
   );
   return meta;
 };
 
-export default function SubtitleConvert() {
-  const { t } = useTranslation();
+export default function SubtitleConvert({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
   const [leftEntries, setLeftEntries] = useState<SubtitleEntry[]>([]);
   const [rightEntries, setRightEntries] = useState<SubtitleEntry[]>([]);
   const [leftFormat, setLeftFormat] = useState<SubtitleFormat | null>(null);
-  const [outputFormat, setOutputFormat] = useState<SubtitleFormat>('srt');
-  const [fileName, setFileName] = useState<string>('');
+  const [outputFormat, setOutputFormat] = useState<SubtitleFormat>("srt");
+  const [fileName, setFileName] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,67 +95,73 @@ export default function SubtitleConvert() {
     try {
       const content = await file.text();
       const format = detectFormat(content);
-      
+
       if (!format) {
-        alert('Unable to detect subtitle format. Please upload a valid SRT, VTT, or ASS file.');
+        alert(
+          "Unable to detect subtitle format. Please upload a valid SRT, VTT, or ASS file.",
+        );
         return;
       }
 
       const parsedEntries = parseSubtitle(content, format);
-      
+
       if (parsedEntries.length === 0) {
-        alert('No subtitle entries found in the file.');
+        alert("No subtitle entries found in the file.");
         return;
       }
 
       setLeftEntries(parsedEntries);
       setLeftFormat(format);
       setOutputFormat(format);
-      setFileName(file.name.replace(/\.[^/.]+$/, ''));
+      setFileName(file.name.replace(/\.[^/.]+$/, ""));
       setRightEntries([]);
     } catch (err: any) {
-      console.error('Error parsing subtitle file:', err);
-      alert(err.message || 'Failed to parse subtitle file');
+      console.error("Error parsing subtitle file:", err);
+      alert(err.message || "Failed to parse subtitle file");
     }
 
-    e.target.value = '';
+    e.target.value = "";
   };
 
   const handleCopyToRight = () => {
     if (leftEntries.length === 0) return;
-    
+
     // Deep copy the entries
-    const copiedEntries = leftEntries.map(entry => ({ ...entry }));
+    const copiedEntries = leftEntries.map((entry) => ({...entry}));
     setRightEntries(copiedEntries);
   };
 
   const handleTranslate = () => {
     // Placeholder for translation functionality
     // In a real implementation, this would call a translation API
-    alert('Translation feature: This would integrate with a translation API like Google Translate or DeepL. For now, use "Copy to Right" and manually edit the text.');
+    alert(
+      'Translation feature: This would integrate with a translation API like Google Translate or DeepL. For now, use "Copy to Right" and manually edit the text.',
+    );
   };
 
   const handleDownload = () => {
     if (rightEntries.length === 0) {
-      alert('No translated subtitle to download. Please copy or create subtitle entries on the right panel.');
+      alert(
+        "No translated subtitle to download. Please copy or create subtitle entries on the right panel.",
+      );
       return;
     }
 
     try {
       const content = writeSubtitle(rightEntries, outputFormat);
-      const blob = new Blob([content], { type: 'text/plain' });
+      const blob = new Blob([content], {type: "text/plain"});
       const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
+
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `${fileName || 'subtitle'}_translated.${outputFormat}`;
+      a.download = `${fileName || "subtitle"}_translated.${outputFormat}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err: any) {
-      console.error('Error generating subtitle file:', err);
-      alert(err.message || 'Failed to generate subtitle file');
+      console.error("Error generating subtitle file:", err);
+      alert(err.message || "Failed to generate subtitle file");
     }
   };
 
@@ -127,12 +169,12 @@ export default function SubtitleConvert() {
     setLeftEntries([]);
     setRightEntries([]);
     setLeftFormat(null);
-    setOutputFormat('srt');
-    setFileName('');
+    setOutputFormat("srt");
+    setFileName("");
   };
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -140,7 +182,8 @@ export default function SubtitleConvert() {
             Subtitle Converter & Translator
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Convert between formats and translate subtitles with side-by-side editing.
+            Convert between formats and translate subtitles with side-by-side
+            editing.
           </p>
         </div>
 
@@ -187,7 +230,8 @@ export default function SubtitleConvert() {
                       {fileName}
                     </h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      Format: {leftFormat?.toUpperCase()} • {leftEntries.length} entries
+                      Format: {leftFormat?.toUpperCase()} • {leftEntries.length}{" "}
+                      entries
                     </p>
                   </div>
                   <button
@@ -251,7 +295,7 @@ export default function SubtitleConvert() {
                       Translated Subtitle
                     </h3>
                     <span className="px-3 py-1 bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-300 text-sm font-medium rounded-full">
-                      {rightEntries.length > 0 ? 'Editing' : 'Empty'}
+                      {rightEntries.length > 0 ? "Editing" : "Empty"}
                     </span>
                   </div>
                   {rightEntries.length > 0 ? (
@@ -264,7 +308,9 @@ export default function SubtitleConvert() {
                   ) : (
                     <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                       <p className="mb-4">No subtitle entries yet</p>
-                      <p className="text-sm">Click "Copy to Right Panel" to start editing</p>
+                      <p className="text-sm">
+                        Click "Copy to Right Panel" to start editing
+                      </p>
                     </div>
                   )}
                 </div>
@@ -283,7 +329,9 @@ export default function SubtitleConvert() {
                       </label>
                       <select
                         value={outputFormat}
-                        onChange={(e) => setOutputFormat(e.target.value as SubtitleFormat)}
+                        onChange={(e) =>
+                          setOutputFormat(e.target.value as SubtitleFormat)
+                        }
                         className="w-full px-4 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="srt">SRT (SubRip)</option>

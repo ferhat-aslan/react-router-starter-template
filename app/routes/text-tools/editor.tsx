@@ -7,20 +7,42 @@ import {
   translations,
   SUPPORTED_LOCALES,
   type Locale,
+  getTranslationData,
 } from "~/utils/route-utils";
 import Layout from "~/components/layout";
 import MessagesEditor from "~/components/messages-editor";
 
-export const meta: MetaFunction = ({location}) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment as any)
-    ? (firstPathSegment as any)
-    : "en";
-  const messages = translations[locale] ?? translations.en;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-  function t(key: string) {
-    return messages[key] ?? key;
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   return generateMeta(
     {
@@ -51,11 +73,11 @@ export const meta: MetaFunction = ({location}) => {
   );
 };
 
-export default function Editor() {
-  const {t} = useTranslation();
+export default function Editor({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <MessagesEditor
         title={t("editor.title")}
         description={t("editor.description")}

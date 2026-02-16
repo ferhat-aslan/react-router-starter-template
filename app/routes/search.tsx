@@ -1,27 +1,52 @@
-import type { Route } from "./+types/search";
+import type {Route} from "./+types/search";
 import Layout from "~/components/layout";
-import { useSearchParams } from "react-router";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
-import { type MetaFunction } from "react-router";
+import {useSearchParams} from "react-router";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
+import {type MetaFunction} from "react-router";
 
 import PDF from "/pdf.svg";
 import WORD from "/word.svg";
 import JPG from "/jpg.svg";
 import FOLDER from "/folder.svg";
 
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = ({ location }) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale =
-    firstPathSegment === "de" ? "de" :
-    firstPathSegment === "es" ? "es" :
-    firstPathSegment === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-  function t(key: string) {
-    return messages[key] ?? key;
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   return generateMeta(
     {
@@ -30,16 +55,16 @@ export const meta: MetaFunction = ({ location }) => {
       url: `https://kleinbyte.com${location.pathname}`,
     },
     [
-      { name: "keywords", content: t("search.meta.keywords") },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {name: "keywords", content: t("search.meta.keywords")},
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
 };
 
-export default function Search() {
+export default function Search({loaderData}: Route.ComponentProps) {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
-  const { t } = useTranslation();
+  const t = (key: string) => loaderData.messages[key] || key;
 
   const tools = [
     {
@@ -165,19 +190,27 @@ export default function Search() {
   ];
 
   const results = tools.flatMap((category) =>
-    category.tools.filter(
-      (tool) =>
-        tool.name.toLowerCase().includes(query) ||
-        tool.description.toLowerCase().includes(query)
-    ).map(tool => ({ ...tool, category: category.category, icon: category.icon }))
+    category.tools
+      .filter(
+        (tool) =>
+          tool.name.toLowerCase().includes(query) ||
+          tool.description.toLowerCase().includes(query),
+      )
+      .map((tool) => ({
+        ...tool,
+        category: category.category,
+        icon: category.icon,
+      })),
   );
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <div className="min-h-screen bg-white dark:bg-neutral-950 text-gray-900 dark:text-white pt-32 pb-20">
         <div className="container mx-auto px-6">
           <h1 className="text-4xl font-bold mb-8">
-            {query ? `${t("search.results_title")} "${query}"` : t("search.default_title")}
+            {query
+              ? `${t("search.results_title")} "${query}"`
+              : t("search.default_title")}
           </h1>
 
           {results.length > 0 ? (

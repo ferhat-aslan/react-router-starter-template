@@ -1,16 +1,48 @@
 import Layout from "~/components/layout";
-import { Link } from "react-router";
-import { FileText, RefreshCw, Merge, Edit3 } from "lucide-react";
-import type { Route } from "./+types/subtitle-tools";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
-import { webApp } from "@forge42/seo-tools/structured-data/web-app";
-import { type MetaFunction } from "react-router";
+import {Link} from "react-router";
+import {FileText, RefreshCw, Merge, Edit3} from "lucide-react";
+import type {Route} from "./+types/subtitle-tools";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
-  const t = (key: string) => messages[key] ?? key;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
@@ -35,40 +67,43 @@ export const meta: MetaFunction = ({ location }) => {
           },
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: t("subtitle.meta.title") },
-      { name: "twitter:description", content: t("subtitle.meta.description") },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-subtitle-tools.png" },
-      { name: "keywords", content: t("subtitle.meta.keywords") },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "twitter:card", content: "summary_large_image"},
+      {name: "twitter:title", content: t("subtitle.meta.title")},
+      {name: "twitter:description", content: t("subtitle.meta.description")},
+      {
+        name: "twitter:image",
+        content: "https://kleinbyte.com/og-image-subtitle-tools.png",
+      },
+      {name: "keywords", content: t("subtitle.meta.keywords")},
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
   return meta;
 };
 
-export default function SubtitleTools() {
-  const { t } = useTranslation();
+export default function SubtitleTools({loaderData}: Route.ComponentProps) {
+  const t = (key: string) => loaderData.messages[key] || key;
 
   const tools = [
     {
-      name: "Subtitle Editor",
-      description: "Edit subtitle files with box-by-box pagination. Modify timing and text content.",
+      name: t("subtitle.tools.edit.name"),
+      description: t("subtitle.tools.edit.description"),
       icon: Edit3,
       href: "/subtitle-tools/edit",
       color: "blue",
     },
     {
-      name: "Subtitle Converter",
-      description: "Convert and translate subtitles. Side-by-side editing with format conversion support.",
+      name: t("subtitle.tools.convert.name"),
+      description: t("subtitle.tools.convert.description"),
       icon: RefreshCw,
       href: "/subtitle-tools/convert",
       color: "green",
     },
     {
-      name: "Subtitle Merger",
-      description: "Merge two subtitle files with time offset controls. Perfect for dual subtitles.",
+      name: t("subtitle.tools.merge.name"),
+      description: t("subtitle.tools.merge.description"),
       icon: Merge,
       href: "/subtitle-tools/merge",
       color: "purple",
@@ -76,7 +111,7 @@ export default function SubtitleTools() {
   ];
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -89,8 +124,8 @@ export default function SubtitleTools() {
             Subtitle Tools
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Professional tools for editing, converting, and merging subtitle files.
-            Support for SRT, VTT, and ASS formats.
+            Professional tools for editing, converting, and merging subtitle
+            files. Support for SRT, VTT, and ASS formats.
           </p>
         </div>
 
@@ -100,8 +135,10 @@ export default function SubtitleTools() {
             const Icon = tool.icon;
             const colorClasses = {
               blue: "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600",
-              green: "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800 hover:border-green-400 dark:hover:border-green-600",
-              purple: "bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600",
+              green:
+                "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800 hover:border-green-400 dark:hover:border-green-600",
+              purple:
+                "bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600",
             }[tool.color];
 
             const iconColorClasses = {
@@ -151,9 +188,7 @@ export default function SubtitleTools() {
               <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
                 VTT
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                WebVTT
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">WebVTT</p>
               <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                 Web standard format
               </p>
@@ -210,24 +245,44 @@ export default function SubtitleTools() {
           </h2>
           <div className="space-y-4 max-w-3xl mx-auto">
             <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q1")}</summary>
-              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a1")}</p>
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                {t("subtitle.faq.q1")}
+              </summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">
+                {t("subtitle.faq.a1")}
+              </p>
             </details>
             <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q2")}</summary>
-              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a2")}</p>
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                {t("subtitle.faq.q2")}
+              </summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">
+                {t("subtitle.faq.a2")}
+              </p>
             </details>
             <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q3")}</summary>
-              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a3")}</p>
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                {t("subtitle.faq.q3")}
+              </summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">
+                {t("subtitle.faq.a3")}
+              </p>
             </details>
             <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q4")}</summary>
-              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a4")}</p>
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                {t("subtitle.faq.q4")}
+              </summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">
+                {t("subtitle.faq.a4")}
+              </p>
             </details>
             <details className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">{t("subtitle.faq.q5")}</summary>
-              <p className="mt-3 text-gray-600 dark:text-gray-400">{t("subtitle.faq.a5")}</p>
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer">
+                {t("subtitle.faq.q5")}
+              </summary>
+              <p className="mt-3 text-gray-600 dark:text-gray-400">
+                {t("subtitle.faq.a5")}
+              </p>
             </details>
           </div>
         </div>

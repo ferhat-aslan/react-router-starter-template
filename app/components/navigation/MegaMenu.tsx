@@ -130,11 +130,18 @@ const MENU_ITEMS: MenuItem[] = [
   {labelKey: "nav.search", href: "/search"},
 ];
 
-export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
-  const {t} = useTranslation();
+export const MegaMenu = ({
+  loaderData,
+  brandLogo,
+}: {
+  loaderData?: any;
+  brandLogo?: React.ReactNode;
+}) => {
+  const t = (key: string) => loaderData?.messages[key] || key;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const {pathname} = useLocation();
   const navigate = useNavigate();
@@ -144,15 +151,19 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
     ? currentLocale
     : "en";
 
-  // Initialize dark mode from localStorage or HTML
+  // Initialize dark mode from localStorage (avoid reading classList to prevent reflow)
   useEffect(() => {
-    const isDark =
-      localStorage.getItem("theme") === "dark" ||
-      document.documentElement.classList.contains("dark");
-    setIsDarkMode(isDark);
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-    }
+    // Use requestAnimationFrame to batch DOM operations
+    requestAnimationFrame(() => {
+      const storedTheme = localStorage.getItem("theme");
+      // Only read classList if no stored preference
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches; // Check system preference
+      const isDark =
+        storedTheme === "dark" || (storedTheme === null && prefersDark);
+      setIsDarkMode(isDark);
+    });
   }, []);
 
   // Close menu when clicking outside
@@ -169,24 +180,31 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
     }
   }, [isMenuOpen]);
 
-  // Close menu on window resize and handle body scroll
+  // Initialize isMobile state using matchMedia (no reflow)
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mediaQuery.matches);
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+      if (!e.matches) {
         setIsMenuOpen(false);
         setActiveSubmenu(null);
       }
     };
 
+    mediaQuery.addEventListener("change", handleMediaChange);
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+  }, []);
+
+  // Handle body scroll separately to avoid reflow
+  useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-
-    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
       document.body.style.overflow = "";
     };
   }, [isMenuOpen]);
@@ -228,7 +246,8 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
   };
 
   const handleMenuItemClick = (item: MenuItem) => {
-    if (item.submenu && window?.innerWidth < 768) {
+    // Use cached isMobile state instead of reading window.innerWidth
+    if (item.submenu && isMobile) {
       if (activeSubmenu === item.labelKey) {
         setActiveSubmenu(null);
       } else {
@@ -261,7 +280,7 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
       <style>{megaMenu}</style>
       <nav className="navbar h-full gap-2 container max-w-7xl bg-zinc-900 rounded-sm px-1 !shadow-none">
         {/* Left Section */}
-        <section className="navbar__left bg-white min-h-9.5 m-0 py-0 px-3 rounded-xs">
+        <section className="navbar__left bg-white dark:bg-transparent min-h-9.5 m-0 py-0 px-3 rounded-xs">
           <LocaleLink to="/" className="brand">
             {brandLogo ? (
               brandLogo
@@ -468,38 +487,47 @@ export const MegaMenu = ({brandLogo}: {brandLogo?: React.ReactNode}) => {
 
           {/* Theme Switcher */}
           <button
-            className="switch bg-orange-500 rounded-full"
+            className="switch border border-white rounded-full"
             onClick={toggleDarkMode}
           >
-            <span className="switch__light">
+            <span className="switch__light hover:[&>svg]:stroke-black!">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
+                stroke="white"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="lucide lucide-moon-icon lucide-moon !stroke-white "
               >
-                <circle cx="12" cy="12" r="5" />
-                <path d="M12 1v6m0 6v6M4.22 4.24 4.24m5.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24" />
+                <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
               </svg>
             </span>
             <span className="switch__dark">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="lucide lucide-sun-icon lucide-sun"
               >
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.93 4.93 1.41 1.41" />
+                <path d="m17.66 17.66 1.41 1.41" />
+                <path d="M2 12h2" />
+                <path d="M20 12h2" />
+                <path d="m6.34 17.66-1.41 1.41" />
+                <path d="m19.07 4.93-1.41 1.41" />
               </svg>
             </span>
           </button>

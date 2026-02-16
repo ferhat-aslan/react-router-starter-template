@@ -29,7 +29,6 @@
 }
 
 :root.dark .header {
-  background-color: var(--color2);
   border-bottom: 1px solid transparent;
 }
 
@@ -162,7 +161,7 @@
     background: #fff;
     flex-grow: 1;
   }
-  
+
   :root.dark .menu__inner {
     background: var(--color2);
   }
@@ -192,7 +191,7 @@
     padding: 0;
     border-bottom: 1px solid #eee;
   }
-  
+
   :root.dark .menu__item {
     border-bottom: 1px solid #333;
   }
@@ -240,11 +239,11 @@
     margin-left: 10px;
     transform: rotate(0deg);
   }
-  
+
   .menu__link.active > svg {
     transform: rotate(90deg);
   }
-  
+
   :root.dark .menu__link {
     color: #fff;
   }
@@ -315,17 +314,17 @@
   .submenu.is-active {
     display: block;
   }
-  
+
   :root.dark .submenu {
     background-color: var(--color2);
   }
-  
+
   .submenu__title {
     padding: 1rem 1.25rem;
     background: #f0f0f0;
     font-weight: 600;
   }
-  
+
   :root.dark .submenu__title {
     background: #333;
   }
@@ -343,7 +342,7 @@
     height: auto;
     margin: 0;
   }
-  
+
   .submenu {
     position: absolute;
     z-index: 100;
@@ -379,16 +378,16 @@
     visibility: visible;
     transform: translateY(0);
   }
-  
+
   .menu__item:hover > .menu__link svg {
     transform: rotate(-90deg);
   }
-  
+
   .submenu__inner {
     width: 25%;
     padding: 0 15px;
   }
-  
+
   @media (min-width: 768px) and (max-width: 992px) {
     .submenu__inner {
       width: 50%;
@@ -422,7 +421,7 @@
     width: 25%;
     padding: 0 15px;
   }
-  
+
   @media (min-width: 768px) and (max-width: 992px) {
     .submenu__inner {
       width: 50%;
@@ -502,12 +501,12 @@
     background: #f8f8f8;
     color: #000;
   }
-  
+
   :root.dark .submenu__list a {
     background: #2c2c2c;
     color: #fff;
   }
-  
+
   :root.dark .submenu__list a:hover {
     background: #3a3a3a;
   }
@@ -822,7 +821,6 @@
 .burger.is-active .burger-line:nth-child(3) {
   transform: translateY(-6px) rotate(-45deg);
 }
-
 
 /* Mobile Menu Additions */
 .mobile-menu__header,

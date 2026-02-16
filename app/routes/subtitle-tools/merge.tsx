@@ -1,18 +1,54 @@
-import { useState, useRef } from "react";
+import {useState, useRef} from "react";
 import Layout from "~/components/layout";
-import { Download, Upload, Merge as MergeIcon, Plus, Minus } from "lucide-react";
-import type { SubtitleEntry, SubtitleFormat } from "~/utils/subtitle-parser";
-import { parseSubtitle, writeSubtitle, detectFormat } from "~/utils/subtitle-parser";
-import type { Route } from "./+types/merge";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
-import { webApp } from "@forge42/seo-tools/structured-data/web-app";
-import { type MetaFunction } from "react-router";
+import {Download, Upload, Merge as MergeIcon, Plus, Minus} from "lucide-react";
+import type {SubtitleEntry, SubtitleFormat} from "~/utils/subtitle-parser";
+import {
+  parseSubtitle,
+  writeSubtitle,
+  detectFormat,
+} from "~/utils/subtitle-parser";
+import type {Route} from "./+types/merge";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
-  const t = (key: string) => messages[key] ?? key;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
@@ -37,100 +73,119 @@ export const meta: MetaFunction = ({ location }) => {
           },
         }),
       },
-    ]
+    ],
   );
   return meta;
 };
 
 // Helper function to parse time to milliseconds
 function timeToMs(timeStr: string): number {
-  const parts = timeStr.replace(',', '.').split(':');
+  const parts = timeStr.replace(",", ".").split(":");
   const hours = parseInt(parts[0]);
   const minutes = parseInt(parts[1]);
-  const secondsParts = parts[2].split('.');
+  const secondsParts = parts[2].split(".");
   const seconds = parseInt(secondsParts[0]);
-  const milliseconds = parseInt(secondsParts[1] || '0');
+  const milliseconds = parseInt(secondsParts[1] || "0");
   return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 }
 
 // Helper function to format milliseconds to time string
-function msToTime(ms: number, format: 'srt' | 'vtt' | 'ass'): string {
+function msToTime(ms: number, format: "srt" | "vtt" | "ass"): string {
   const hours = Math.floor(ms / 3600000);
   const minutes = Math.floor((ms % 3600000) / 60000);
   const seconds = Math.floor((ms % 60000) / 1000);
   const remainder = ms % 1000;
 
-  if (format === 'srt') {
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')},${String(remainder).padStart(3, '0')}`;
-  } else if (format === 'vtt') {
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(remainder).padStart(3, '0')}`;
+  if (format === "srt") {
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0",
+    )}:${String(seconds).padStart(2, "0")},${String(remainder).padStart(
+      3,
+      "0",
+    )}`;
+  } else if (format === "vtt") {
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0",
+    )}:${String(seconds).padStart(2, "0")}.${String(remainder).padStart(
+      3,
+      "0",
+    )}`;
   } else {
     const centiseconds = Math.floor(remainder / 10);
-    return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}`;
+    return `${hours}:${String(minutes).padStart(2, "0")}:${String(
+      seconds,
+    ).padStart(2, "0")}.${String(centiseconds).padStart(2, "0")}`;
   }
 }
 
-export default function SubtitleMerge() {
-  const { t } = useTranslation();
+export default function SubtitleMerge({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
   const [file1Entries, setFile1Entries] = useState<SubtitleEntry[]>([]);
   const [file2Entries, setFile2Entries] = useState<SubtitleEntry[]>([]);
   const [file1Format, setFile1Format] = useState<SubtitleFormat | null>(null);
   const [file2Format, setFile2Format] = useState<SubtitleFormat | null>(null);
-  const [file1Name, setFile1Name] = useState<string>('');
-  const [file2Name, setFile2Name] = useState<string>('');
+  const [file1Name, setFile1Name] = useState<string>("");
+  const [file2Name, setFile2Name] = useState<string>("");
   const [offset1, setOffset1] = useState<number>(0); // in seconds
   const [offset2, setOffset2] = useState<number>(0); // in seconds
-  const [outputFormat, setOutputFormat] = useState<SubtitleFormat>('srt');
+  const [outputFormat, setOutputFormat] = useState<SubtitleFormat>("srt");
   const file1InputRef = useRef<HTMLInputElement>(null);
   const file2InputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = async (fileNumber: 1 | 2, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    fileNumber: 1 | 2,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
       const content = await file.text();
       const format = detectFormat(content);
-      
+
       if (!format) {
-        alert('Unable to detect subtitle format. Please upload a valid SRT, VTT, or ASS file.');
+        alert(
+          "Unable to detect subtitle format. Please upload a valid SRT, VTT, or ASS file.",
+        );
         return;
       }
 
       const parsedEntries = parseSubtitle(content, format);
-      
+
       if (parsedEntries.length === 0) {
-        alert('No subtitle entries found in the file.');
+        alert("No subtitle entries found in the file.");
         return;
       }
 
       if (fileNumber === 1) {
         setFile1Entries(parsedEntries);
         setFile1Format(format);
-        setFile1Name(file.name.replace(/\.[^/.]+$/, ''));
+        setFile1Name(file.name.replace(/\.[^/.]+$/, ""));
         setOutputFormat(format);
       } else {
         setFile2Entries(parsedEntries);
         setFile2Format(format);
-        setFile2Name(file.name.replace(/\.[^/.]+$/, ''));
+        setFile2Name(file.name.replace(/\.[^/.]+$/, ""));
       }
     } catch (err: any) {
-      console.error('Error parsing subtitle file:', err);
-      alert(err.message || 'Failed to parse subtitle file');
+      console.error("Error parsing subtitle file:", err);
+      alert(err.message || "Failed to parse subtitle file");
     }
 
-    e.target.value = '';
+    e.target.value = "";
   };
 
   const handleMerge = (): SubtitleEntry[] => {
     if (file1Entries.length === 0 && file2Entries.length === 0) return [];
 
     const mergedEntries: SubtitleEntry[] = [];
-    
+
     // Apply offset to file 1 entries
-    const offsetFile1 = file1Entries.map(entry => {
-      const startMs = timeToMs(entry.startTime) + (offset1 * 1000);
-      const endMs = timeToMs(entry.endTime) + (offset1 * 1000);
+    const offsetFile1 = file1Entries.map((entry) => {
+      const startMs = timeToMs(entry.startTime) + offset1 * 1000;
+      const endMs = timeToMs(entry.endTime) + offset1 * 1000;
       return {
         ...entry,
         startTime: msToTime(startMs, outputFormat),
@@ -139,9 +194,9 @@ export default function SubtitleMerge() {
     });
 
     // Apply offset to file 2 entries
-    const offsetFile2 = file2Entries.map(entry => {
-      const startMs = timeToMs(entry.startTime) + (offset2 * 1000);
-      const endMs = timeToMs(entry.endTime) + (offset2 * 1000);
+    const offsetFile2 = file2Entries.map((entry) => {
+      const startMs = timeToMs(entry.startTime) + offset2 * 1000;
+      const endMs = timeToMs(entry.endTime) + offset2 * 1000;
       return {
         ...entry,
         startTime: msToTime(startMs, outputFormat),
@@ -163,18 +218,20 @@ export default function SubtitleMerge() {
 
   const handleDownload = () => {
     const merged = handleMerge();
-    
+
     if (merged.length === 0) {
-      alert('No subtitle entries to merge. Please upload at least one subtitle file.');
+      alert(
+        "No subtitle entries to merge. Please upload at least one subtitle file.",
+      );
       return;
     }
 
     try {
       const content = writeSubtitle(merged, outputFormat);
-      const blob = new Blob([content], { type: 'text/plain' });
+      const blob = new Blob([content], {type: "text/plain"});
       const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
+
+      const a = document.createElement("a");
       a.href = url;
       a.download = `merged_subtitle.${outputFormat}`;
       document.body.appendChild(a);
@@ -182,8 +239,8 @@ export default function SubtitleMerge() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err: any) {
-      console.error('Error generating subtitle file:', err);
-      alert(err.message || 'Failed to generate subtitle file');
+      console.error("Error generating subtitle file:", err);
+      alert(err.message || "Failed to generate subtitle file");
     }
   };
 
@@ -192,17 +249,17 @@ export default function SubtitleMerge() {
     setFile2Entries([]);
     setFile1Format(null);
     setFile2Format(null);
-    setFile1Name('');
-    setFile2Name('');
+    setFile1Name("");
+    setFile2Name("");
     setOffset1(0);
     setOffset2(0);
-    setOutputFormat('srt');
+    setOutputFormat("srt");
   };
 
   const mergedPreview = handleMerge();
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -210,7 +267,8 @@ export default function SubtitleMerge() {
             Subtitle Merger
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Merge two subtitle files with time offset controls. Perfect for dual subtitles.
+            Merge two subtitle files with time offset controls. Perfect for dual
+            subtitles.
           </p>
         </div>
 
@@ -232,7 +290,8 @@ export default function SubtitleMerge() {
                         {file1Name}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-500">
-                        {file1Format?.toUpperCase()} • {file1Entries.length} entries
+                        {file1Format?.toUpperCase()} • {file1Entries.length}{" "}
+                        entries
                       </p>
                     </div>
                   ) : (
@@ -252,7 +311,7 @@ export default function SubtitleMerge() {
                   onClick={() => file1InputRef.current?.click()}
                   className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300"
                 >
-                  {file1Name ? 'Change File' : 'Choose File'}
+                  {file1Name ? "Change File" : "Choose File"}
                 </button>
               </div>
             </div>
@@ -271,7 +330,8 @@ export default function SubtitleMerge() {
                         {file2Name}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-500">
-                        {file2Format?.toUpperCase()} • {file2Entries.length} entries
+                        {file2Format?.toUpperCase()} • {file2Entries.length}{" "}
+                        entries
                       </p>
                     </div>
                   ) : (
@@ -291,7 +351,7 @@ export default function SubtitleMerge() {
                   onClick={() => file2InputRef.current?.click()}
                   className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-300"
                 >
-                  {file2Name ? 'Change File' : 'Choose File'}
+                  {file2Name ? "Change File" : "Choose File"}
                 </button>
               </div>
             </div>
@@ -319,7 +379,9 @@ export default function SubtitleMerge() {
                     <input
                       type="number"
                       value={offset1}
-                      onChange={(e) => setOffset1(Math.max(0, parseFloat(e.target.value) || 0))}
+                      onChange={(e) =>
+                        setOffset1(Math.max(0, parseFloat(e.target.value) || 0))
+                      }
                       step="0.1"
                       className="flex-1 px-4 py-2 text-center border border-gray-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
@@ -347,7 +409,9 @@ export default function SubtitleMerge() {
                     <input
                       type="number"
                       value={offset2}
-                      onChange={(e) => setOffset2(Math.max(0, parseFloat(e.target.value) || 0))}
+                      onChange={(e) =>
+                        setOffset2(Math.max(0, parseFloat(e.target.value) || 0))
+                      }
                       step="0.1"
                       className="flex-1 px-4 py-2 text-center border border-gray-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
@@ -375,12 +439,19 @@ export default function SubtitleMerge() {
                 </p>
                 <div className="space-y-2">
                   {mergedPreview.slice(0, 10).map((entry, idx) => (
-                    <div key={idx} className="text-xs font-mono text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-neutral-700 pb-2">
+                    <div
+                      key={idx}
+                      className="text-xs font-mono text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-neutral-700 pb-2"
+                    >
                       <div className="flex justify-between">
                         <span>#{entry.index}</span>
-                        <span>{entry.startTime} --&gt; {entry.endTime}</span>
+                        <span>
+                          {entry.startTime} --&gt; {entry.endTime}
+                        </span>
                       </div>
-                      <div className="mt-1 text-gray-600 dark:text-gray-400">{entry.text}</div>
+                      <div className="mt-1 text-gray-600 dark:text-gray-400">
+                        {entry.text}
+                      </div>
                     </div>
                   ))}
                   {mergedPreview.length > 10 && (
@@ -406,7 +477,9 @@ export default function SubtitleMerge() {
                   </label>
                   <select
                     value={outputFormat}
-                    onChange={(e) => setOutputFormat(e.target.value as SubtitleFormat)}
+                    onChange={(e) =>
+                      setOutputFormat(e.target.value as SubtitleFormat)
+                    }
                     className="w-full px-4 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="srt">SRT (SubRip)</option>

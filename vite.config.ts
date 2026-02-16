@@ -79,7 +79,7 @@ export default defineConfig({
 		],
 		exclude: ["@sanity/client", "@sanity/image-url", 'jspdf',
 			'html-to-image',
-			'lodash',
+
 			'isbot',],
 	}
 });

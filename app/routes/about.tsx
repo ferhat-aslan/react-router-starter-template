@@ -5,24 +5,55 @@ import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
-import {translations, type Locale} from "../utils/route-utils";
+import {
+  getTranslationData,
+  translations,
+  type Locale,
+} from "../utils/route-utils";
 import {useLocation} from "react-router";
 
-export const meta: MetaFunction = ({location}) => {
-  const locale: Locale = 
-    location.pathname.split("/")?.[1] === "de" ? "de" : 
-    location.pathname.split("/")?.[1] === "es" ? "es" : 
-    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-  function t(key: string) {
-    return messages[key];
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
-      title: t("about.title") + " - " + "Kleinbyte - All-in-One Digital Tools Platform",
-      description: t("about.text") + ". " + "Kleinbyte provides every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
+      title:
+        t("about.title") +
+        " - " +
+        "Kleinbyte - All-in-One Digital Tools Platform",
+      description:
+        t("about.text") +
+        ". " +
+        "Kleinbyte provides every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
       url: "https://kleinbyte.com/about",
       image: "https://kleinbyte.com/og-image-about.png",
     },
@@ -44,24 +75,31 @@ export const meta: MetaFunction = ({location}) => {
           description: t("about.text"),
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: t("about.title") + " - Kleinbyte" },
-      { name: "twitter:description", content: t("about.text") },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-about.png" },
-      { name: "keywords", content: "about kleinbyte, free online tools, pdf tools, document tools, image tools, developer tools" },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "twitter:card", content: "summary_large_image"},
+      {name: "twitter:title", content: t("about.title") + " - Kleinbyte"},
+      {name: "twitter:description", content: t("about.text")},
+      {
+        name: "twitter:image",
+        content: "https://kleinbyte.com/og-image-about.png",
+      },
+      {
+        name: "keywords",
+        content:
+          "about kleinbyte, free online tools, pdf tools, document tools, image tools, developer tools",
+      },
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
   return meta;
 };
 
-export default function Home() {
-
+export default function Home({loaderData}: Route.ComponentProps) {
+  const t = (key: string) => loaderData.messages[key] || key;
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       {/* Card Blog */}
       <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         {/* Grid */}

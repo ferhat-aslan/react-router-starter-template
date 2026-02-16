@@ -1,6 +1,4 @@
 {
-  "home.title": "Willkommen auf unserer Webseite",
-  "home.subtitle": "All-in-One Dokumenten-Tools",
   "home.meta.title": "All-in-One Digitale Tools Plattform - PDF, DOCX, Bilder, LaTeX, SEO & E-Commerce Tools",
   "home.meta.description": "Jedes Tool, das Sie für die Arbeit mit PDFs, Docx, Bildern, Latex, SEO-Tools, E-Commerce-Tools und Entwickler-Tools benötigen, an einem Ort. 100% kostenlos und einfach zu bedienen!",
   "home.meta.keywords": "pdf tools, dokumenten konverter, online tools, kostenlos, pdf bearbeiten, image tools, seo tools",
@@ -499,6 +497,7 @@
   "pdf.merge.order_hint": "Ziehen zum Umordnen • Dateien werden von oben nach unten zusammengefügt",
   "pdf.merge.success": "Zusammenführung abgeschlossen!",
   "pdf.merge.total_pages": "Seiten insgesamt",
+  "pdf.meta.title": "Kostenlose Online-PDF-Tools - PDF bearbeiten, konvertieren, zusammenfügen & teilen | Kleinbyte",
   "image.pdf.meta.title": "Bilder zu PDF Konverter - Online kostenlos JPG in PDF umwandeln | Kleinbyte",
   "image.pdf.meta.description": "Konvertieren Sie mehrere Bilder online kostenlos in PDF. Keine Installation oder Registrierung erforderlich.",
   "image.pdf.meta.name": "Kleinbyte Bilder zu PDF Konverter",

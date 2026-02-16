@@ -1,19 +1,61 @@
-import { useState, useRef } from "react";
+import {useState, useRef} from "react";
 import Layout from "~/components/layout";
 import SubtitleEditor from "~/components/subtitle-editor";
-import { Download, Upload, Loader2, CheckCircle, AlertCircle } from "lucide-react";
-import type { SubtitleEntry, SubtitleFormat } from "~/utils/subtitle-parser";
-import { parseSubtitle, writeSubtitle, detectFormat } from "~/utils/subtitle-parser";
-import type { Route } from "./+types/edit";
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
-import { generateMeta } from "@forge42/seo-tools/remix/metadata";
-import { webApp } from "@forge42/seo-tools/structured-data/web-app";
-import { type MetaFunction } from "react-router";
+import {
+  Download,
+  Upload,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+import type {SubtitleEntry, SubtitleFormat} from "~/utils/subtitle-parser";
+import {
+  parseSubtitle,
+  writeSubtitle,
+  detectFormat,
+} from "~/utils/subtitle-parser";
+import type {Route} from "./+types/edit";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
+import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+import {webApp} from "@forge42/seo-tools/structured-data/web-app";
+import {type MetaFunction} from "react-router";
 
-export const meta: MetaFunction = ({ location }) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
-  const t = (key: string) => messages[key] ?? key;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
@@ -38,17 +80,19 @@ export const meta: MetaFunction = ({ location }) => {
           },
         }),
       },
-    ]
+    ],
   );
   return meta;
 };
 
-export default function SubtitleEdit() {
-  const { t } = useTranslation();
+export default function SubtitleEdit({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
   const [entries, setEntries] = useState<SubtitleEntry[]>([]);
-  const [originalFormat, setOriginalFormat] = useState<SubtitleFormat | null>(null);
-  const [outputFormat, setOutputFormat] = useState<SubtitleFormat>('srt');
-  const [fileName, setFileName] = useState<string>('');
+  const [originalFormat, setOriginalFormat] = useState<SubtitleFormat | null>(
+    null,
+  );
+  const [outputFormat, setOutputFormat] = useState<SubtitleFormat>("srt");
+  const [fileName, setFileName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,30 +107,36 @@ export default function SubtitleEdit() {
     try {
       const content = await file.text();
       const format = detectFormat(content);
-      
+
       if (!format) {
-        throw new Error('Unable to detect subtitle format. Please upload a valid SRT, VTT, or ASS file.');
+        throw new Error(
+          "Unable to detect subtitle format. Please upload a valid SRT, VTT, or ASS file.",
+        );
       }
 
       const parsedEntries = parseSubtitle(content, format);
-      
+
       if (parsedEntries.length === 0) {
-        throw new Error('No subtitle entries found in the file.');
+        throw new Error("No subtitle entries found in the file.");
       }
 
       setEntries(parsedEntries);
       setOriginalFormat(format);
       setOutputFormat(format);
-      setFileName(file.name.replace(/\.[^/.]+$/, ''));
-      setSuccess(`Successfully loaded ${parsedEntries.length} subtitle entries from ${format.toUpperCase()} file.`);
+      setFileName(file.name.replace(/\.[^/.]+$/, ""));
+      setSuccess(
+        `Successfully loaded ${
+          parsedEntries.length
+        } subtitle entries from ${format.toUpperCase()} file.`,
+      );
     } catch (err: any) {
-      console.error('Error parsing subtitle file:', err);
-      setError(err.message || 'Failed to parse subtitle file');
+      console.error("Error parsing subtitle file:", err);
+      setError(err.message || "Failed to parse subtitle file");
       setEntries([]);
     }
 
     // Reset input
-    e.target.value = '';
+    e.target.value = "";
   };
 
   const handleDownload = () => {
@@ -94,35 +144,37 @@ export default function SubtitleEdit() {
 
     try {
       const content = writeSubtitle(entries, outputFormat);
-      const blob = new Blob([content], { type: 'text/plain' });
+      const blob = new Blob([content], {type: "text/plain"});
       const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
+
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `${fileName || 'subtitle'}_edited.${outputFormat}`;
+      a.download = `${fileName || "subtitle"}_edited.${outputFormat}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      setSuccess(`Downloaded edited subtitle as ${outputFormat.toUpperCase()} file.`);
+      setSuccess(
+        `Downloaded edited subtitle as ${outputFormat.toUpperCase()} file.`,
+      );
     } catch (err: any) {
-      console.error('Error generating subtitle file:', err);
-      setError(err.message || 'Failed to generate subtitle file');
+      console.error("Error generating subtitle file:", err);
+      setError(err.message || "Failed to generate subtitle file");
     }
   };
 
   const handleReset = () => {
     setEntries([]);
     setOriginalFormat(null);
-    setOutputFormat('srt');
-    setFileName('');
+    setOutputFormat("srt");
+    setFileName("");
     setError(null);
     setSuccess(null);
   };
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -130,7 +182,8 @@ export default function SubtitleEdit() {
             Subtitle Editor
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Edit subtitle files with box-by-box pagination. Modify timing and text content for SRT, VTT, and ASS formats.
+            Edit subtitle files with box-by-box pagination. Modify timing and
+            text content for SRT, VTT, and ASS formats.
           </p>
         </div>
 
@@ -207,7 +260,8 @@ export default function SubtitleEdit() {
                       Editing: {fileName}
                     </h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      Format: {originalFormat?.toUpperCase()} • {entries.length} entries
+                      Format: {originalFormat?.toUpperCase()} • {entries.length}{" "}
+                      entries
                     </p>
                   </div>
                   <button
@@ -237,7 +291,9 @@ export default function SubtitleEdit() {
                     </label>
                     <select
                       value={outputFormat}
-                      onChange={(e) => setOutputFormat(e.target.value as SubtitleFormat)}
+                      onChange={(e) =>
+                        setOutputFormat(e.target.value as SubtitleFormat)
+                      }
                       className="w-full px-4 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="srt">SRT (SubRip)</option>

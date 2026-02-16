@@ -16,7 +16,7 @@ const LANG_NAMES: Record<Locale, string> = {
   ru: "Русский",
 };
 
-const Layout = ({children}: any) => {
+const Layout = ({loaderData = null, children}: any) => {
   const {pathname} = useLocation();
   const navigate = useNavigate();
 
@@ -59,7 +59,7 @@ const Layout = ({children}: any) => {
   return (
     <>
       {/* ========== HEADER ========== */}
-      <MegaMenu />
+      <MegaMenu loaderData={loaderData} />
 
       {/* ========== MAIN CONTENT ========== */}
       <main className="flex-grow w-full max-w-340 py-10 px-4 sm:px-6 lg:px-8 mx-auto border-l border-r border-gray-200 dark:border-neutral-700">
@@ -149,7 +149,7 @@ const Layout = ({children}: any) => {
                   Blog
                 </LocaleLink>
               </p>
-              <p>
+              {/* <p>
                 <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   to="/careers"
@@ -159,23 +159,23 @@ const Layout = ({children}: any) => {
                 <span className="inline text-blue-600 dark:text-blue-500">
                   — We're hiring
                 </span>
-              </p>
-              <p>
+              </p> */}
+              {/*  <p>
                 <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   to="/customers"
                 >
                   Customers
                 </LocaleLink>
-              </p>
-              <p>
+              </p> */}
+              {/*  <p>
                 <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
                   to="/newsroom"
                 >
                   Newsroom
                 </LocaleLink>
-              </p>
+              </p> */}
               <p>
                 <LocaleLink
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"

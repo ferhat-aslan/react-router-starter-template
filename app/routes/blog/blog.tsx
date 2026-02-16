@@ -1,27 +1,31 @@
 import type {Route} from "./+types/blog";
 import Layout from "~/components/layout";
-import {useTranslation, translations, type Locale} from "~/utils/route-utils";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
 import {type MetaFunction} from "react-router";
 import {sanityClient, allPostsQuery, type BlogPost} from "./sanity";
 import {createImageUrlBuilder, type SanityImageSource} from "@sanity/image-url";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-export const meta: MetaFunction = ({location}) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale =
-    firstPathSegment === "de"
-      ? "de"
-      : firstPathSegment === "es"
-      ? "es"
-      : firstPathSegment === "ar"
-      ? "ar"
-      : "en";
-  const messages = translations[locale] ?? translations.en;
-
-  function t(key: string) {
-    return messages[key] ?? key;
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   return generateMeta(
     {
@@ -36,10 +40,12 @@ export const meta: MetaFunction = ({location}) => {
   );
 };
 
-export const loader = async () => {
+export const loader = async ({request}: any) => {
+  const url = new URL(request.url);
+  const {locale, messages, t} = await getTranslationData(url.pathname);
   try {
     const posts = await sanityClient.fetch<BlogPost[]>(allPostsQuery);
-    return {posts};
+    return {posts, locale, messages};
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     return {posts: []};
@@ -53,9 +59,10 @@ export function urlFor(source: SanityImageSource) {
   return builder.image(source);
 }
 
-export default function Blog({loaderData}: Route.ComponentProps) {
+export default function Blog({loaderData}: any) {
   const {posts} = loaderData;
-  const {t, locale} = useTranslation();
+  const t = (key: string) => loaderData.messages[key] || key;
+  const locale = loaderData.locale;
 
   // Helper to format date based on locale
   const formatDate = (dateString: string) => {
@@ -67,7 +74,7 @@ export default function Blog({loaderData}: Route.ComponentProps) {
   };
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <div className="min-h-screen bg-white dark:bg-neutral-950 text-gray-900 dark:text-white pt-32 pb-20">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">

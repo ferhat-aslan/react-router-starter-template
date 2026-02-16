@@ -1,15 +1,22 @@
 import { type RouteConfig, index, prefix, route } from "@react-router/dev/routes";
 import { generateLocalizedRoutes } from "./utils/route-utils";
 
+
+const notLocalizedRoutes = [
+  route("robots.txt", "routes/robots[.]txt.ts"),
+  route("sitemap.xml", "routes/sitemap[.]xml.ts"),
+  route("llms.txt", "routes/llms[.]txt.ts"),
+
+]
+
 const baseRoutes: RouteConfig = [
   index("routes/home.tsx"),
   route("search", "routes/search.tsx"),
   route("all-tools", "routes/all-tools.tsx"),
   route("about", "routes/about.tsx"),
   route("amazon", "routes/amazon.tsx"),
-  route("robots.txt", "routes/robots[.]txt.ts"),
-  route("sitemap.xml", "routes/sitemap[.]xml.ts"),
-  route("llms.txt", "routes/llms[.]txt.ts"),
+
+
   route("docx-tools", "routes/docx-tools.tsx"),
   route("latex-tools", "routes/latex-tools.tsx"),
   ...prefix("text-tools", [
@@ -60,4 +67,4 @@ const baseRoutes: RouteConfig = [
   ]),
 ];
 
-export default [...baseRoutes, ...generateLocalizedRoutes(baseRoutes)] satisfies RouteConfig;
+export default [...baseRoutes, ...generateLocalizedRoutes(baseRoutes), ...notLocalizedRoutes] satisfies RouteConfig;

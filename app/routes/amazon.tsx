@@ -7,10 +7,40 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 
-import { useTranslation } from "~/utils/route-utils";
+import {getTranslationData, useTranslation} from "~/utils/route-utils";
 
-export const meta: MetaFunction = ({location}) => {
-  const { t } = useTranslation();
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
+
   const meta = generateMeta(
     {
       title: t("amazon.meta.title"),
@@ -30,8 +60,8 @@ export const meta: MetaFunction = ({location}) => {
           offers: {
             "@type": "Offer",
             price: "0",
-            priceCurrency: "USD"
-          }
+            priceCurrency: "USD",
+          },
         }),
       },
       {
@@ -41,14 +71,15 @@ export const meta: MetaFunction = ({location}) => {
           description: t("amazon.description"),
         }),
       },
-    ]
+    ],
   );
   return meta;
 };
 
-export default function Home() {
+export default function Home({loaderData}: Route.ComponentProps) {
+  const t = (key: string) => loaderData.messages[key] || key;
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       {/* Card Blog */}
       <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         {/* Grid */}

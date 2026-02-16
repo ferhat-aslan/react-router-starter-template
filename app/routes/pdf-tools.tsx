@@ -1,7 +1,7 @@
 import type {Route} from "./+types/home";
 import Layout from "~/components/layout";
 import {LocaleLink} from "~/components/locale-link";
-import { ToolCategoryCard } from "~/components/tool-category-card";
+import {ToolCategoryCard} from "~/components/tool-category-card";
 import SVG from "/pdf.svg";
 import WORD from "/word.svg";
 import TXT from "/txt.svg";
@@ -13,24 +13,53 @@ import {course} from "@forge42/seo-tools/structured-data/course";
 
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 
-import { useTranslation, translations, type Locale } from "~/utils/route-utils";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getLocaleFromPath,
+  getTranslationData,
+} from "~/utils/route-utils";
 
-export const meta: MetaFunction = ({location}) => {
-  const locale: Locale = 
-    location.pathname.split("/")?.[1] === "de" ? "de" : 
-    location.pathname.split("/")?.[1] === "es" ? "es" : 
-    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-  function t(key: string) {
-    return messages[key] ?? key;
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
       title: t("pdf.meta.title"),
       description: t("pdf.meta.description"),
-      url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}pdf-tools`,
+      url: `https://kleinbyte.com/${
+        locale === "en" ? "" : locale + "/"
+      }pdf-tools`,
       image: "https://kleinbyte.com/og-image-pdf-tools.png",
     },
     [
@@ -38,7 +67,9 @@ export const meta: MetaFunction = ({location}) => {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("pdf.title"),
-          url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}pdf-tools`,
+          url: `https://kleinbyte.com/${
+            locale === "en" ? "" : locale + "/"
+          }pdf-tools`,
           description: t("pdf.description"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
@@ -56,22 +87,25 @@ export const meta: MetaFunction = ({location}) => {
           description: t("pdf.description"),
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: t("pdf.meta.title") },
-      { name: "twitter:description", content: t("pdf.meta.description") },
-      { name: "twitter:image", content: "https://kleinbyte.com/og-image-pdf-tools.png" },
-      { name: "keywords", content: t("pdf.meta.keywords") },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "twitter:card", content: "summary_large_image"},
+      {name: "twitter:title", content: t("pdf.meta.title")},
+      {name: "twitter:description", content: t("pdf.meta.description")},
+      {
+        name: "twitter:image",
+        content: "https://kleinbyte.com/og-image-pdf-tools.png",
+      },
+      {name: "keywords", content: t("pdf.meta.keywords")},
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
   return meta;
 };
 
-export default function PDFTools() {
-  const { t } = useTranslation();
-  
+export default function PDFTools({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
+
   const tools = [
     {
       title: t("pdf.merge.title"),
@@ -133,7 +167,7 @@ export default function PDFTools() {
   ];
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">

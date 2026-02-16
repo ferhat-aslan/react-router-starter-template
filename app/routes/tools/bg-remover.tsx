@@ -13,19 +13,52 @@ import {
 } from "lucide-react";
 import Layout from "~/components/layout";
 import Free from "~/components/free";
-import {useTranslation, type Locale, translations} from "~/utils/route-utils";
+import {
+  useTranslation,
+  type Locale,
+  translations,
+  getTranslationData,
+} from "~/utils/route-utils";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {course} from "@forge42/seo-tools/structured-data/course";
 import {type MetaFunction} from "react-router";
+import type {Route} from "./+types/video-compressor";
 
 // We will use dynamic imports for the heavy AI transformer library
 // to keep the initial bundle size small.
 
-export const meta: MetaFunction = ({location}) => {
-  const locale: Locale = (location.pathname.split("/")?.[1] as Locale) || "en";
-  const messages = translations[locale] ?? translations.en;
-  const t = (key: string) => messages[key] ?? key;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
+  }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   return generateMeta(
     {
@@ -67,8 +100,8 @@ export const meta: MetaFunction = ({location}) => {
   );
 };
 
-export default function BgRemover() {
-  const {t} = useTranslation();
+export default function BgRemover({loaderData}: any) {
+  const t = (key: string) => loaderData.messages[key] || key;
   const [isClient, setIsClient] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -237,7 +270,7 @@ export default function BgRemover() {
   }
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">

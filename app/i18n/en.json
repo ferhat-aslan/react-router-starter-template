@@ -1,6 +1,4 @@
 {
-  "home.title": "Welcome to our website",
-  "home.subtitle": "All-in-one document tools",
   "home.meta.title": "All-in-One Digital Tools Platform - PDF, DOCX, Images, LaTeX, SEO & E-commerce Tools",
   "home.meta.description": "Every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
   "home.meta.lt.web.name": "Kleinbyte Digital Tools",
@@ -725,5 +723,9 @@
   "pdf.compress.status.failed": "Compression Failed",
   "pdf.compress.btn.try_again": "Try Again",
   "pdf.compress.btn.compress_another": "Compress Another",
-  "pdf.compress.status.keep_open": "Please keep this window open"
+  "pdf.compress.status.keep_open": "Please keep this window open",
+  "tools.title": "Free Online Tools for PDF, Images, Video, and More | Kleinbyte",
+  "tools.description": "Discover our collection of free online tools for PDF editing, image conversion, video compression, and more. No registration required. Fast, secure, and easy-to-use tools for all your file processing needs.",
+  "tools.meta.title": "Free Online Tools - PDF, Image, Video, Developer | Kleinbyte",
+  "tools.meta.description": "Access our complete library of free online tools. Convert PDFs"
 }

@@ -1,26 +1,30 @@
 import type {Route} from "./+types/post";
 import Layout from "~/components/layout";
-import {useTranslation, translations, type Locale} from "~/utils/route-utils";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "~/utils/route-utils";
 import {type MetaFunction} from "react-router";
 import {sanityClient, postBySlugQuery, type BlogPost} from "./sanity";
 import {PortableText} from "@portabletext/react";
 import {createImageUrlBuilder, type SanityImageSource} from "@sanity/image-url";
 
-export const meta: MetaFunction<typeof loader> = ({data, location}) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale =
-    firstPathSegment === "de"
-      ? "de"
-      : firstPathSegment === "es"
-      ? "es"
-      : firstPathSegment === "ar"
-      ? "ar"
-      : "en";
-
-  const messages = translations[locale] ?? translations.en;
-  function t(key: string) {
-    return messages[key] ?? key;
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   // If no data (404), return default meta
   if (!data || typeof data !== "object" || !("post" in data)) {
@@ -73,8 +77,11 @@ export const meta: MetaFunction<typeof loader> = ({data, location}) => {
 };
 
 export const loader = async ({
+  request,
   params,
-}: Route.LoaderArgs): Promise<{post: BlogPost}> => {
+}: Route.LoaderArgs): Promise<any> => {
+  const url = new URL(request.url);
+  const {locale, messages, t} = await getTranslationData(url.pathname);
   try {
     const post = await sanityClient.fetch<BlogPost>(
       postBySlugQuery(params.slug),
@@ -82,7 +89,7 @@ export const loader = async ({
     if (!post) {
       throw new Response("Not Found", {status: 404});
     }
-    return {post};
+    return {post, locale, messages};
   } catch (error) {
     throw new Response("Not Found", {status: 404});
   }
@@ -97,7 +104,8 @@ export function urlFor(source: SanityImageSource) {
 
 export default function BlogPost({loaderData}: Route.ComponentProps) {
   const {post} = loaderData;
-  const {t, locale} = useTranslation();
+  const t = (key: string) => loaderData.messages[key] || key;
+  const locale: Locale = loaderData.locale;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(locale, {
@@ -172,7 +180,7 @@ export default function BlogPost({loaderData}: Route.ComponentProps) {
   };
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(structuredData)}}

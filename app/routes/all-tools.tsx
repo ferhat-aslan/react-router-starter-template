@@ -1,8 +1,12 @@
-
 import type {Route} from "./+types/all-tools";
 import Layout from "~/components/layout";
 import {ToolCategoryCard} from "~/components/tool-category-card";
-import {useTranslation, translations, type Locale} from "../utils/route-utils";
+import {
+  useTranslation,
+  translations,
+  type Locale,
+  getTranslationData,
+} from "../utils/route-utils";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
 import {type MetaFunction} from "react-router";
@@ -13,22 +17,45 @@ import JPG from "/jpg.svg";
 import TXT from "/txt.svg";
 import FOLDER from "/folder.svg";
 
-export const meta: MetaFunction = ({location}) => {
-  const locale: Locale = 
-    location.pathname.split("/")?.[1] === "de" ? "de" : 
-    location.pathname.split("/")?.[1] === "es" ? "es" : 
-    location.pathname.split("/")?.[1] === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-  function t(key: string) {
-    return messages[key] ?? key;
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
       title: t("all_tools.meta.title"),
       description: t("all_tools.meta.description"),
-      url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}all-tools`,
+      url: `https://kleinbyte.com/${
+        locale === "en" ? "" : locale + "/"
+      }all-tools`,
       image: "https://kleinbyte.com/og-image-all-tools.png",
     },
     [
@@ -37,44 +64,52 @@ export const meta: MetaFunction = ({location}) => {
           "@type": "CollectionPage",
           name: t("all_tools.title"),
           description: t("all_tools.description"),
-          url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}all-tools`,
+          url: `https://kleinbyte.com/${
+            locale === "en" ? "" : locale + "/"
+          }all-tools`,
           mainEntity: {
             "@type": "ItemList",
             itemListElement: [
-              // This would ideally be dynamically generated from the tools list, 
+              // This would ideally be dynamically generated from the tools list,
               // but for static structured data we can keep it high level or generic
               {
                 "@type": "ListItem",
                 position: 1,
                 name: t("tools.pdf.category"),
-                url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}pdf-tools`
+                url: `https://kleinbyte.com/${
+                  locale === "en" ? "" : locale + "/"
+                }pdf-tools`,
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: t("tools.images.category"),
-                url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}tools/image-converter`
+                url: `https://kleinbyte.com/${
+                  locale === "en" ? "" : locale + "/"
+                }tools/image-converter`,
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: t("tools.video.category"),
-                url: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}tools/video-compressor`
-              }
-            ]
-          }
+                url: `https://kleinbyte.com/${
+                  locale === "en" ? "" : locale + "/"
+                }tools/video-compressor`,
+              },
+            ],
+          },
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "keywords", content: t("all_tools.meta.keywords") },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "keywords", content: t("all_tools.meta.keywords")},
+    ],
   );
   return meta;
 };
 
-export default function AllTools() {
-  const { t } = useTranslation();
+export default function AllTools({loaderData}: Route.ComponentProps) {
+  const t = (key: string) => loaderData.messages[key] || key;
 
   const allTools = [
     {
@@ -86,25 +121,25 @@ export default function AllTools() {
           name: t("tools.pdf.merge.name"),
           description: t("tools.pdf.merge.description"),
           link: "/pdf-tools/merge-pdf",
-          icon: <img src={PDF} alt="PDF" className="size-8 dark:invert" />
+          icon: <img src={PDF} alt="PDF" className="size-8 dark:invert" />,
         },
         {
           name: t("tools.pdf.split.name"),
           description: t("tools.pdf.split.description"),
           link: "/pdf-tools/split-pdf",
-          icon: <img src={PDF} alt="PDF" className="size-8 dark:invert" />
+          icon: <img src={PDF} alt="PDF" className="size-8 dark:invert" />,
         },
         {
           name: t("tools.pdf.word_to_pdf.name"),
           description: t("tools.pdf.word_to_pdf.description"),
           link: "/pdf-tools/word-to-pdf",
           icon: (
-             <span className="flex gap-1">
-               <img src={WORD} alt="Word" className="size-6 dark:invert" />
-               <span>→</span>
-               <img src={PDF} alt="PDF" className="size-6 dark:invert" />
-             </span>
-           )
+            <span className="flex gap-1">
+              <img src={WORD} alt="Word" className="size-6 dark:invert" />
+              <span>→</span>
+              <img src={PDF} alt="PDF" className="size-6 dark:invert" />
+            </span>
+          ),
         },
         {
           name: t("tools.pdf.pdf_to_text.name"),
@@ -116,7 +151,7 @@ export default function AllTools() {
               <span>→</span>
               <img src={TXT} alt="Text" className="size-6 dark:invert" />
             </span>
-          )
+          ),
         },
         {
           name: t("tools.pdf.pdf_to_images.name"),
@@ -128,7 +163,7 @@ export default function AllTools() {
               <span>→</span>
               <img src={JPG} alt="Image" className="size-6 dark:invert" />
             </span>
-          )
+          ),
         },
       ],
     },
@@ -141,13 +176,13 @@ export default function AllTools() {
           name: t("tools.documents.docx.name"),
           description: t("tools.documents.docx.description"),
           link: "/docx-tools",
-          icon: <img src={WORD} alt="DOCX" className="size-8 dark:invert" />
+          icon: <img src={WORD} alt="DOCX" className="size-8 dark:invert" />,
         },
         {
           name: t("tools.documents.latex.name"),
           description: t("tools.documents.latex.description"),
           link: "/latex-tools",
-          icon: <img src={TXT} alt="LaTeX" className="size-8 dark:invert" />
+          icon: <img src={TXT} alt="LaTeX" className="size-8 dark:invert" />,
         },
       ],
     },
@@ -160,7 +195,7 @@ export default function AllTools() {
           name: t("tools.images.converter.name"),
           description: t("tools.images.converter.description"),
           link: "/tools/image-converter",
-          icon: <img src={JPG} alt="Image" className="size-8 dark:invert" />
+          icon: <img src={JPG} alt="Image" className="size-8 dark:invert" />,
         },
       ],
     },
@@ -173,7 +208,7 @@ export default function AllTools() {
           name: t("tools.video.compressor.name"),
           description: t("tools.video.compressor.description"),
           link: "/tools/video-compressor",
-          icon: <img src={JPG} alt="Video" className="size-8 dark:invert" />
+          icon: <img src={JPG} alt="Video" className="size-8 dark:invert" />,
         },
       ],
     },
@@ -182,30 +217,30 @@ export default function AllTools() {
       id: "subtitle",
       icon: TXT,
       tools: [
-         {
+        {
           name: t("tools.subtitle.edit.name"),
           description: t("tools.subtitle.edit.description"),
           link: "/subtitle-tools/editor",
-          icon: <img src={TXT} alt="Subtitle" className="size-8 dark:invert" />
+          icon: <img src={TXT} alt="Subtitle" className="size-8 dark:invert" />,
         },
         {
           name: t("tools.subtitle.convert.name"),
           description: t("tools.subtitle.convert.description"),
           link: "/subtitle-tools/converter",
-          icon: <img src={TXT} alt="Subtitle" className="size-8 dark:invert" />
+          icon: <img src={TXT} alt="Subtitle" className="size-8 dark:invert" />,
         },
         {
           name: t("tools.subtitle.merge.name"),
           description: t("tools.subtitle.merge.description"),
           link: "/subtitle-tools/merger",
-          icon: <img src={TXT} alt="Subtitle" className="size-8 dark:invert" />
+          icon: <img src={TXT} alt="Subtitle" className="size-8 dark:invert" />,
         },
-      ]
-    }
+      ],
+    },
   ];
 
   return (
-    <Layout>
+    <Layout loaderData={loaderData}>
       <div className="min-h-screen">
         {/* Header */}
         <div className="bg-gray-50 dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 py-16">
@@ -223,28 +258,32 @@ export default function AllTools() {
         <div className="container mx-auto px-6 py-16 space-y-16">
           {allTools.map((category, idx) => (
             <section key={idx} className="space-y-8">
-               <div className="flex items-center gap-4 border-b border-gray-200 dark:border-white/10 pb-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
-                     <img src={category.icon} alt={category.category} className="w-6 h-6 dark:invert" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {category.category}
-                  </h2>
-               </div>
-               
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                 {category.tools.map((tool, tIdx) => (
-                   <ToolCategoryCard
-                     key={tIdx}
-                     title={tool.name}
-                     description={tool.description}
-                     count={1}
-                     icon={tool.icon}
-                     link={tool.link}
-                     badge="Free"
-                   />
-                 ))}
-               </div>
+              <div className="flex items-center gap-4 border-b border-gray-200 dark:border-white/10 pb-4">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+                  <img
+                    src={category.icon}
+                    alt={category.category}
+                    className="w-6 h-6 dark:invert"
+                  />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {category.category}
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {category.tools.map((tool, tIdx) => (
+                  <ToolCategoryCard
+                    key={tIdx}
+                    title={tool.name}
+                    description={tool.description}
+                    count={1}
+                    icon={tool.icon}
+                    link={tool.link}
+                    badge="Free"
+                  />
+                ))}
+              </div>
             </section>
           ))}
         </div>

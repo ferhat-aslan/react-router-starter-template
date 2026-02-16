@@ -1,21 +1,44 @@
-
-import PrivacyPolicy from '../components/PrivacyPolicy';
+import PrivacyPolicy from "../components/PrivacyPolicy";
 import {type MetaFunction} from "react-router";
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
 import {webApp} from "@forge42/seo-tools/structured-data/web-app";
-import { translations, type Locale } from "~/utils/route-utils";
+import {
+  getTranslationData,
+  translations,
+  type Locale,
+} from "~/utils/route-utils";
 
-export const meta: MetaFunction = ({location}) => {
-  const firstPathSegment = location.pathname.split("/")?.[1];
-  const locale: Locale = 
-    firstPathSegment === "de" ? "de" : 
-    firstPathSegment === "es" ? "es" : 
-    firstPathSegment === "ar" ? "ar" : "en";
-  const messages = translations[locale] ?? translations.en;
+// SSR Loader - Async data fetching for translations
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
 
-  function t(key: string) {
-    return messages[key] ?? key;
+  const {locale, messages, t} = await getTranslationData(url.pathname);
+
+  return {
+    locale,
+    messages,
+    seo: {
+      title: t("pdf.meta.title"),
+      description: t("pdf.meta.description"),
+      keywords: t("pdf.meta.keywords"),
+    },
+  };
+}
+
+export const meta: MetaFunction = ({data, location}: any) => {
+  if (!data) {
+    return [
+      {title: "All Tools - Kleinbyte"},
+      {
+        name: "description",
+        content:
+          "Free online tools for PDF, documents, images and more. No signup required.",
+      },
+    ];
   }
+
+  const locale = data.locale;
+  const t = (key: string) => data.messages[key] || key;
 
   const meta = generateMeta(
     {
@@ -33,14 +56,18 @@ export const meta: MetaFunction = ({location}) => {
           description: "Privacy policy for Kleinbyte online tools",
         }),
       },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Kleinbyte" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: t("privacy.meta.title") },
-      { name: "twitter:description", content: t("privacy.meta.description") },
-      { name: "keywords", content: "privacy policy, data protection, kleinbyte privacy, user data, cookies policy" },
-      { name: "author", content: "Kleinbyte" },
-    ]
+      {property: "og:type", content: "website"},
+      {property: "og:site_name", content: "Kleinbyte"},
+      {name: "twitter:card", content: "summary_large_image"},
+      {name: "twitter:title", content: t("privacy.meta.title")},
+      {name: "twitter:description", content: t("privacy.meta.description")},
+      {
+        name: "keywords",
+        content:
+          "privacy policy, data protection, kleinbyte privacy, user data, cookies policy",
+      },
+      {name: "author", content: "Kleinbyte"},
+    ],
   );
   return meta;
 };

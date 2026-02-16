@@ -1,37 +1,101 @@
+// ~/utils/route-utils.tsx
 import { type RouteConfig, prefix } from "@react-router/dev/routes";
+import React from "react";
 import { useLocation } from "react-router";
-import en from "../i18n/en.json";
-import de from "../i18n/de.json";
-import es from "../i18n/es.json";
-import ar from "../i18n/ar.json";
-import tr from "../i18n/tr.json";
-import pt from "../i18n/pt.json";
-import fr from "../i18n/fr.json";
-import it from "../i18n/it.json";
-import ru from "../i18n/ru.json";
 
 export type Locale = "en" | "de" | "es" | "ar" | "tr" | "pt" | "fr" | "it" | "ru";
 
 export const SUPPORTED_LOCALES: Locale[] = ["en", "de", "es", "ar", "tr", "pt", "fr", "it", "ru"];
 
 type Messages = Record<string, string>;
-export const translations: Record<Locale, Messages> = { en, de, es, ar, tr, pt, fr, it, ru };
 
+// JSON dosyalarını dinamik import et (SSR-safe)
+const translationLoaders: Record<Locale, () => Promise<Messages>> = {
+    en: () => import("../i18n/en.json").then(m => m.default),
+    de: () => import("../i18n/de.json").then(m => m.default),
+    es: () => import("../i18n/es.json").then(m => m.default),
+    ar: () => import("../i18n/ar.json").then(m => m.default),
+    tr: () => import("../i18n/tr.json").then(m => m.default),
+    pt: () => import("../i18n/pt.json").then(m => m.default),
+    fr: () => import("../i18n/fr.json").then(m => m.default),
+    it: () => import("../i18n/it.json").then(m => m.default),
+    ru: () => import("../i18n/ru.json").then(m => m.default),
+};
+
+// SSR için sync translation (sadece loader'lar için)
+let cachedTranslations: Record<Locale, Messages> | null = null;
+
+export const loadTranslation = async (locale: Locale): Promise<Messages> => {
+    return await translationLoaders[locale]();
+};
+
+// SSR-safe t fonksiyonu (server component'ler için)
+export const createTFunction = (messages: Messages) => {
+    return (key: string): string => messages[key] ?? key;
+};
+
+// Client-side hook (hydration'dan sonra çalışır)
 export function useTranslation() {
     const location = useLocation();
-    const firstPathSegment = location.pathname.split("/")?.[1] as Locale;
+    const locale = getLocaleFromPath(location.pathname);
 
-    const locale: Locale = SUPPORTED_LOCALES.includes(firstPathSegment)
-        ? firstPathSegment
-        : "en";
+    // Bu hook sadece client'da çalıştığı için useState kullanabiliriz
+    const [messages, setMessages] = React.useState<Messages | null>(null);
+    const [isLoading, setIsLoading] = React.useState(false);
 
-    const messages = translations[locale] ?? translations.en;
+    React.useEffect(() => {
+        let isMounted = true;
 
-    function t(key: string) {
-        return messages[key] ?? key;
-    }
+        const loadMessages = async () => {
+            setIsLoading(true);
+            try {
+                const loadedMessages = await translationLoaders[locale]();
+                if (isMounted) {
+                    setMessages(loadedMessages);
+                }
+            } catch (error) {
+                console.error("Failed to load translations:", error);
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
 
-    return { t, locale };
+        loadMessages();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [locale]);
+
+    const t = React.useCallback((key: string): string => {
+        return messages?.[key] ?? key;
+    }, [messages]);
+
+    return {
+        t,
+        locale,
+        isLoading,
+        messages
+    };
+}
+
+// SSR-safe locale detection
+export function getLocaleFromPath(pathname: string): Locale {
+    const firstSegment = pathname.split("/")?.[1];
+
+    // Type guard
+    const isSupportedLocale = (str: string): str is Locale => {
+        return SUPPORTED_LOCALES.includes(str as Locale);
+    };
+
+    return isSupportedLocale(firstSegment) ? firstSegment : "en";
+}
+
+// Sync version for server-side (if needed in loaders)
+export function getLocaleFromPathSync(pathname: string): Locale {
+    return getLocaleFromPath(pathname);
 }
 
 /**
@@ -67,3 +131,18 @@ export function generateLocalizedRoutes(baseRoutes: any[]): any[] {
 
     return localizedRoutes;
 }
+
+// Helper for loader functions
+export async function getTranslationData(pathname: string) {
+    const locale = getLocaleFromPath(pathname);
+    const messages = await loadTranslation(locale);
+
+    return {
+        locale,
+        messages,
+        t: createTFunction(messages)
+    };
+}
+
+// For backward compatibility
+export const translations: Record<Locale, Messages> = {} as any;
