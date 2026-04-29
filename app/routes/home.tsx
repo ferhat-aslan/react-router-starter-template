@@ -9,11 +9,11 @@ const HeroBackground = lazy(() =>
   })),
 );
 
-import PDF from "/pdf.svg?url";
-import WORD from "/word.svg?url";
-import JPG from "/jpg.svg?url";
-import TXT from "/txt.svg";
-import FOLDER from "/folder.svg?url";
+const PDF = "/pdf.svg";
+const WORD = "/word.svg";
+const JPG = "/jpg.svg";
+const TXT = "/txt.svg";
+const FOLDER = "/folder.svg";
 import {
   useTranslation,
   translations,

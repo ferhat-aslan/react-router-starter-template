@@ -60,6 +60,20 @@ export default defineType({
             to: [{ type: 'author' }],
         }),
         defineField({
+            name: 'categories',
+            title: 'Categories',
+            type: 'array',
+            of: [{ type: 'reference', to: [{ type: 'category' }] }],
+            options: { layout: 'tags' },
+        }),
+        defineField({
+            name: 'tags',
+            title: 'Tags',
+            type: 'array',
+            of: [{ type: 'reference', to: [{ type: 'tag' }] }],
+            options: { layout: 'tags' },
+        }),
+        defineField({
             name: 'language',
             title: 'Language',
             type: 'string',
@@ -84,6 +98,40 @@ export default defineType({
             title: 'Published at',
             type: 'datetime',
             validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+            name: 'isGuide',
+            title: 'Is Guide',
+            type: 'boolean',
+            description: 'Enable guide-specific UI/markup if your frontend supports it.',
+            initialValue: false,
+        }),
+        defineField({
+            name: 'keyTakeaways',
+            title: 'Key Takeaways',
+            type: 'array',
+            of: [{ type: 'string' }],
+        }),
+        defineField({
+            name: 'seo',
+            title: 'SEO',
+            type: 'seo',
+        }),
+        defineField({
+            name: 'faqs',
+            title: 'FAQs',
+            type: 'array',
+            of: [{ type: 'faqItem' }],
+        }),
+        defineField({
+            name: 'howTo',
+            title: 'How-To',
+            type: 'howTo',
+        }),
+        defineField({
+            name: 'cta',
+            title: 'CTA',
+            type: 'cta',
         }),
         defineField({
             name: 'seoTitle',
