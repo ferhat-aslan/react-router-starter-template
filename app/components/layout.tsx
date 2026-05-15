@@ -1,4 +1,4 @@
-import {useLocation, useNavigate} from "react-router";
+import {Link, useLocation, useNavigate} from "react-router";
 import {LocaleLink} from "./locale-link";
 
 import {SUPPORTED_LOCALES, type Locale} from "../utils/route-utils";
@@ -177,12 +177,12 @@ const Layout = ({loaderData = null, children}: any) => {
                 </LocaleLink>
               </p> */}
               <p>
-                <LocaleLink
+                <a
                   className="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                  to="/sitemap"
+                  href="/sitemap.xml"
                 >
                   Sitemap
-                </LocaleLink>
+                </a>
               </p>
             </div>
           </div>

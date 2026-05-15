@@ -40,9 +40,12 @@ const baseRoutes: RouteConfig = [
   route("blog/:slug", "routes/blog/post.tsx"),
   ...prefix("subtitle-tools", [
     index("routes/subtitle-tools.tsx"),
-    route("edit", "routes/subtitle-tools/edit.tsx"),
-    route("convert", "routes/subtitle-tools/convert.tsx"),
-    route("merge", "routes/subtitle-tools/merge.tsx"),
+    route("editor", "routes/subtitle-tools/editor.tsx"),
+
+    route("converter", "routes/subtitle-tools/converter.tsx"),
+
+    route("merger", "routes/subtitle-tools/merger.tsx"),
+
   ]),
   ...prefix("pdf-tools", [
     index("routes/pdf-tools.tsx"),

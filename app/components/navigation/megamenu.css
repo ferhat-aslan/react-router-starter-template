@@ -204,11 +204,11 @@
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
-  color: #fff;
+
   text-transform: capitalize;
   transition: all 0.25s ease;
   border: none;
-  background: #2c2c2c;
+
   padding: 12px 15px;
   text-decoration: none;
   width: 100%;
@@ -265,8 +265,7 @@
   height: auto;
   padding: 20px 15px;
   border-radius: 0.25rem;
-  background-color: #2c2c2c;
-  color: white !important;
+  background-color: #3e3e3e;
   opacity: 0;
   visibility: hidden;
   transition: all 0.35s ease-in-out;
@@ -354,8 +353,13 @@
     height: auto;
     padding: 20px 15px;
     border-radius: 0.25rem;
-    background-color: #2c2c2c;
-    color: white !important;
+    outline-color: #f6f6f6;
+    outline-width: 10px;
+    outline-style: solid;
+    background-color: white;
+    border: 1px solid #eee;
+    /* inline border radius */
+
     opacity: 0;
     visibility: hidden;
     transition: all 0.35s ease-in-out;
@@ -480,7 +484,7 @@
   padding: 10px 15px;
   line-height: 1.4;
   text-transform: capitalize;
-  color: #fff;
+
   transition: all 0.25s ease-in-out;
   text-decoration: none;
   border-radius: 4px;
@@ -488,8 +492,6 @@
 }
 
 .submenu__list a:hover {
-  background: #3a3a3a;
-  color: var(--color);
   padding-left: 20px;
 }
 

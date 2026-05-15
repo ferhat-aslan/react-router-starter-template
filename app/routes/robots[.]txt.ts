@@ -34,7 +34,7 @@ export function loader({ request }: any) {
         "User-agent: *",
         "Allow: /",
         "Content-Signal: ai-train=yes, search=yes, ai-input=yes",
-        `Sitemap: ${origin}/sitemap.xml`,
+        `Sitemap: ${"https://kleinbyte.com"}/sitemap.xml`,
         "",
     ].join("\n");
 

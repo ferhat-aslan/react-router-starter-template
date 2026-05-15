@@ -75,7 +75,8 @@ body {
 }
 
 .scrolled header {
-  backdrop-filter: blur(10px);
+  background-color: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */

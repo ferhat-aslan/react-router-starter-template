@@ -276,9 +276,9 @@ export const MegaMenu = ({
   );
 
   return (
-    <header className="header h-12! max-h-12 ">
+    <header className="header h-max! max-h-max ">
       <style>{megaMenu}</style>
-      <nav className="navbar h-full gap-2 container max-w-7xl bg-zinc-900 rounded-sm px-1 !shadow-none">
+      <nav className="navbar h-full gap-2 container max-w-7xl  rounded-sm px-1 !shadow-none">
         {/* Left Section */}
         <section className="navbar__left bg-white dark:bg-transparent min-h-9.5 m-0 py-0 px-3 rounded-xs">
           <LocaleLink to="/" className="brand">
@@ -490,7 +490,7 @@ export const MegaMenu = ({
             className="switch border border-white rounded-full"
             onClick={toggleDarkMode}
           >
-            <span className="switch__light hover:[&>svg]:stroke-black!">
+            <span className="switch__light hover:[&>svg]:stroke-black! stroke-black!">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -501,7 +501,7 @@ export const MegaMenu = ({
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-moon-icon lucide-moon !stroke-white "
+                className="lucide lucide-moon-icon lucide-moon !stroke-black "
               >
                 <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
               </svg>
@@ -554,10 +554,10 @@ const Submenu = ({items, type, isActive}: SubmenuProps) => {
           key={category.titleKey}
           className="submenu__inner w-full flex flex-col justify-start items-start text-left p-0 m-0"
         >
-          <h4 className="submenu__title bg-violet-500 w-full h-16 rounded-xs text-white flex items-center px-3 !m-0 !py-0">
+          <h4 className="submenu__title  w-full h-16 rounded-xs lex items-center px-3 !m-0 !py-0">
             {t(category.titleKey)}
           </h4>
-          <ul className="submenu__list !text-left flex flex-col justify-start items-start bg-[#3c3c3c] gap-1 w-full gap-y-1">
+          <ul className="submenu__list !text-left flex flex-col justify-start items-start  gap-1 w-full gap-y-1">
             {category.items.map((item) => (
               <li key={item.labelKey} className="text-left w-full">
                 <LocaleLink to={item.href} className={"text-left w-full"}>
