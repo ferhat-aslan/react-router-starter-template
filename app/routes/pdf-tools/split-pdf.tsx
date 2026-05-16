@@ -127,6 +127,7 @@ export default function SplitPdf({loaderData}: any) {
 
   const handleFile = async (selectedFile: File) => {
     if (selectedFile.type !== "application/pdf") return;
+    if (import.meta.env.SSR) return;
 
     setFile(selectedFile);
     setResultBlob(null);

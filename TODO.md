@@ -19,3 +19,23 @@ Scan Downloaded Files: Always scan the converted file with updated antivirus sof
 Avoid Registration: Opt for converters that do not require an account or payment details, as these requests are often used for phishing.
 Manual Deletion: If the tool offers a "Delete File" button after your download is finished, use it immediately rather than waiting for their automatic timer.
 These resources offer advice on verifying the safety of online tools and managing your data
+
+TOOLKIT
+
+• React Router v7 does not support React Server Components (RSC). If your goal is “server renders HTML and the browser
+downloads zero app JS chunks”, you can do SSR without hydration (HTML-only), but that’s not RSC.
+
+What you can do on React Router v7 (HTML-only SSR)
+
+- Remove client hydration scripts: in app/root.tsx, remove <Scripts /> (and usually <ScrollRestoration /> too).
+- Avoid any client-only behavior you currently rely on (your ThemeScript is inline JS; if you want no JS at all,
+  remove that too).
+- Accept the tradeoffs: no client-side navigation, no hydration, no hooks running in the browser, no lazy/Suspense on
+  the client, etc. Links will do full page reloads.
+
+If you truly want RSC (server components that never ship client JS for those parts)
+
+- Switch frameworks to one that supports RSC (e.g. Next.js App Router). React Router v7 won’t get you there.
+
+If you want, I can patch your app/root.tsx to “HTML-only SSR mode” (remove <Scripts />, <ScrollRestoration />, and
+optionally ThemeScript) so those /assets/\*.js requests stop.

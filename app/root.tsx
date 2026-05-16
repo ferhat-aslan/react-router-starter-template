@@ -5,11 +5,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useMatches,
 } from "react-router";
 import {useLocation} from "react-router";
 
 import type {Route} from "./+types/root";
 import appcss from "./app.css?inline";
+import {getTranslationData} from "./utils/route-utils";
 
 export const links: Route.LinksFunction = () => [
   /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
@@ -26,8 +28,19 @@ export const links: Route.LinksFunction = () => [
 
 import {SUPPORTED_LOCALES, type Locale} from "./utils/route-utils";
 
+export async function loader({request}: {request: Request}) {
+  const url = new URL(request.url);
+  const {locale, messages} = await getTranslationData(url.pathname);
+  return {locale, messages};
+}
+
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
+  const matches = useMatches();
+  const rootData = (matches[0]?.data ?? null) as null | {
+    locale?: string;
+    messages?: Record<string, string>;
+  };
 
   const localeParam =
     SUPPORTED_LOCALES.find((lang) => pathname.startsWith(`/${lang}`)) || "en";
@@ -107,6 +120,16 @@ export function Layout({children}: {children: React.ReactNode}) {
           }}
         ></script>
         <style dangerouslySetInnerHTML={{__html: `${appcss}`}} />
+        {rootData?.locale && rootData?.messages ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.__I18N__=${JSON.stringify({
+                locale: rootData.locale,
+                messages: rootData.messages,
+              })};`,
+            }}
+          />
+        ) : null}
         <ThemeScript />
       </head>
       <body suppressHydrationWarning>

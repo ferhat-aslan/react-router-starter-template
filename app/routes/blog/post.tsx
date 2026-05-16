@@ -8,14 +8,22 @@ import {
 } from "~/utils/route-utils";
 import {type MetaFunction} from "react-router";
 import {
-  sanityClient,
   postBySlugQuery,
   similarPostsQuery,
-  urlFor,
-  type BlogPost,
-  type BlogPostListItem,
-} from "./sanity";
+} from "./sanity-queries";
+import type {BlogPost, BlogPostListItem} from "./types";
 import {PortableText, type PortableTextComponents} from "@portabletext/react";
+
+function withImageWidth(url: string, width: number) {
+  try {
+    const u = new URL(url);
+    u.searchParams.set("w", String(width));
+    u.searchParams.set("auto", "format");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
 
 export const meta: MetaFunction = ({data, location}: any) => {
   if (!data) {
@@ -54,15 +62,8 @@ export const meta: MetaFunction = ({data, location}: any) => {
 
   const ogImageUrl =
     post.ogImageUrl ||
-    (post.ogImage ? urlFor(post.ogImage).width(1200).height(630).fit("crop").url() : undefined) ||
     post.seo?.imageUrl ||
-    (post.seo?.image
-      ? urlFor(post.seo.image).width(1200).height(630).fit("crop").url()
-      : undefined) ||
     post.coverImageUrl ||
-    (post.coverImage
-      ? urlFor(post.coverImage).width(1200).height(630).fit("crop").url()
-      : undefined) ||
     `${origin}/og-image-blog.png`;
 
   return [
@@ -110,6 +111,7 @@ export const loader = async ({
   const url = new URL(request.url);
   const {locale, messages, t} = await getTranslationData(url.pathname);
   try {
+    const {sanityClient} = await import("./sanity.server");
     const post = await sanityClient.fetch<BlogPost>(
       postBySlugQuery,
       {slug: params.slug},
@@ -157,7 +159,6 @@ export default function BlogPost({loaderData}: Route.ComponentProps) {
       post.ogImageUrl ||
       post.seo?.imageUrl ||
       post.coverImageUrl ||
-      (post.coverImage ? urlFor(post.coverImage).width(1200).url() : undefined) ||
       `${origin}/og-image-blog.png`,
     datePublished: post.publishedAt,
     dateModified: post._updatedAt || post.publishedAt,
@@ -285,14 +286,24 @@ export default function BlogPost({loaderData}: Route.ComponentProps) {
         <div className="container blog-article-wp">
           <article className="blog-article">
             <header style={{marginBottom: "48px"}}>
-              {post.coverImage && (
+              {post.coverImageUrl && (
                 <div className="w-full aspect-video bg-gray-100 dark:bg-white/5  overflow-hidden mb-8">
                   <img
-                    src={urlFor(post.coverImage).width(800).url()}
+                    src={
+                      post.coverImageUrl
+                        ? withImageWidth(post.coverImageUrl, 800)
+                        : undefined
+                    }
                     srcSet={[
-                      `${urlFor(post.coverImage).width(400).url()} 400w`,
-                      `${urlFor(post.coverImage).width(800).url()} 800w`,
-                      `${urlFor(post.coverImage).width(1200).url()} 1200w`,
+                      post.coverImageUrl
+                        ? `${withImageWidth(post.coverImageUrl, 400)} 400w`
+                        : "",
+                      post.coverImageUrl
+                        ? `${withImageWidth(post.coverImageUrl, 800)} 800w`
+                        : "",
+                      post.coverImageUrl
+                        ? `${withImageWidth(post.coverImageUrl, 1200)} 1200w`
+                        : "",
                     ].join(", ")}
                     sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
                     alt={post.title || ""}
@@ -369,10 +380,14 @@ export default function BlogPost({loaderData}: Route.ComponentProps) {
                         className="block"
                       >
                         <div className="w-full aspect-[16/10] bg-gray-100 dark:bg-white/5 overflow-hidden">
-                          {sp.coverImage ? (
+                          {sp.coverImageUrl ? (
                             <img
                               className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                              src={urlFor(sp.coverImage).width(900).url()}
+                              src={
+                                sp.coverImageUrl
+                                  ? withImageWidth(sp.coverImageUrl, 900)
+                                  : undefined
+                              }
                               alt={sp.title || ""}
                               loading="lazy"
                             />

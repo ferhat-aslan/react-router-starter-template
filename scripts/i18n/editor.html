@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>I18n Editor</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0b0f16;
+        --panel: #111827;
+        --muted: #94a3b8;
+        --text: #e5e7eb;
+        --border: rgba(148, 163, 184, 0.22);
+        --accent: #60a5fa;
+        --danger: #fb7185;
+        --ok: #34d399;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f8fafc;
+          --panel: #ffffff;
+          --muted: #475569;
+          --text: #0f172a;
+          --border: rgba(15, 23, 42, 0.12);
+          --accent: #2563eb;
+          --danger: #e11d48;
+          --ok: #059669;
+        }
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+      header {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .title {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: 0.2px;
+      }
+      .sub {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      input,
+      button,
+      select,
+      textarea {
+        font: inherit;
+      }
+      input[type="text"] {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 10px 12px;
+        min-width: 260px;
+        outline: none;
+      }
+      input[type="text"]:focus {
+        border-color: rgba(96, 165, 250, 0.55);
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+      }
+      button {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 10px 12px;
+        cursor: pointer;
+      }
+      button.primary {
+        background: linear-gradient(180deg, rgba(96, 165, 250, 0.22), rgba(96, 165, 250, 0.08));
+        border-color: rgba(96, 165, 250, 0.45);
+      }
+      button.danger {
+        background: linear-gradient(180deg, rgba(251, 113, 133, 0.18), rgba(251, 113, 133, 0.06));
+        border-color: rgba(251, 113, 133, 0.45);
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .status {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .status.ok {
+        color: var(--ok);
+      }
+      .status.bad {
+        color: var(--danger);
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: rgba(17, 24, 39, 0.96);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        font-size: 12px;
+        color: var(--muted);
+        padding: 10px 10px;
+        white-space: nowrap;
+      }
+      @media (prefers-color-scheme: light) {
+        thead th {
+          background: rgba(255, 255, 255, 0.96);
+        }
+      }
+      tbody td {
+        border-bottom: 1px solid var(--border);
+        padding: 8px 10px;
+        vertical-align: top;
+      }
+      tbody tr:hover td {
+        background: rgba(96, 165, 250, 0.06);
+      }
+      .key {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 12px;
+        word-break: break-word;
+      }
+      textarea {
+        width: 100%;
+        min-width: 220px;
+        min-height: 44px;
+        resize: vertical;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        padding: 8px;
+        color: var(--text);
+        outline: none;
+      }
+      textarea:focus {
+        border-color: rgba(96, 165, 250, 0.55);
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+        background: rgba(96, 165, 250, 0.05);
+      }
+      .row-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .hint {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1px 6px;
+        background: rgba(148, 163, 184, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="title">
+          <h1>I18n JSON Editor</h1>
+          <div class="sub">Edits <span class="kbd">app/i18n/*.json</span> directly (save writes files).</div>
+        </div>
+        <div class="controls">
+          <button id="pickDir" class="primary">Open app/i18n</button>
+          <input id="search" type="text" placeholder="Search key or text…" autocomplete="off" />
+          <input id="newKey" type="text" placeholder="New key (e.g. nav.home)" autocomplete="off" />
+          <button id="addKey" class="primary" disabled>Add key</button>
+          <button id="save" class="primary" disabled>Save all</button>
+          <span id="status" class="status">Pick folder to start</span>
+        </div>
+      </header>
+
+      <div class="panel">
+        <table>
+          <thead>
+            <tr id="headRow">
+              <th style="width: 320px">key</th>
+              <th style="width: 120px; text-align: right">actions</th>
+            </tr>
+          </thead>
+          <tbody id="body"></tbody>
+        </table>
+      </div>
+
+      <div class="hint">
+        Tips: This uses the browser File System Access API. Click <span class="kbd">Open app/i18n</span> and pick the
+        <span class="kbd">app/i18n</span> folder. Search matches key + any locale value. Add key creates empty string in
+        every locale. Delete removes from every locale. Save writes pretty JSON (2-space indent).
+      </div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const statusEl = $("status");
+      const bodyEl = $("body");
+      const headRowEl = $("headRow");
+      const searchEl = $("search");
+      const newKeyEl = $("newKey");
+      const addKeyBtn = $("addKey");
+      const saveBtn = $("save");
+      const pickDirBtn = $("pickDir");
+
+      let locales = [];
+      let dictByLocale = {};
+      let fileHandleByLocale = {};
+      let dirty = false;
+
+      function setStatus(text, kind) {
+        statusEl.textContent = text;
+        statusEl.className = `status${kind ? " " + kind : ""}`;
+      }
+
+      function markDirty(on) {
+        dirty = on;
+        saveBtn.disabled = !dirty;
+        if (dirty) setStatus("Unsaved changes", "bad");
+        else setStatus("Saved", "ok");
+      }
+
+      function allKeys() {
+        const set = new Set();
+        for (const locale of locales) {
+          const dict = dictByLocale[locale] || {};
+          for (const k of Object.keys(dict)) set.add(k);
+        }
+        return [...set].sort((a, b) => a.localeCompare(b));
+      }
+
+      function rebuildHeader() {
+        headRowEl.innerHTML = "";
+        const thKey = document.createElement("th");
+        thKey.textContent = "key";
+        thKey.style.width = "320px";
+        headRowEl.appendChild(thKey);
+
+        for (const locale of locales) {
+          const th = document.createElement("th");
+          th.textContent = locale;
+          headRowEl.appendChild(th);
+        }
+
+        const thActions = document.createElement("th");
+        thActions.textContent = "actions";
+        thActions.style.width = "120px";
+        thActions.style.textAlign = "right";
+        headRowEl.appendChild(thActions);
+      }
+
+      function rowMatchesFilter(key, filter) {
+        if (!filter) return true;
+        const f = filter.toLowerCase();
+        if (key.toLowerCase().includes(f)) return true;
+        for (const locale of locales) {
+          const v = (dictByLocale[locale] && dictByLocale[locale][key]) || "";
+          if (String(v).toLowerCase().includes(f)) return true;
+        }
+        return false;
+      }
+
+      function render() {
+        const filter = searchEl.value.trim();
+        const keys = allKeys().filter((k) => rowMatchesFilter(k, filter));
+
+        bodyEl.innerHTML = "";
+        const frag = document.createDocumentFragment();
+
+        for (const key of keys) {
+          const tr = document.createElement("tr");
+
+          const tdKey = document.createElement("td");
+          tdKey.className = "key";
+          tdKey.textContent = key;
+          tr.appendChild(tdKey);
+
+          for (const locale of locales) {
+            const td = document.createElement("td");
+            const ta = document.createElement("textarea");
+            const dict = dictByLocale[locale] || (dictByLocale[locale] = {});
+            ta.value = dict[key] ?? "";
+            ta.placeholder = dict[key] == null ? "(missing)" : "";
+            ta.addEventListener("input", () => {
+              dict[key] = ta.value;
+              markDirty(true);
+            });
+            td.appendChild(ta);
+            tr.appendChild(td);
+          }
+
+          const tdActions = document.createElement("td");
+          tdActions.className = "row-actions";
+          const del = document.createElement("button");
+          del.className = "danger";
+          del.textContent = "Delete";
+          del.addEventListener("click", () => {
+            if (!confirm(`Delete key "${key}" from ALL locales?`)) return;
+            for (const locale of locales) {
+              if (dictByLocale[locale]) delete dictByLocale[locale][key];
+            }
+            markDirty(true);
+            render();
+          });
+          tdActions.appendChild(del);
+          tr.appendChild(tdActions);
+
+          frag.appendChild(tr);
+        }
+
+        bodyEl.appendChild(frag);
+      }
+
+      function canUseFsApi() {
+        return typeof window.showDirectoryPicker === "function";
+      }
+
+      async function readJsonFromFileHandle(fileHandle) {
+        const file = await fileHandle.getFile();
+        const text = await file.text();
+        return JSON.parse(text);
+      }
+
+      async function writeJsonToFileHandle(fileHandle, data) {
+        const json = JSON.stringify(data, null, 2) + "\n";
+        const writable = await fileHandle.createWritable();
+        await writable.write(json);
+        await writable.close();
+      }
+
+      async function pickI18nFolder() {
+        if (!canUseFsApi()) {
+          alert(
+            "Your browser does not support the File System Access API.\n\nUse a Chromium-based browser (Chrome/Edge) and open this page over http://localhost (not file://).",
+          );
+          return;
+        }
+
+        setStatus("Pick the app/i18n folder…");
+        const dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+
+        locales = [];
+        dictByLocale = {};
+        fileHandleByLocale = {};
+
+        for await (const [name, handle] of dirHandle.entries()) {
+          if (handle.kind !== "file") continue;
+          if (!name.endsWith(".json")) continue;
+          const locale = name.slice(0, -".json".length);
+          locales.push(locale);
+          fileHandleByLocale[locale] = handle;
+        }
+
+        locales.sort((a, b) => a.localeCompare(b));
+        if (!locales.length) {
+          setStatus("No *.json files found", "bad");
+          addKeyBtn.disabled = true;
+          saveBtn.disabled = true;
+          return;
+        }
+
+        setStatus("Loading JSON…");
+        for (const locale of locales) {
+          try {
+            dictByLocale[locale] = await readJsonFromFileHandle(fileHandleByLocale[locale]);
+          } catch (e) {
+            console.error(e);
+            dictByLocale[locale] = {};
+          }
+        }
+
+        rebuildHeader();
+        render();
+        markDirty(false);
+        addKeyBtn.disabled = false;
+      }
+
+      function validateKey(key) {
+        if (!key) return "Key is required";
+        if (key.length > 200) return "Key is too long";
+        if (/\s/.test(key)) return "Key cannot contain whitespace";
+        return null;
+      }
+
+      addKeyBtn.addEventListener("click", () => {
+        const key = newKeyEl.value.trim();
+        const err = validateKey(key);
+        if (err) return alert(err);
+
+        for (const locale of locales) {
+          const dict = dictByLocale[locale] || (dictByLocale[locale] = {});
+          if (dict[key] == null) dict[key] = "";
+        }
+
+        newKeyEl.value = "";
+        markDirty(true);
+        render();
+      });
+
+      newKeyEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") addKeyBtn.click();
+      });
+
+      searchEl.addEventListener("input", () => render());
+
+      async function saveAll() {
+        saveBtn.disabled = true;
+        setStatus("Saving…");
+        try {
+          for (const locale of locales) {
+            const dict = dictByLocale[locale] || {};
+            const handle = fileHandleByLocale[locale];
+            if (!handle) throw new Error(`Missing file handle for locale: ${locale}`);
+            await writeJsonToFileHandle(handle, dict);
+          }
+          markDirty(false);
+        } catch (e) {
+          console.error(e);
+          setStatus("Save failed", "bad");
+          alert(String(e));
+          saveBtn.disabled = false;
+        }
+      }
+
+      saveBtn.addEventListener("click", () => saveAll());
+
+      window.addEventListener("beforeunload", (e) => {
+        if (!dirty) return;
+        e.preventDefault();
+        e.returnValue = "";
+      });
+
+      pickDirBtn.addEventListener("click", () => {
+        pickI18nFolder().catch((e) => {
+          console.error(e);
+          setStatus("Failed to load", "bad");
+          alert(String(e));
+        });
+      });
+
+      if (!canUseFsApi()) {
+        setStatus("Unsupported browser", "bad");
+      }
+    </script>
+  </body>
+</html>

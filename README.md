@@ -72,6 +72,29 @@ Preview the production build locally:
 npm run preview
 ```
 
+## i18n (JSON key/value management)
+
+Generate a typed key union from `app/i18n/en.json`:
+
+```bash
+npm run i18n:keys
+```
+
+Check for missing/extra keys across locales:
+
+```bash
+npm run i18n:check
+```
+
+Open a local HTML editor to add/edit keys and translations:
+
+```bash
+npm run i18n:editor
+```
+
+If the local server cannot bind a port in your environment, open `scripts/i18n/editor.html` in a Chromium browser and use
+the “Open app/i18n” button.
+
 ## Deployment
 
 If you don't have a Cloudflare account, [create one here](https://dash.cloudflare.com/sign-up)! Go to your [Workers dashboard](https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fworkers-and-pages) to see your [free custom Cloudflare Workers subdomain](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/) on `*.workers.dev`.

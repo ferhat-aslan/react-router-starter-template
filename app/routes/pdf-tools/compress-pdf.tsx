@@ -139,6 +139,7 @@ export default function CompressPdf({loaderData}: any) {
 
   const handleCompress = async () => {
     if (!file) return;
+    if (import.meta.env.SSR) return;
 
     setStatus("compressing");
     setProgress(0);

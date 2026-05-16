@@ -1,15 +1,49 @@
 import { generateRemixSitemap } from "@forge42/seo-tools/remix/sitemap";
 import type { Route } from "../+types/root";
-import { sanityClient, allPostsQuery, type BlogPost } from "./blog/sanity";
+import { allPostsQuery } from "./blog/sanity-queries";
+
+type BlogPostForSitemap = {
+    slug?: { current?: string };
+    language?: string;
+};
+
+type SanityQueryResponse<T> = {
+    result: T;
+};
+
+async function fetchSanity<T>(query: string, params?: Record<string, string | number | boolean>) {
+    const projectId = "7g9hg49b";
+    const dataset = "production";
+    const apiVersion = "2024-11-28";
+
+    const searchParams = new URLSearchParams();
+    searchParams.set("query", query);
+    if (params) {
+        for (const [key, value] of Object.entries(params)) {
+            searchParams.set(`$${key}`, String(value));
+        }
+    }
+
+    const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?${searchParams.toString()}`;
+    const res = await fetch(url, {
+        headers: { Accept: "application/json" },
+    });
+    if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(`Sanity query failed (${res.status}): ${text || res.statusText}`);
+    }
+    const data = (await res.json()) as SanityQueryResponse<T>;
+    return data.result;
+}
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
     const { routes } = await import("virtual:react-router/server-build");
     const { origin } = new URL(request.url);
 
     // Fetch blog posts from Sanity
-    let blogPosts: BlogPost[] = [];
+    let blogPosts: BlogPostForSitemap[] = [];
     try {
-        blogPosts = await sanityClient.fetch<BlogPost[]>(allPostsQuery);
+        blogPosts = await fetchSanity<BlogPostForSitemap[]>(allPostsQuery);
     } catch (error) {
         console.error("Error fetching blog posts for sitemap:", error);
     }

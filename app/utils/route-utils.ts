@@ -2,12 +2,19 @@
 import { type RouteConfig, prefix } from "@react-router/dev/routes";
 import React from "react";
 import { useLocation } from "react-router";
+import type { I18nKey } from "../i18n/keys";
 
 export type Locale = "en" | "de" | "es" | "ar" | "tr" | "pt" | "fr" | "it" | "ru";
 
 export const SUPPORTED_LOCALES: Locale[] = ["en", "de", "es", "ar", "tr", "pt", "fr", "it", "ru"];
 
 type Messages = Record<string, string>;
+
+declare global {
+    interface Window {
+        __I18N__?: { locale: Locale; messages: Messages };
+    }
+}
 
 // JSON dosyalarını dinamik import et (SSR-safe)
 const translationLoaders: Record<Locale, () => Promise<Messages>> = {
@@ -31,7 +38,7 @@ export const loadTranslation = async (locale: Locale): Promise<Messages> => {
 
 // SSR-safe t fonksiyonu (server component'ler için)
 export const createTFunction = (messages: Messages) => {
-    return (key: string): string => messages[key] ?? key;
+    return (key: I18nKey | string): string => messages[key] ?? key;
 };
 
 // Client-side hook (hydration'dan sonra çalışır)
@@ -39,14 +46,25 @@ export function useTranslation() {
     const location = useLocation();
     const locale = getLocaleFromPath(location.pathname);
 
+    const initialMessages =
+        typeof window !== "undefined" && window.__I18N__?.locale === locale
+            ? window.__I18N__?.messages
+            : undefined;
+
     // Bu hook sadece client'da çalıştığı için useState kullanabiliriz
-    const [messages, setMessages] = React.useState<Messages | null>(null);
+    const [messages, setMessages] = React.useState<Messages | null>(initialMessages ?? null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     React.useEffect(() => {
         let isMounted = true;
 
         const loadMessages = async () => {
+            if (typeof window !== "undefined" && window.__I18N__?.locale === locale && window.__I18N__?.messages) {
+                if (isMounted) {
+                    setMessages(window.__I18N__.messages);
+                }
+                return;
+            }
             setIsLoading(true);
             try {
                 const loadedMessages = await translationLoaders[locale]();
@@ -69,7 +87,7 @@ export function useTranslation() {
         };
     }, [locale]);
 
-    const t = React.useCallback((key: string): string => {
+    const t = React.useCallback((key: I18nKey | string): string => {
         return messages?.[key] ?? key;
     }, [messages]);
 

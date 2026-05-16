@@ -8,14 +8,23 @@ import {
 } from "~/utils/route-utils";
 import {type MetaFunction} from "react-router";
 import {
-  sanityClient,
   blogPostsPageQuery,
   blogPostsCountQuery,
-  urlFor,
-  type BlogPostListItem,
-} from "./sanity";
+} from "./sanity-queries";
+import type {BlogPostListItem} from "./types";
 
 import {generateMeta} from "@forge42/seo-tools/remix/metadata";
+
+function withImageWidth(url: string, width: number) {
+  try {
+    const u = new URL(url);
+    u.searchParams.set("w", String(width));
+    u.searchParams.set("auto", "format");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
 
 export const meta: MetaFunction = ({data, location}: any) => {
   if (!data) {
@@ -71,6 +80,7 @@ export const loader = async ({request}: any) => {
   const from = (page - 1) * pageSize;
   const to = from + pageSize;
   try {
+    const {sanityClient} = await import("./sanity.server");
     const [posts, total] = await Promise.all([
       sanityClient.fetch<BlogPostListItem[]>(blogPostsPageQuery, {from, to}),
       sanityClient.fetch<number>(blogPostsCountQuery),
@@ -155,10 +165,14 @@ export default function Blog({loaderData}: any) {
                       className="group block"
                     >
                       <div className="w-full aspect-[16/10] bg-gray-100 dark:bg-white/5 overflow-hidden">
-                        {featured.coverImage ? (
+                        {featured.coverImageUrl ? (
                           <img
                             className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                            src={urlFor(featured.coverImage).width(1400).url()}
+                            src={
+                              featured.coverImageUrl
+                                ? withImageWidth(featured.coverImageUrl, 1400)
+                                : undefined
+                            }
                             alt={featured.title || ""}
                             loading="eager"
                           />
@@ -224,10 +238,14 @@ export default function Blog({loaderData}: any) {
                           className="block"
                         >
                           <div className="w-full aspect-[16/10] bg-gray-100 dark:bg-white/5 overflow-hidden">
-                            {post.coverImage ? (
+                            {post.coverImageUrl ? (
                               <img
                                 className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                                src={urlFor(post.coverImage).width(900).url()}
+                                src={
+                                  post.coverImageUrl
+                                    ? withImageWidth(post.coverImageUrl, 900)
+                                    : undefined
+                                }
                                 alt={post.title || ""}
                                 loading="lazy"
                               />

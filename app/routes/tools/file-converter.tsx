@@ -162,6 +162,7 @@ export default function FileConverter({loaderData}: any) {
 
   const convertAll = async () => {
     if (!targetFormat) return;
+    if (import.meta.env.SSR) return;
 
     // Dynamic imports for libraries
     const pdfjs = await import("pdfjs-dist");

@@ -1,7 +1,7 @@
 import { reactRouter } from "@react-router/dev/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "vite";
+import { defineConfig, splitVendorChunkPlugin } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import viteCompression from 'vite-plugin-compression';
 
@@ -18,12 +18,19 @@ export default defineConfig({
 		tailwindcss(),
 		reactRouter(),
 		tsconfigPaths(),
+		// Helps Vite keep async-route deps out of the initial client entry where possible.
+		splitVendorChunkPlugin(),
 
 		viteCompression({ algorithm: "gzip", ext: ".gz" }),
 		viteCompression({ algorithm: "brotliCompress", ext: ".br" }),
 	],
 
 	build: {
+		modulePreload: {
+			// Avoid injecting the modulepreload polyfill chunk
+			// (modern browsers support it; reduces one extra request)
+			polyfill: false,
+		},
 		cssMinify: true,
 		cssCodeSplit: true,
 		sourcemap: false,
@@ -31,19 +38,56 @@ export default defineConfig({
 
 		rollupOptions: {
 			output: {
-				manualChunks: {
-					// Core React
-					vendor: ["react", "react-dom", "react-router"],
-					// Sanity / CMS
-					sanity: ["@sanity/client", "@sanity/image-url", "@portabletext/react"],
-					// Icons (often heavy)
-					icons: ["lucide-react"],
-					// OG Image Generation (very heavy, definitely split)
-					og: ["satori", "@resvg/resvg-wasm"],
-					// Utils
-
-
-				}
+				// Keep heavy feature bundles out of the initial client entry where possible.
+				manualChunks(id) {
+					// Ensure Vite's internal preload helper never ends up inside feature chunks
+					// (otherwise unrelated pages can be forced to download that feature chunk).
+					if (
+						id.includes("vite/preload-helper") ||
+						id.includes("\u0000vite/preload-helper") ||
+						id.includes("vite/modulepreload-polyfill") ||
+						id.includes("\u0000vite/modulepreload-polyfill")
+					) {
+						return "preload";
+					}
+					if (id.includes("node_modules")) {
+						if (
+							id.includes("html2canvas") ||
+							id.includes("canvg") ||
+							id.includes("stackblur-canvas") ||
+							id.includes("rgbcolor") ||
+							id.includes("svg-pathdata")
+						) {
+							return "canvas";
+						}
+						if (id.includes("qrcode-generator")) {
+							return "qr";
+						}
+						if (id.includes("dompurify") || id.includes("linkifyjs")) {
+							return "sanitize";
+						}
+						if (id.includes("@tiptap/") || id.includes("prosemirror")) {
+							return "editor";
+						}
+						if (id.includes("pdfjs-dist") || id.includes("pdf-lib") || id.includes("jspdf")) {
+							return "pdf";
+						}
+						if (
+							id.includes("@sanity/") ||
+							id.includes("@portabletext/") ||
+							id.includes("/get-it/") ||
+							id.includes("/groq/") ||
+							id.includes("/@sanity/") ||
+							id.includes("/@portabletext/")
+						) {
+							return "sanity";
+						}
+						if (id.includes("satori") || id.includes("@resvg/resvg-wasm")) {
+							return "og";
+						}
+						return "vendor";
+					}
+				},
 
 			},
 
