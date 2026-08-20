@@ -31,7 +31,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -53,7 +53,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       url: `https://kleinbyte.com/${
         locale === "en" ? "" : locale + "/"
       }image-tools`,
-      image: "https://kleinbyte.com/og-image-image-tools.png",
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/image-tools.png`,
     },
     [
       {
@@ -87,7 +87,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:description", content: t("image.meta.description")},
       {
         name: "twitter:image",
-        content: "https://kleinbyte.com/og-image-image-tools.png",
+        content: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/image-tools.png`,
       },
       {name: "keywords", content: t("image.meta.keywords")},
       {name: "author", content: "Kleinbyte"},

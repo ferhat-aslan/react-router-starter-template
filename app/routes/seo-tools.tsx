@@ -31,7 +31,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -50,15 +50,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("seo.meta.title"),
       description: t("seo.meta.description"),
-      url: "https://kleinbyte.com/seo-tools",
-      image: "https://kleinbyte.com/og-image-seo-tools.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/seo-tools.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("seo.title"),
-          url: "https://kleinbyte.com/seo-tools",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("seo.description"),
           applicationCategory: "DeveloperApplication",
           operatingSystem: "Any",
@@ -83,7 +83,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:description", content: t("seo.meta.description")},
       {
         name: "twitter:image",
-        content: "https://kleinbyte.com/og-image-seo-tools.png",
+        content: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/seo-tools.png`,
       },
       {name: "keywords", content: t("seo.meta.keywords")},
       {name: "author", content: "Kleinbyte"},

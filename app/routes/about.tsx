@@ -29,7 +29,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -54,15 +54,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
         t("about.text") +
         ". " +
         "Kleinbyte provides every tool you need to work with PDFs, Docx, Images, Latex, Seo Tools, E-commerce Tools, Developer Tools in one place. 100% free and easy to use!",
-      url: "https://kleinbyte.com/about",
-      image: "https://kleinbyte.com/og-image-about.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/about.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "Organization",
           name: "Kleinbyte",
-          url: "https://kleinbyte.com",
+          url: `https://kleinbyte.com${location.pathname}`,
           logo: "https://kleinbyte.com/logo.png",
           description: t("home.meta.lt.web.description"),
           foundingDate: "2025",
@@ -82,7 +82,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:description", content: t("about.text")},
       {
         name: "twitter:image",
-        content: "https://kleinbyte.com/og-image-about.png",
+        content: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/about.png`,
       },
       {
         name: "keywords",

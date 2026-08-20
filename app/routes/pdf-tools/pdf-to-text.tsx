@@ -42,7 +42,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -61,15 +61,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("pdf.text.meta.title"),
       description: t("pdf.text.meta.description"),
-      url: "https://kleinbyte.com/pdf-tools/pdf-to-text",
-      image: "https://kleinbyte.com/og-image-pdf-to-text.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/pdf-tools/pdf-to-text.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
           name: t("pdf.text.meta.name"),
-          url: "https://kleinbyte.com/pdf-tools/pdf-to-text",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("pdf.text.meta.app_desc"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",

@@ -29,7 +29,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -51,7 +51,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       url: `https://kleinbyte.com/${
         locale === "en" ? "" : locale + "/"
       }text-tools/gemini-editor`,
-      image: "https://kleinbyte.com/og-image-gemini-editor.png",
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/text-tools/gemini-editor.png`,
     },
     [
       {

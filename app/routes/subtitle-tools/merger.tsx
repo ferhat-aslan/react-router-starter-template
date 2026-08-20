@@ -35,7 +35,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -54,15 +54,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("subtitle.merge.meta.title"),
       description: t("subtitle.merge.meta.description"),
-      url: "https://kleinbyte.com/subtitle-tools/merge",
-      image: "https://kleinbyte.com/og-image-subtitle-merge.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/subtitle-tools/merger.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
           name: t("subtitle.merge.meta.name"),
-          url: "https://kleinbyte.com/subtitle-tools/merge",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("subtitle.merge.meta.app_desc"),
           applicationCategory: "MultimediaApplication",
           operatingSystem: "Any",

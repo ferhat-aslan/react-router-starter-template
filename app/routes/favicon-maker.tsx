@@ -31,7 +31,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -50,15 +50,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("favicon.meta.title"),
       description: t("favicon.meta.description"),
-      url: "https://kleinbyte.com/favicon-maker",
-      image: "https://kleinbyte.com/og-image-favicon-maker.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/favicon-maker.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("favicon.title"),
-          url: "https://kleinbyte.com/favicon-maker",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("favicon.description"),
           applicationCategory: "GraphicsApplication",
           operatingSystem: "Any",
@@ -83,7 +83,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:description", content: t("favicon.meta.description")},
       {
         name: "twitter:image",
-        content: "https://kleinbyte.com/og-image-favicon-maker.png",
+        content: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/favicon-maker.png`,
       },
       {name: "keywords", content: t("favicon.meta.keywords")},
       {name: "author", content: "Kleinbyte"},

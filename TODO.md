@@ -1,8 +1,10 @@
+CLONE a website and work on it. canvas
+auto stranslate and merge subtile
 metadata exif reader delete
 delete pdf pages
 invoice creator editor viewer
 pdf editor
-
+pdf clear
 Internal links free no coupoun code
 Ahrefs errors
 

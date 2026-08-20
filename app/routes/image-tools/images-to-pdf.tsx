@@ -31,7 +31,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -50,15 +50,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("image.pdf.meta.title"),
       description: t("image.pdf.meta.description"),
-      url: "https://kleinbyte.com/image-tools/images-to-pdf",
-      image: "https://kleinbyte.com/og-image-images-to-pdf.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/image-tools/images-to-pdf.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
           name: t("image.pdf.meta.name"),
-          url: "https://kleinbyte.com/image-tools/images-to-pdf",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("image.pdf.meta.app_desc"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",
@@ -84,7 +84,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:description", content: t("image.pdf.meta.description")},
       {
         name: "twitter:image",
-        content: "https://kleinbyte.com/og-image-images-to-pdf.png",
+        content: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/image-tools/images-to-pdf.png`,
       },
       {name: "keywords", content: t("image.pdf.meta.keywords")},
       {name: "author", content: "Kleinbyte"},

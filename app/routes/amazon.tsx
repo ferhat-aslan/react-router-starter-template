@@ -26,7 +26,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -45,15 +45,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("amazon.meta.title"),
       description: t("amazon.meta.description"),
-      url: "https://kleinbyte.com/amazon",
-      image: "https://kleinbyte.com/og-image-ecommerce-tools.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/amazon.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("amazon.title"),
-          url: "https://kleinbyte.com/amazon",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("amazon.description"),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Any",

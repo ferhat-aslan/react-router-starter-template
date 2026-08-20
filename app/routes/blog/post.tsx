@@ -25,7 +25,7 @@ function withImageWidth(url: string, width: number) {
   }
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -64,7 +64,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
     post.ogImageUrl ||
     post.seo?.imageUrl ||
     post.coverImageUrl ||
-    `${origin}/og-image-blog.png`;
+    `${origin}/${locale === "en" ? "" : locale + "/"}og/blog.png`;
 
   return [
     {title},
@@ -159,7 +159,7 @@ export default function BlogPost({loaderData}: Route.ComponentProps) {
       post.ogImageUrl ||
       post.seo?.imageUrl ||
       post.coverImageUrl ||
-      `${origin}/og-image-blog.png`,
+      `${origin}/${locale === "en" ? "" : locale + "/"}og/blog.png`,
     datePublished: post.publishedAt,
     dateModified: post._updatedAt || post.publishedAt,
     author: {

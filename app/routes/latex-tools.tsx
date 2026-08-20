@@ -30,7 +30,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -49,15 +49,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("latex.meta.title"),
       description: t("latex.meta.description"),
-      url: "https://kleinbyte.com/latex-tools",
-      image: "https://kleinbyte.com/og-image-latex-tools.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/latex-tools.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "WebApplication",
           name: t("latex.title"),
-          url: "https://kleinbyte.com/latex-tools",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("latex.description"),
           applicationCategory: "EducationalApplication",
           operatingSystem: "Any",
@@ -82,7 +82,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:description", content: t("latex.meta.description")},
       {
         name: "twitter:image",
-        content: "https://kleinbyte.com/og-image-latex-tools.png",
+        content: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/latex-tools.png`,
       },
       {
         name: "keywords",

@@ -1,13 +1,18 @@
-import { type RouteConfig, index, prefix, route } from "@react-router/dev/routes";
+import {
+  type RouteConfig,
+  index,
+  prefix,
+  route,
+} from "@react-router/dev/routes";
 import { generateLocalizedRoutes } from "./utils/route-utils";
-
 
 const notLocalizedRoutes = [
   route("robots.txt", "routes/robots[.]txt.ts"),
   route("sitemap.xml", "routes/sitemap[.]xml.ts"),
   route("llms.txt", "routes/llms[.]txt.ts"),
-
-]
+  route("og/*", "routes/og-generator.tsx", { id: "og-default" }),
+  route(":lang/og/*", "routes/og-generator-localized.tsx", { id: "og-localized" }),
+];
 
 const baseRoutes: RouteConfig = [
   index("routes/home.tsx"),
@@ -15,7 +20,8 @@ const baseRoutes: RouteConfig = [
   route("all-tools", "routes/all-tools.tsx"),
   route("about", "routes/about.tsx"),
   route("amazon", "routes/amazon.tsx"),
-
+  route("invoice-editor", "routes/invoice-editor.tsx"),
+  
 
   route("docx-tools", "routes/docx-tools.tsx"),
   route("latex-tools", "routes/latex-tools.tsx"),
@@ -35,7 +41,6 @@ const baseRoutes: RouteConfig = [
   route("privacy-policy", "routes/privacy-policy.tsx"),
   route("terms-and-conditions", "routes/terms-and-conditions.tsx"),
 
-
   route("blog", "routes/blog/blog.tsx"),
   route("blog/:slug", "routes/blog/post.tsx"),
   ...prefix("subtitle-tools", [
@@ -45,7 +50,6 @@ const baseRoutes: RouteConfig = [
     route("converter", "routes/subtitle-tools/converter.tsx"),
 
     route("merger", "routes/subtitle-tools/merger.tsx"),
-
   ]),
   ...prefix("pdf-tools", [
     index("routes/pdf-tools.tsx"),
@@ -70,4 +74,8 @@ const baseRoutes: RouteConfig = [
   ]),
 ];
 
-export default [...baseRoutes, ...generateLocalizedRoutes(baseRoutes), ...notLocalizedRoutes] satisfies RouteConfig;
+export default [
+  ...baseRoutes,
+  ...generateLocalizedRoutes(baseRoutes),
+  ...notLocalizedRoutes,
+] satisfies RouteConfig;

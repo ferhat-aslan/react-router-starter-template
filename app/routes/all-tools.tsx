@@ -34,7 +34,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -56,7 +56,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       url: `https://kleinbyte.com/${
         locale === "en" ? "" : locale + "/"
       }all-tools`,
-      image: "https://kleinbyte.com/og-image-all-tools.png",
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/all-tools.png`,
     },
     [
       {

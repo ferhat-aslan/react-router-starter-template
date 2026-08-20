@@ -25,7 +25,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -44,15 +44,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("privacy.meta.title"),
       description: t("privacy.meta.description"),
-      url: "https://kleinbyte.com/privacy-policy",
-      image: "https://kleinbyte.com/og-image-privacy.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/privacy-policy.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "WebPage",
           name: "Privacy Policy",
-          url: "https://kleinbyte.com/privacy-policy",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: "Privacy policy for Kleinbyte online tools",
         }),
       },

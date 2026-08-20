@@ -41,7 +41,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -61,7 +61,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       title: t("pdf.merge.meta.title"),
       description: t("pdf.merge.meta.description"),
       url: `https://kleinbyte.com${location.pathname}`,
-      image: "https://kleinbyte.com/og-image-merge-pdf.png",
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/pdf-tools/merge-pdf.png`,
     },
     [
       {

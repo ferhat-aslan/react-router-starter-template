@@ -68,7 +68,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -88,7 +88,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       title: t("file.convert.meta.title"),
       description: t("file.convert.meta.description"),
       url: `https://kleinbyte.com${location.pathname}`,
-      image: "https://kleinbyte.com/og-image-file-converter.png",
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/tools/file-converter.png`,
     },
     [
       {

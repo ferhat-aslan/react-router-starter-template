@@ -29,7 +29,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -48,15 +48,15 @@ export const meta: MetaFunction = ({data, location}: any) => {
     {
       title: t("subtitle.meta.title"),
       description: t("subtitle.meta.description"),
-      url: "https://kleinbyte.com/subtitle-tools",
-      image: "https://kleinbyte.com/og-image-subtitle-tools.png",
+      url: `https://kleinbyte.com${location.pathname}`,
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/subtitle-tools.png`,
     },
     [
       {
         "script:ld+json": webApp({
           "@type": "SoftwareApplication",
           name: t("subtitle.meta.name"),
-          url: "https://kleinbyte.com/subtitle-tools",
+          url: `https://kleinbyte.com${location.pathname}`,
           description: t("subtitle.meta.app_desc"),
           applicationCategory: "MultimediaApplication",
           operatingSystem: "Any",
@@ -74,7 +74,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:description", content: t("subtitle.meta.description")},
       {
         name: "twitter:image",
-        content: "https://kleinbyte.com/og-image-subtitle-tools.png",
+        content: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/subtitle-tools.png`,
       },
       {name: "keywords", content: t("subtitle.meta.keywords")},
       {name: "author", content: "Kleinbyte"},

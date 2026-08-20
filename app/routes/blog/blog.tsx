@@ -26,7 +26,7 @@ function withImageWidth(url: string, width: number) {
   }
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -47,7 +47,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       title: t("blog.meta.title"),
       description: t("blog.meta.description"),
       url: `${origin}${location.pathname}`,
-      image: `${origin}/og-image-blog.png`,
+      image: `${origin}/${locale === "en" ? "" : locale + "/"}og/blog.png`,
     },
     [
       {name: "keywords", content: t("blog.meta.keywords")},
@@ -57,7 +57,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       {name: "twitter:card", content: "summary_large_image"},
       {name: "twitter:title", content: t("blog.meta.title")},
       {name: "twitter:description", content: t("blog.meta.description")},
-      {name: "twitter:image", content: `${origin}/og-image-blog.png`},
+      {name: "twitter:image", content: `${origin}/${locale === "en" ? "" : locale + "/"}og/blog.png`},
       {
         "script:ld+json": {
           "@context": "https://schema.org",

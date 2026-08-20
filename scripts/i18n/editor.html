@@ -32,8 +32,13 @@
         margin: 0;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
           "Segoe UI Emoji";
-        background: var(--bg);
-        color: var(--text);
+
+
+        background-color: white !important;
+        color: black !important;
+      }
+      *{
+         color: black !important;
       }
       .wrap {
         max-width: 1400px;
@@ -60,7 +65,7 @@
       }
       .sub {
         font-size: 12px;
-        color: var(--muted);
+
       }
       .controls {
         display: flex;
@@ -75,10 +80,10 @@
         font: inherit;
       }
       input[type="text"] {
-        background: var(--panel);
+
         border: 1px solid var(--border);
-        color: var(--text);
-        border-radius: 10px;
+
+
         padding: 10px 12px;
         min-width: 260px;
         outline: none;
@@ -88,19 +93,19 @@
         box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
       }
       button {
-        background: var(--panel);
+
         border: 1px solid var(--border);
-        color: var(--text);
-        border-radius: 10px;
+
+
         padding: 10px 12px;
         cursor: pointer;
       }
       button.primary {
-        background: linear-gradient(180deg, rgba(96, 165, 250, 0.22), rgba(96, 165, 250, 0.08));
+
         border-color: rgba(96, 165, 250, 0.45);
       }
       button.danger {
-        background: linear-gradient(180deg, rgba(251, 113, 133, 0.18), rgba(251, 113, 133, 0.06));
+
         border-color: rgba(251, 113, 133, 0.45);
       }
       button:disabled {
@@ -118,40 +123,42 @@
         color: var(--danger);
       }
       .panel {
-        background: var(--panel);
+
         border: 1px solid var(--border);
-        border-radius: 12px;
+
         overflow: hidden;
       }
       table {
         width: 100%;
         border-collapse: collapse;
+        overflow-x: scroll;
       }
       thead th {
         position: sticky;
         top: 0;
         z-index: 1;
-        background: rgba(17, 24, 39, 0.96);
-        backdrop-filter: blur(10px);
+
         border-bottom: 1px solid var(--border);
         text-align: left;
         font-size: 12px;
-        color: var(--muted);
+
         padding: 10px 10px;
         white-space: nowrap;
+        min-width: 150px;
       }
       @media (prefers-color-scheme: light) {
         thead th {
-          background: rgba(255, 255, 255, 0.96);
+
         }
       }
       tbody td {
         border-bottom: 1px solid var(--border);
         padding: 8px 10px;
         vertical-align: top;
+        min-width: 150px;
       }
       tbody tr:hover td {
-        background: rgba(96, 165, 250, 0.06);
+
       }
       .key {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -165,15 +172,15 @@
         resize: vertical;
         background: transparent;
         border: 1px solid transparent;
-        border-radius: 8px;
+
         padding: 8px;
-        color: var(--text);
+
         outline: none;
       }
       textarea:focus {
         border-color: rgba(96, 165, 250, 0.55);
-        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
-        background: rgba(96, 165, 250, 0.05);
+
+
       }
       .row-actions {
         display: flex;
@@ -188,9 +195,9 @@
       .kbd {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         border: 1px solid var(--border);
-        border-radius: 8px;
+
         padding: 1px 6px;
-        background: rgba(148, 163, 184, 0.08);
+
       }
     </style>
   </head>

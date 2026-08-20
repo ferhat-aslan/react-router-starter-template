@@ -37,7 +37,7 @@ export async function loader({request}: {request: Request}) {
 export function Layout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
   const matches = useMatches();
-  const rootData = (matches[0]?.data ?? null) as null | {
+  const rootData = (matches[0]?.loaderData ?? null) as null | {
     locale?: string;
     messages?: Record<string, string>;
   };

@@ -45,7 +45,7 @@ export async function loader({request}: {request: Request}) {
   };
 }
 
-export const meta: MetaFunction = ({data, location}: any) => {
+export const meta: MetaFunction = ({loaderData: data, location}: any) => {
   if (!data) {
     return [
       {title: "All Tools - Kleinbyte"},
@@ -65,7 +65,7 @@ export const meta: MetaFunction = ({data, location}: any) => {
       title: t("bg.remover.meta.title"),
       description: t("bg.remover.meta.description"),
       url: `https://kleinbyte.com${location.pathname}`,
-      image: "https://kleinbyte.com/og-image-bg-remover.png",
+      image: `https://kleinbyte.com/${locale === "en" ? "" : locale + "/"}og/tools/bg-remover.png`,
     },
     [
       {
