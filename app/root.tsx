@@ -7,14 +7,14 @@ import {
   ScrollRestoration,
   useMatches,
 } from "react-router";
-import {useLocation} from "react-router";
+import { useLocation } from "react-router";
 
-import type {Route} from "./+types/root";
+import type { Route } from "./+types/root";
 import appcss from "./app.css?inline";
-import {getTranslationData} from "./utils/route-utils";
+import { getTranslationData } from "./utils/route-utils";
 
 export const links: Route.LinksFunction = () => [
-  {rel: "icon", href: "/favicon.ico?v=2", type: "image/x-icon"},
+  { rel: "icon", href: "/favicon.ico?v=2", type: "image/x-icon" },
   /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
   {
     rel: "preconnect",
@@ -27,16 +27,16 @@ export const links: Route.LinksFunction = () => [
   }, */
 ];
 
-import {SUPPORTED_LOCALES, type Locale} from "./utils/route-utils";
+import { SUPPORTED_LOCALES, type Locale } from "./utils/route-utils";
 
-export async function loader({request}: {request: Request}) {
+export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
-  const {locale, messages} = await getTranslationData(url.pathname);
-  return {locale, messages};
+  const { locale, messages } = await getTranslationData(url.pathname);
+  return { locale, messages };
 }
 
-export function Layout({children}: {children: React.ReactNode}) {
-  const {pathname} = useLocation();
+export function Layout({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
   const matches = useMatches();
   const rootData = (matches[0]?.loaderData ?? null) as null | {
     locale?: string;
@@ -120,7 +120,7 @@ export function Layout({children}: {children: React.ReactNode}) {
     gtag('config', 'G-HRC6G6L65K');`,
           }}
         ></script>
-        <style dangerouslySetInnerHTML={{__html: `${appcss}`}} />
+        <style dangerouslySetInnerHTML={{ __html: `${appcss}` }} />
         {rootData?.locale && rootData?.messages ? (
           <script
             dangerouslySetInnerHTML={{
@@ -186,14 +186,14 @@ export function ThemeScript() {
     })();
   `;
 
-  return <script dangerouslySetInnerHTML={{__html: scriptContent}} />;
+  return <script dangerouslySetInnerHTML={{ __html: scriptContent }} />;
 }
 
 export default function App() {
   return <Outlet />;
 }
 
-export function ErrorBoundary({error}: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
