@@ -14,6 +14,7 @@ import appcss from "./app.css?inline";
 import {getTranslationData} from "./utils/route-utils";
 
 export const links: Route.LinksFunction = () => [
+  {rel: "icon", href: "/favicon.ico?v=2", type: "image/x-icon"},
   /* {rel: "preconnect", href: "https://fonts.googleapis.com"},
   {
     rel: "preconnect",
