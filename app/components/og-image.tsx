@@ -24,6 +24,9 @@ export function OgImage({ title, description, lang }: { title: string; descripti
         </div>
         <div style={{ display: "flex", fontSize: 52, fontWeight: 800, lineHeight: 1.08, letterSpacing: -1 }}>{title}</div>
         <div style={{ display: "flex", fontSize: 23, lineHeight: 1.25, color: "#78716c", marginTop: 24, maxWidth: 690 }}>{description}</div>
+        <div style={{ display: "flex", alignItems: "center", alignSelf: "flex-start", marginTop: 30, padding: "14px 24px", borderRadius: 999, background: ORANGE, color: "#ffffff", fontSize: 22, fontWeight: 700, boxShadow: "0 10px 20px rgba(194,65,12,.2)" }}>
+          Try Kleinbyte free <span style={{ display: "flex", marginLeft: 10 }}>→</span>
+        </div>
       </div>
     </div>
   );

@@ -90,6 +90,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
         >
           {description}
         </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: 34,
+            padding: "14px 26px",
+            borderRadius: "999px",
+            backgroundColor: theme === "dark" ? "#8b5cf6" : "#7c3aed",
+            color: "#ffffff",
+            fontSize: 24,
+            fontWeight: 700,
+          }}
+        >
+          Try it free <span style={{ display: "flex", marginLeft: 10 }}>→</span>
+        </div>
         
         <div
           style={{
